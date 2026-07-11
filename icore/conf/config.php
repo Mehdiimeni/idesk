@@ -1,0 +1,25 @@
+<?php
+return [
+    'allowedHosts' => ['localhost', '127.0.0.1','https://intek.ir/','http://intek.ir/','192.168.50.12','www.intek.ir','intek.ir'],
+    'allowedLanguage' => ['fa', 'en', 'ar'],
+    'allLanguage' => ['fa'=>'فارسی', 'en'=>'English', 'ar'=>'العربية'],
+    'defaultLanguage' => 'fa',
+    'defaultLanguageDir' => 'rtl',
+    'defaultLanguageAdmin' => 'fa',
+    'defaultLanguageAdminDir' => 'rtl',
+    'allowWebUrl' => '/idesk/',
+    'clearWebUrl' => '/idesk/',
+    'targetIpanelPath' => '/idesk/ipanel/',
+    'prefixOnline' => '',
+    'prefixLocal' => '/ipanel',
+    'encryptWebKey' => '/idesk/iw',
+    'encryptPanelKey' => '/ipanel/iw',
+    'smtpHost' => 'smtp.intek.ir',
+    'smtpUsername' => 'idesk@intek.ir',
+    'smtpPassword' => 'ce4a4aOx6@D',
+    'smtpPort1' => 465,
+    'smtpPort2' => 25,
+    'smtpsSecure1' => 'ssl',
+    'smtpsSecure2' => 'tls',
+];
+?>

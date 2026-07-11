@@ -1,0 +1,37 @@
+[28-Jun-2026 10:28:52 Europe/Berlin] PHP Warning:  Cannot modify header information - headers already sent by (output started at E:\xampp\htdocs\idesk\ipanel\template\global\page_top.php:32) in E:\xampp\htdocs\idesk\ipanel\controller\ticket\ticket_details.php on line 401
+[28-Jun-2026 10:37:26 Europe/Berlin] PHP Warning:  Cannot modify header information - headers already sent by (output started at E:\xampp\htdocs\idesk\ipanel\template\global\page_top.php:32) in E:\xampp\htdocs\idesk\ipanel\controller\ticket\ticket_details.php on line 401
+[28-Jun-2026 10:38:44 Europe/Berlin] PHP Warning:  Cannot modify header information - headers already sent by (output started at E:\xampp\htdocs\idesk\ipanel\template\global\page_top.php:32) in E:\xampp\htdocs\idesk\ipanel\controller\ticket\ticket_details.php on line 401
+[28-Jun-2026 11:30:40 Europe/Berlin] PHP Warning:  Cannot modify header information - headers already sent by (output started at E:\xampp\htdocs\idesk\ipanel\template\global\page_top.php:32) in E:\xampp\htdocs\idesk\icore\class\file_manager.php on line 94
+[28-Jun-2026 11:30:40 Europe/Berlin] PHP Warning:  Cannot modify header information - headers already sent by (output started at E:\xampp\htdocs\idesk\ipanel\template\global\page_top.php:32) in E:\xampp\htdocs\idesk\icore\class\file_manager.php on line 95
+[28-Jun-2026 11:30:40 Europe/Berlin] PHP Warning:  Cannot modify header information - headers already sent by (output started at E:\xampp\htdocs\idesk\ipanel\template\global\page_top.php:32) in E:\xampp\htdocs\idesk\icore\class\file_manager.php on line 96
+[28-Jun-2026 11:30:40 Europe/Berlin] PHP Warning:  Cannot modify header information - headers already sent by (output started at E:\xampp\htdocs\idesk\ipanel\template\global\page_top.php:32) in E:\xampp\htdocs\idesk\icore\class\file_manager.php on line 97
+[28-Jun-2026 11:30:40 Europe/Berlin] PHP Warning:  Cannot modify header information - headers already sent by (output started at E:\xampp\htdocs\idesk\ipanel\template\global\page_top.php:32) in E:\xampp\htdocs\idesk\icore\class\file_manager.php on line 98
+[28-Jun-2026 11:30:40 Europe/Berlin] PHP Warning:  Cannot modify header information - headers already sent by (output started at E:\xampp\htdocs\idesk\ipanel\template\global\page_top.php:32) in E:\xampp\htdocs\idesk\icore\class\file_manager.php on line 99
+[28-Jun-2026 11:30:40 Europe/Berlin] PHP Warning:  filesize(): stat failed for ../irepository/tickets/fd4af619fa5b6999.txt in E:\xampp\htdocs\idesk\icore\class\file_manager.php on line 100
+[28-Jun-2026 11:30:40 Europe/Berlin] PHP Warning:  Cannot modify header information - headers already sent by (output started at E:\xampp\htdocs\idesk\ipanel\template\global\page_top.php:32) in E:\xampp\htdocs\idesk\icore\class\file_manager.php on line 100
+[28-Jun-2026 11:30:40 Europe/Berlin] PHP Warning:  readfile(../irepository/tickets/fd4af619fa5b6999.txt): Failed to open stream: No such file or directory in E:\xampp\htdocs\idesk\icore\class\file_manager.php on line 104
+[28-Jun-2026 11:33:39 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method FileManager::fileDownload() in E:\xampp\htdocs\idesk\ipanel\controller\ticket\ticket_details.php:690
+Stack trace:
+#0 E:\xampp\htdocs\idesk\ipanel\view\ticket\ticket_details.php(3): include()
+#1 E:\xampp\htdocs\idesk\icore\class\file_caller.php(136): require_once('E:\\xampp\\htdocs...')
+#2 E:\xampp\htdocs\idesk\icore\class\file_caller.php(31): FileCaller->loadFile('.\\view\\ticket\\t...', 'require')
+#3 E:\xampp\htdocs\idesk\ipanel\page\tickets.php(34): FileCaller->includeFileWithController('.', 'ticket/', 'ticket_details')
+#4 E:\xampp\htdocs\idesk\ipanel\page\tickets.php(49): includeFiles(Object(FileCaller), 'ticket_details')
+#5 E:\xampp\htdocs\idesk\icore\class\router.php(105): include_once('E:\\xampp\\htdocs...')
+#6 E:\xampp\htdocs\idesk\icore\class\router.php(45): Router->invokeHandler('tickets', '.')
+#7 E:\xampp\htdocs\idesk\ipanel\core\route.php(27): Router->handleRequest('/tickets')
+#8 E:\xampp\htdocs\idesk\ipanel\index.php(31): require('E:\\xampp\\htdocs...')
+#9 {main}
+  thrown in E:\xampp\htdocs\idesk\ipanel\controller\ticket\ticket_details.php on line 690
+[28-Jun-2026 13:18:05 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'idesk'@'localhost' (using password: YES) in E:\xampp\htdocs\idesk\icore\class\mysql.php:40
+Stack trace:
+#0 E:\xampp\htdocs\idesk\icore\class\mysql.php(40): mysqli->__construct('localhost', 'idesk', Object(SensitiveParameterValue), 'idesk')
+#1 E:\xampp\htdocs\idesk\icore\class\mysql.php(16): Database->initializeConnection()
+#2 E:\xampp\htdocs\idesk\icore\class\mysql.php(23): Database->__construct(Object(Configuration))
+#3 E:\xampp\htdocs\idesk\ipanel\page\tickets.php(8): Database::getInstance(Object(Configuration))
+#4 E:\xampp\htdocs\idesk\icore\class\router.php(75): include_once('E:\\xampp\\htdocs...')
+#5 E:\xampp\htdocs\idesk\icore\class\router.php(29): Router->invokeHandler('tickets', '.')
+#6 E:\xampp\htdocs\idesk\ipanel\core\route.php(27): Router->handleRequest('/tickets')
+#7 E:\xampp\htdocs\idesk\ipanel\index.php(33): require('E:\\xampp\\htdocs...')
+#8 {main}
+  thrown in E:\xampp\htdocs\idesk\icore\class\mysql.php on line 40

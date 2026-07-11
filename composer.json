@@ -1,0 +1,37 @@
+{
+  "name": "iw/desk",
+  "description": "Desk automations and ERP solution",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Imeni",
+      "email": "imeni1982@gmail.com"
+    }
+  ],
+  "require": {
+    "myclabs/php-enum": "*",
+    "ext-pdo": "*",
+    "ext-json": "*",
+    "ext-mbstring": "*",
+    "ext-gd": "*",
+    "ext-curl": "*",
+    "ext-soap": "*",
+    "pepco-api/php-rest-sdk": "*",
+    "txthinking/mailer": "^2.0",
+    "tecnickcom/tcpdf": "*",
+    "phpmailer/phpmailer": "^6.9"
+  },
+  "autoload": {
+    "classmap": ["icore","./icore"],
+    "psr-4": {
+<<<<<<< HEAD
+      "ICore\\": "icore/class/",
+=======
+>>>>>>> 5591029... some change
+      "conf\\": "icore/conf",
+      "ipanel\\model\\": "ipanel/model/",  
+      "iweb\\model\\": "iweb/model/"       
+    }
+  }
+}
