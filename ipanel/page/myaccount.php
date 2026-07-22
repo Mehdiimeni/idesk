@@ -28,11 +28,7 @@ function includeFiles($objFileCaller, $specificFile)
     $objFileCaller->includeFileWithController('.', 'global/', 'page_footer');
     $objFileCaller->includeFileWithController('.', 'global/', 'page_js');
 }
-<<<<<<< HEAD
-$_SESSION['pageTitle'][] = 'my_account';
-=======
 
->>>>>>> 5591029... some change
 includeFiles($objFileCaller, 'myaccount');
 
 

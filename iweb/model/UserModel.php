@@ -56,122 +56,6 @@ class UserModel extends \Configuration
 		return $user_info;
 	}
 
-<<<<<<< HEAD
-	private function setUserSession(array $user): void
-	{
-		$_SESSION["user_id"] = $user['id'];
-		$_SESSION["rbac_id"] = $user['rbac_id'];
-		$_SESSION["role"] = $user['role'];
-		$_SESSION["mobile"] = $user['mobile'];
-		$_SESSION["name"] = $user['name'];
-		$_SESSION["email"] = $user['email'];
-		$_SESSION["user_company"] = $user['user_company'];
-		$_SESSION["user_unit"] = $user['user_unit'];
-		$_SESSION["unit_id"] = $user['unit_id'];
-		$_SESSION["company_id"] = $user['company_id'];
-
-		$sqlQuery = "
-        SELECT file_name, file_path
-        FROM file_manage
-        WHERE part_name = 'user_profile'
-          AND part_id = ?
-          AND user_id = ?
-    ";
-
-		$stmt = $this->conn->prepare($sqlQuery);
-		$stmt->bind_param("ii", $_SESSION["user_id"], $_SESSION["user_id"]);
-		$stmt->execute();
-
-		$result = $stmt->get_result();
-
-		if ($result->num_rows > 0) {
-			$imageProfile = $result->fetch_assoc();
-
-			$_SESSION["profile_image_name"] = $imageProfile['file_name'];
-			$_SESSION["profile_image_path"] = $imageProfile['file_path'];
-		} else {
-			$_SESSION["profile_image_name"] = $this->getDefaultFileName();
-			$_SESSION["profile_image_path"] = $this->getDefaultFilePath();
-		}
-	}
-
-	private function getActiveUserById(int $userId): ?array
-	{
-		$sqlQuery = "
-        SELECT user.*, 
-               unit.unit_name AS user_unit, 
-               unit.id AS unit_id,
-               company.company_name AS user_company, 
-               company.id AS company_id
-        FROM " . $this->userTable . " user
-        LEFT JOIN " . $this->unitTable . " unit 
-            ON user.unit_id = unit.id
-        JOIN " . $this->companyTable . " company 
-            ON unit.company_id = company.id
-        WHERE user.id = ?
-          AND user.status = 'Active'
-        LIMIT 1
-    ";
-
-		$stmt = $this->conn->prepare($sqlQuery);
-		$stmt->bind_param("i", $userId);
-		$stmt->execute();
-
-		$result = $stmt->get_result();
-
-		if ($result->num_rows <= 0) {
-			return null;
-		}
-
-		return $result->fetch_assoc();
-	}
-
-	public function loginByRememberToken(string $rememberToken): bool
-	{
-		if (strpos($rememberToken, ':') === false) {
-			return false;
-		}
-
-		[$selector, $validator] = explode(':', $rememberToken, 2);
-
-		$sqlQuery = "
-        SELECT user_id, token_hash
-        FROM user_remember_tokens
-        WHERE selector = ?
-          AND expires_at > NOW()
-        LIMIT 1
-    ";
-
-		$stmt = $this->conn->prepare($sqlQuery);
-		$stmt->bind_param("s", $selector);
-		$stmt->execute();
-
-		$result = $stmt->get_result();
-
-		if ($result->num_rows <= 0) {
-			return false;
-		}
-
-		$tokenData = $result->fetch_assoc();
-
-		if (!password_verify($validator, $tokenData['token_hash'])) {
-			return false;
-		}
-
-		$user = $this->getActiveUserById((int) $tokenData['user_id']);
-
-		if (!$user) {
-			return false;
-		}
-
-		$this->setUserSession($user);
-		$this->user_log('remember_login');
-
-		return true;
-	}
-
-=======
->>>>>>> 5591029... some change
 	public function login()
 	{
 		if (!$this->email || !$this->password) {
@@ -179,43 +63,6 @@ class UserModel extends \Configuration
 		}
 
 		$sqlQuery = "
-<<<<<<< HEAD
-        SELECT user.*, 
-               unit.unit_name AS user_unit, 
-               unit.id AS unit_id,
-               company.company_name AS user_company, 
-               company.id AS company_id
-        FROM " . $this->userTable . " user
-        LEFT JOIN " . $this->unitTable . " unit 
-            ON user.unit_id = unit.id
-        JOIN " . $this->companyTable . " company 
-            ON unit.company_id = company.id
-        WHERE user.email = ?
-          AND user.status = 'Active'
-        LIMIT 1
-    ";
-
-		$stmt = $this->conn->prepare($sqlQuery);
-		$stmt->bind_param("s", $this->email);
-		$stmt->execute();
-
-		$result = $stmt->get_result();
-
-		if ($result->num_rows <= 0) {
-			return 0;
-		}
-
-		$user = $result->fetch_assoc();
-
-		if (!password_verify($this->password, $user['password'])) {
-			return 0;
-		}
-
-		$this->setUserSession($user);
-		$this->user_log('login');
-
-		return 1;
-=======
 			SELECT user.*, unit.unit_name AS user_unit, unit.id AS unit_id, 
 				   company.company_name AS user_company, company.id AS company_id 
 			FROM " . $this->userTable . " user
@@ -271,7 +118,6 @@ class UserModel extends \Configuration
 		}
 
 		return 0;
->>>>>>> 5591029... some change
 	}
 
 	function getTopPerforming()
@@ -347,15 +193,11 @@ class UserModel extends \Configuration
 
 	public function loggedIn()
 	{
-<<<<<<< HEAD
-		return !empty($_SESSION["user_id"]) ? 1 : 0;
-=======
 		if (isset($_SESSION["user_id"]) and !empty($_SESSION["user_id"])) {
 			return 1;
 		} else {
 			return 0;
 		}
->>>>>>> 5591029... some change
 	}
 
 
@@ -411,53 +253,6 @@ class UserModel extends \Configuration
 	}
 
 
-<<<<<<< HEAD
-	public function createRememberToken(): string
-	{
-		$userId = $_SESSION['user_id'] ?? null;
-
-		if (empty($userId)) {
-			return '';
-		}
-
-		$selector = bin2hex(random_bytes(8));
-		$validator = bin2hex(random_bytes(32));
-		$tokenHash = password_hash($validator, PASSWORD_DEFAULT);
-		$expiresAt = date('Y-m-d H:i:s', time() + 30 * 24 * 60 * 60);
-
-		$sql = "
-        INSERT INTO user_remember_tokens 
-        (user_id, selector, token_hash, expires_at)
-        VALUES (?, ?, ?, ?)
-    ";
-
-		$stmt = $this->conn->prepare($sql);
-		$stmt->bind_param('isss', $userId, $selector, $tokenHash, $expiresAt);
-		$stmt->execute();
-
-		return $selector . ':' . $validator;
-	}
-
-	public function deleteRememberToken(string $rememberToken): bool
-	{
-		if (strpos($rememberToken, ':') === false) {
-			return false;
-		}
-
-		[$selector] = explode(':', $rememberToken, 2);
-
-		$sqlQuery = "
-        DELETE FROM user_remember_tokens
-        WHERE selector = ?
-    ";
-
-		$stmt = $this->conn->prepare($sqlQuery);
-		$stmt->bind_param("s", $selector);
-
-		return $stmt->execute();
-	}
-=======
->>>>>>> 5591029... some change
 
 }
 ?>

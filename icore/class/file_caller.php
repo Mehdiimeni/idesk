@@ -1,202 +1,95 @@
-<?php
-
+<?php 
 class FileCaller
 {
-    private static ?FileCaller $instance = null;
+    private static $instance;
 
-    public const TYPE_REQUIRE = 'require';
-    public const TYPE_INCLUDE = 'include';
+    const TYPE_REQUIRE = 'require';
+    const TYPE_INCLUDE = 'include';
 
     private function __construct()
     {
     }
 
-    public static function getInstance(): FileCaller
+    public static function getInstance()
     {
-        if (self::$instance === null) {
+        if (!self::$instance) {
             self::$instance = new self();
         }
-
         return self::$instance;
     }
 
-    public function includeFileWithController(
-        string $baseDir,
-        string $folder,
-        string $name,
-        string $typeInclude = self::TYPE_REQUIRE
-    ): void {
-        $this->ensureMvcFiles($baseDir, $folder, $name . '.php');
+    public function includeFileWithController($fullDirAddress, $nameFolder, $name, $typeInclude = self::TYPE_REQUIRE)
+    {
+        $this->ensureFileLocationExists($fullDirAddress, '/controller/', $nameFolder, $name . '.php');
+        $this->ensureFileLocationExists($fullDirAddress, '/template/', $nameFolder, $name . '.php');
+        $this->ensureFileLocationExists($fullDirAddress, '/view/', $nameFolder, $name . '.php');
 
-        $this->loadFile(
-            $this->buildPath($baseDir, 'view', $folder, $name . '.php'),
-            $typeInclude
-        );
+        $filePath = $fullDirAddress . '/view/' . $nameFolder . '/' . $name . '.php';
+
+        if ($typeInclude === self::TYPE_REQUIRE) {
+            require_once $filePath;
+        } else {
+            include $filePath;
+        }
     }
 
-    public function includeFileJustController(
-        string $baseDir,
-        string $folder,
-        string $name,
-        string $typeInclude = self::TYPE_REQUIRE
-    ): void {
-        $folder = $this->normalizeName($folder);
-        $name = $this->normalizeName($name);
+    public function includeFileJustController($fullDirAddress, $nameFolder, $name, $typeInclude = self::TYPE_REQUIRE)
+    {
+        $this->ensureFileLocationExists($fullDirAddress, '/controller/', $nameFolder, $name . '.php');
+        $filePath = $fullDirAddress . '/controller/' . $nameFolder . '/' . $name . '.php';
 
-        $this->validateName($folder);
-        $this->validateName($name);
-
-        $fileName = $name . '.php';
-
-        $this->ensureFileLocationExists($baseDir, 'controller', $folder, $fileName);
-
-        $this->loadFile(
-            $this->buildPath($baseDir, 'controller', $folder, $fileName),
-            $typeInclude
-        );
+        if ($typeInclude === self::TYPE_REQUIRE) {
+            require_once $filePath;
+        } else {
+            include $filePath;
+        }
     }
 
-    public function includeModifiedFileWithController(
-        string $baseDir,
-        string $folder,
-        string $name,
-        string $typeModify = 'Modify',
-        string $typeInclude = self::TYPE_REQUIRE
-    ): void {
-        $suffix = $typeModify !== '' ? $typeModify : 'Modify';
-        $fileName = $name . $suffix . '.php';
+    public function includeModifiedFileWithController($fullDirAddress, $nameFolder, $name, $typeModify, $typeInclude = self::TYPE_REQUIRE)
+    {
+        $this->ensureFileLocationExists($fullDirAddress, '/controller/', $nameFolder, $name . 'Modify.php');
+        $this->ensureFileLocationExists($fullDirAddress, '/template/', $nameFolder, $name . 'Modify.php');
+        $this->ensureFileLocationExists($fullDirAddress, '/view/', $nameFolder, $name . 'Modify.php');
 
-        $this->ensureMvcFiles($baseDir, $folder, $fileName);
+        $filePath = $fullDirAddress . '/view/' . $nameFolder . '/' . $name . 'Modify.php';
 
-        $this->loadFile(
-            $this->buildPath($baseDir, 'view', $folder, $fileName),
-            $typeInclude
-        );
+        if ($typeInclude === self::TYPE_REQUIRE) {
+            require_once $filePath;
+        } else {
+            include $filePath;
+        }
     }
 
-
-
-    private function ensureFileLocationExists(
-        string $baseDir,
-        string $type,
-        string $folder,
-        string $fileName
-    ): void {
-        $folderPath = $this->buildPath($baseDir, $type, $folder);
+    private function ensureFileLocationExists($fullDirAddress, $type, $nameFolder, $nameFile)
+    {
+        $folderPath = $fullDirAddress . $type . $nameFolder;
 
         if (!is_dir($folderPath)) {
             mkdir($folderPath, 0755, true);
         }
 
-        $filePath = $this->buildPath($baseDir, $type, $folder, $fileName);
+        $filePath = $folderPath . '/' . $nameFile;
 
         if (!file_exists($filePath)) {
-            $this->createFile($filePath, $type, $folder, $fileName, $baseDir);
+            $this->createFile($filePath, $type, $nameFolder, $nameFile,$fullDirAddress);
         }
     }
 
-    private function createFile(
-        string $filePath,
-        string $type,
-        string $folder,
-        string $fileName,
-        string $baseDir
-    ): void {
-        $handle = fopen($filePath, 'x');
-
-        if ($handle === false) {
-            throw new RuntimeException("Cannot create file: {$filePath}");
-        }
-
-        fwrite($handle, "<?php\n");
-        fwrite($handle, "// {$type}/{$folder}/{$fileName}\n");
-
-        if ($type === 'template') {
-            fwrite($handle, "?>\n");
-        }
-
-        if ($type === 'view') {
-            $controllerPath = $this->buildPath($baseDir, 'controller', $folder, $fileName);
-            $templatePath = $this->buildPath($baseDir, 'template', $folder, $fileName);
-
-            fwrite($handle, "require_once " . var_export($controllerPath, true) . ";\n");
-            fwrite($handle, "require_once " . var_export($templatePath, true) . ";\n");
-        }
-
-        fclose($handle);
-    }
-
-    private function loadFile(string $filePath, string $typeInclude): void
+    private function createFile($filePath, $type, $nameFolder, $nameFile,$fullDirAddress)
     {
-        if (!is_file($filePath)) {
-            throw new RuntimeException("File not found: {$filePath}");
+        $fOpen = fopen($filePath, 'x');
+        fwrite($fOpen, "<?php\n");
+        fwrite($fOpen, "//$type$nameFolder$nameFile\n");
+
+        if ($type == '/template/') {
+            fwrite($fOpen, "?>\n");
         }
 
-        if ($typeInclude === self::TYPE_REQUIRE) {
-            require_once $filePath;
-            return;
+        if ($type == '/view/') {
+            fwrite($fOpen, "include '$fullDirAddress/controller/$nameFolder$nameFile';\n");
+            fwrite($fOpen, "include '$fullDirAddress/template/$nameFolder$nameFile';\n");
         }
 
-        include $filePath;
-    }
-
-    private function buildPath(string ...$parts): string
-    {
-        $cleanParts = [];
-
-        foreach ($parts as $part) {
-            $part = trim($part, "/\\");
-
-            if ($part !== '') {
-                $cleanParts[] = $part;
-            }
-        }
-
-        return implode(DIRECTORY_SEPARATOR, $cleanParts);
-    }
-
-
-
-    private function validateFileName(string $fileName): void
-    {
-        if (!preg_match('/^[a-zA-Z0-9_-]+\.php$/', $fileName)) {
-            throw new InvalidArgumentException("Invalid file name: {$fileName}");
-        }
-    }
-
-    private function __clone()
-    {
-    }
-
-    public function __wakeup()
-    {
-        throw new Exception('Cannot unserialize FileCaller singleton.');
-    }
-
-
-    private function normalizeName(string $name): string
-    {
-        return trim($name, "/\\");
-    }
-
-    private function validateName(string $name): void
-    {
-        $name = $this->normalizeName($name);
-
-        if (!preg_match('/^[a-zA-Z0-9_-]+$/', $name)) {
-            throw new InvalidArgumentException("Invalid name: {$name}");
-        }
-    }
-
-    private function ensureMvcFiles(string $baseDir, string $folder, string $fileName): void
-    {
-        $folder = $this->normalizeName($folder);
-
-        $this->validateName($folder);
-        $this->validateFileName($fileName);
-
-        $this->ensureFileLocationExists($baseDir, 'controller', $folder, $fileName);
-        $this->ensureFileLocationExists($baseDir, 'template', $folder, $fileName);
-        $this->ensureFileLocationExists($baseDir, 'view', $folder, $fileName);
+        fclose($fOpen);
     }
 }

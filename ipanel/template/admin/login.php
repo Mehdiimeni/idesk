@@ -343,7 +343,6 @@ $defultAdminDir = !empty($_COOKIE['adminLanguageDir']) ? $_COOKIE['adminLanguage
                                         <a href="#" class="admin-logo-box">
                                             <img src="../itheme/panel/images/logo-intek.png" alt="dark logo">
                                         </a>
-<<<<<<< HEAD
 
                                         <h2>
                                             <?php echo (_lang['login_admin']); ?>
@@ -353,17 +352,6 @@ $defultAdminDir = !empty($_COOKIE['adminLanguageDir']) ? $_COOKIE['adminLanguage
                                             <?php echo (_lang['login_adver2']); ?>
                                         </p>
 
-=======
-
-                                        <h2>
-                                            <?php echo (_lang['login_admin']); ?>
-                                        </h2>
-
-                                        <p>
-                                            <?php echo (_lang['login_adver2']); ?>
-                                        </p>
-
->>>>>>> 5591029... some change
                                         <div class="admin-security-badge">
                                             <i class="ri-shield-user-line"></i>
                                             <?php echo (_lang['company_owner']); ?>
@@ -394,19 +382,11 @@ $defultAdminDir = !empty($_COOKIE['adminLanguageDir']) ? $_COOKIE['adminLanguage
                                     </div>
 
                                     <?php if (isset($loginMessage) && $loginMessage != '') { ?>
-<<<<<<< HEAD
-                                        <div class="alert admin-alert alert-dismissible fade show mb-4" role="alert">
-                                            <i class="ri-alert-line me-1"></i>
-                                            <?php echo ($loginMessage); ?>
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        </div>
-=======
                                             <div class="alert admin-alert alert-dismissible fade show mb-4" role="alert">
                                                 <i class="ri-alert-line me-1"></i>
                                                 <?php echo ($loginMessage); ?>
                                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                             </div>
->>>>>>> 5591029... some change
                                     <?php } ?>
 
                                     <div class="mb-3">
@@ -420,24 +400,14 @@ $defultAdminDir = !empty($_COOKIE['adminLanguageDir']) ? $_COOKIE['adminLanguage
                                             </option>
 
                                             <?php foreach ($allLanguages as $key => $value) { ?>
-<<<<<<< HEAD
-                                                <option value="<?php echo $key; ?>">
-                                                    <?php echo $value; ?>
-                                                </option>
-=======
                                                     <option value="<?php echo $key; ?>">
                                                         <?php echo $value; ?>
                                                     </option>
->>>>>>> 5591029... some change
                                             <?php } ?>
                                         </select>
                                     </div>
 
-<<<<<<< HEAD
-                                    <form method="POST" action="" autocomplete="on">
-=======
                                     <form method="POST" action="">
->>>>>>> 5591029... some change
                                         <div class="mb-3">
                                             <label for="emailaddress" class="form-label">
                                                 <?php echo (_lang['email']); ?>
@@ -454,19 +424,11 @@ $defultAdminDir = !empty($_COOKIE['adminLanguageDir']) ? $_COOKIE['adminLanguage
                                                     name="email"
                                                     type="email"
                                                     id="emailaddress"
-<<<<<<< HEAD
-                                                    autocomplete="username"
-=======
->>>>>>> 5591029... some change
                                                     required>
                                             </div>
                                         </div>
 
-<<<<<<< HEAD
-                                        <div class="mb-3">
-=======
                                         <div class="mb-4">
->>>>>>> 5591029... some change
                                             <label for="password" class="form-label">
                                                 <?php echo (_lang['password']); ?>
                                             </label>
@@ -482,12 +444,7 @@ $defultAdminDir = !empty($_COOKIE['adminLanguageDir']) ? $_COOKIE['adminLanguage
                                                     id="password"
                                                     placeholder="<?php echo (_lang['password']); ?>"
                                                     name="password"
-<<<<<<< HEAD
-                                                    type="password"
-                                                    autocomplete="current-password">
-=======
                                                     type="password">
->>>>>>> 5591029... some change
 
                                                 <button class="btn toggle-password" type="button">
                                                     <i class="ri-eye-line"></i>
@@ -495,25 +452,6 @@ $defultAdminDir = !empty($_COOKIE['adminLanguageDir']) ? $_COOKIE['adminLanguage
                                             </div>
                                         </div>
 
-<<<<<<< HEAD
-                                        <div class="mb-4">
-                                            <div class="form-check">
-                                                <input
-                                                    class="form-check-input"
-                                                    type="checkbox"
-                                                    id="remember_login"
-                                                    name="remember_login"
-                                                    value="1"
-                                                    <?php echo !empty($_COOKIE['remember_admin_token']) ? 'checked' : ''; ?>>
-
-                                                <label class="form-check-label" for="remember_login">
-                                                    <?php echo _lang['remember_login']; ?>
-                                                </label>
-                                            </div>
-                                        </div>
-
-=======
->>>>>>> 5591029... some change
                                         <button
                                             class="btn btn-primary btn-login w-100"
                                             type="submit"

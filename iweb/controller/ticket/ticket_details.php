@@ -5,10 +5,7 @@ use iweb\model\CommentModel;
 use iweb\model\StructureModel;
 use iweb\model\TicketModel;
 use iweb\model\UserModel;
-<<<<<<< HEAD
-=======
 
->>>>>>> 5591029... some change
 use ipanel\model\AdminModel;
 
 

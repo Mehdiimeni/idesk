@@ -4,11 +4,28 @@ class DatabaseHandler
 {
     private $db;
 
-    private $specialFields = ['password', 'stracture', 'operation', 'parts'];
+    private $specialFields = [
+        'password',
+        'stracture',
+        'operation',
+        'parts'
+    ];
+
+    private $specialFieldsMap = [];
+
+    private $identifierCache = [];
 
     public function __construct($db)
     {
         $this->db = $db;
+
+        /*
+         * استفاده از isset به‌جای in_array
+         * برای بررسی سریع‌تر فیلدهای خاص
+         */
+        foreach ($this->specialFields as $specialField) {
+            $this->specialFieldsMap[$specialField] = true;
+        }
     }
 
     private function sanitizeValue($value)
@@ -18,15 +35,22 @@ class DatabaseHandler
         }
 
         if (is_array($value)) {
+            $jsonValue = json_encode(
+                $value,
+                JSON_UNESCAPED_UNICODE
+            );
+
             return htmlspecialchars(
-                json_encode($value, JSON_UNESCAPED_UNICODE),
+                $jsonValue,
                 ENT_QUOTES,
                 'UTF-8'
             );
         }
 
+        $value = strip_tags((string) $value);
+
         return htmlspecialchars(
-            strip_tags((string) $value),
+            $value,
             ENT_QUOTES,
             'UTF-8'
         );
@@ -34,11 +58,16 @@ class DatabaseHandler
 
     private function serializeField($field, $value)
     {
+        $sanitizedValue = $this->sanitizeValue($value);
+
         if ($field === 'password') {
-            return password_hash($this->sanitizeValue($value), PASSWORD_BCRYPT);
+            return password_hash(
+                $sanitizedValue,
+                PASSWORD_BCRYPT
+            );
         }
 
-        return serialize($this->sanitizeValue($value));
+        return serialize($sanitizedValue);
     }
 
     private function detectType($field, $value)
@@ -58,21 +87,42 @@ class DatabaseHandler
         return 's';
     }
 
-    private function bindValues($types, $values)
+    private function bindValues($types, &$values)
     {
         $bindValues = [];
         $bindValues[] = $types;
 
-        foreach ($values as $key => $value) {
-            $bindValues[] = &$values[$key];
+        foreach ($values as $key => &$value) {
+            $bindValues[] = &$value;
         }
+
+        unset($value);
 
         return $bindValues;
     }
 
     private function isValidIdentifier($name)
     {
-        return is_string($name) && preg_match('/^[a-zA-Z0-9_]+$/', $name);
+        if (!is_string($name)) {
+            return false;
+        }
+
+        /*
+         * جلوگیری از اجرای مکرر preg_match
+         * برای نام‌های تکراری جدول و فیلد
+         */
+        if (array_key_exists($name, $this->identifierCache)) {
+            return $this->identifierCache[$name];
+        }
+
+        $isValid = preg_match(
+            '/^[a-zA-Z0-9_]+$/',
+            $name
+        ) === 1;
+
+        $this->identifierCache[$name] = $isValid;
+
+        return $isValid;
     }
 
     private function buildDataParts($arrData, $unique_fields = '', $mode = 'insert')
@@ -82,9 +132,15 @@ class DatabaseHandler
         $types = '';
         $usedFields = [];
 
+        $isUpdate = $mode === 'update';
+
         foreach ($arrData as $field => $value) {
 
-            if ($field === $unique_fields && !empty($value) && is_array($value)) {
+            if (
+                $field === $unique_fields &&
+                !empty($value) &&
+                is_array($value)
+            ) {
                 foreach ($value as $uniqueField) {
 
                     if (!array_key_exists($uniqueField, $arrData)) {
@@ -99,14 +155,19 @@ class DatabaseHandler
                         continue;
                     }
 
-                    $fields[] = $mode === 'update'
-                        ? "$uniqueField = ?"
-                        : $uniqueField;
+                    if ($isUpdate) {
+                        $fields[] = $uniqueField . ' = ?';
+                    } else {
+                        $fields[] = $uniqueField;
+                    }
 
                     $fieldValue = $arrData[$uniqueField];
 
                     $values[] = $this->sanitizeValue($fieldValue);
-                    $types .= $this->detectType($uniqueField, $fieldValue);
+                    $types .= $this->detectType(
+                        $uniqueField,
+                        $fieldValue
+                    );
 
                     $usedFields[$uniqueField] = true;
                 }
@@ -114,7 +175,10 @@ class DatabaseHandler
                 continue;
             }
 
-            if ($field === $unique_fields || isset($usedFields[$field])) {
+            if (
+                $field === $unique_fields ||
+                isset($usedFields[$field])
+            ) {
                 continue;
             }
 
@@ -122,16 +186,28 @@ class DatabaseHandler
                 return "Error: Invalid field name $field.";
             }
 
-            $fields[] = $mode === 'update'
-                ? "$field = ?"
-                : $field;
+            if ($isUpdate) {
+                $fields[] = $field . ' = ?';
+            } else {
+                $fields[] = $field;
+            }
 
-            if (in_array($field, $this->specialFields, true) && !empty($value)) {
-                $values[] = $this->serializeField($field, $value);
+            if (
+                isset($this->specialFieldsMap[$field]) &&
+                !empty($value)
+            ) {
+                $values[] = $this->serializeField(
+                    $field,
+                    $value
+                );
+
                 $types .= 's';
             } else {
                 $values[] = $this->sanitizeValue($value);
-                $types .= $this->detectType($field, $value);
+                $types .= $this->detectType(
+                    $field,
+                    $value
+                );
             }
 
             $usedFields[$field] = true;
@@ -154,7 +230,11 @@ class DatabaseHandler
             return "Error: Invalid data.";
         }
 
-        $parts = $this->buildDataParts($arrData, $unique_fields, 'insert');
+        $parts = $this->buildDataParts(
+            $arrData,
+            $unique_fields,
+            'insert'
+        );
 
         if (is_string($parts)) {
             return $parts;
@@ -164,23 +244,44 @@ class DatabaseHandler
             return "Error: No valid fields to insert.";
         }
 
+        $fieldCount = count($parts['fields']);
+
         $fields = implode(', ', $parts['fields']);
-        $placeholders = implode(', ', array_fill(0, count($parts['fields']), '?'));
+
+        $placeholders = implode(
+            ', ',
+            array_fill(0, $fieldCount, '?')
+        );
 
         $sql = "INSERT INTO $table_set ($fields) VALUES ($placeholders)";
 
         $stmt = $this->db->prepare($sql);
 
         if ($stmt === false) {
-            return "Error in preparing SQL statement: " . $this->db->error;
+            return "Error in preparing SQL statement: " .
+                $this->db->error;
         }
 
-        $bindParamsRefs = $this->bindValues($parts['types'], $parts['values']);
+        $bindParamsRefs = $this->bindValues(
+            $parts['types'],
+            $parts['values']
+        );
 
-        call_user_func_array([$stmt, 'bind_param'], $bindParamsRefs);
+        $bindResult = call_user_func_array(
+            [$stmt, 'bind_param'],
+            $bindParamsRefs
+        );
+
+        if ($bindResult === false) {
+            $error = $stmt->error;
+            $stmt->close();
+
+            return "Error in binding SQL parameters: " . $error;
+        }
 
         if ($stmt->execute()) {
             $insertedId = $stmt->insert_id;
+
             $stmt->close();
 
             return [
@@ -190,6 +291,7 @@ class DatabaseHandler
         }
 
         $error = $stmt->error;
+
         $stmt->close();
 
         return "Error in executing SQL statement: " . $error;
@@ -209,7 +311,11 @@ class DatabaseHandler
             return "Error: Where condition is required.";
         }
 
-        $parts = $this->buildDataParts($arrData, $unique_fields, 'update');
+        $parts = $this->buildDataParts(
+            $arrData,
+            $unique_fields,
+            'update'
+        );
 
         if (is_string($parts)) {
             return $parts;
@@ -226,19 +332,35 @@ class DatabaseHandler
         $stmt = $this->db->prepare($sql);
 
         if ($stmt === false) {
-            return "Error in preparing SQL statement: " . $this->db->error;
+            return "Error in preparing SQL statement: " .
+                $this->db->error;
         }
 
-        $bindParamsRefs = $this->bindValues($parts['types'], $parts['values']);
+        $bindParamsRefs = $this->bindValues(
+            $parts['types'],
+            $parts['values']
+        );
 
-        call_user_func_array([$stmt, 'bind_param'], $bindParamsRefs);
+        $bindResult = call_user_func_array(
+            [$stmt, 'bind_param'],
+            $bindParamsRefs
+        );
+
+        if ($bindResult === false) {
+            $error = $stmt->error;
+            $stmt->close();
+
+            return "Error in binding SQL parameters: " . $error;
+        }
 
         if ($stmt->execute()) {
             $stmt->close();
+
             return "Data updated successfully.";
         }
 
         $error = $stmt->error;
+
         $stmt->close();
 
         return "Error in executing SQL statement: " . $error;
@@ -254,18 +376,23 @@ class DatabaseHandler
             return "Error: Where condition is required.";
         }
 
-        $stmt = $this->db->prepare("DELETE FROM $table_set WHERE $whereCondition");
+        $sql = "DELETE FROM $table_set WHERE $whereCondition";
+
+        $stmt = $this->db->prepare($sql);
 
         if ($stmt === false) {
-            return "Error in preparing SQL statement: " . $this->db->error;
+            return "Error in preparing SQL statement: " .
+                $this->db->error;
         }
 
         if ($stmt->execute()) {
             $stmt->close();
+
             return "Data deleted successfully.";
         }
 
         $error = $stmt->error;
+
         $stmt->close();
 
         return "Error in executing SQL statement: " . $error;

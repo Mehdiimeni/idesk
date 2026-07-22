@@ -1,82 +1,44 @@
 <?php
-<<<<<<< HEAD
-
-=======
->>>>>>> 5591029... some change
 class DateConverter extends jDateTime
 {
-    protected string $date;
-    protected string $language;
+    protected $date;
+    protected $language;
 
-    public function __construct(string $date, string $language = 'en')
+    public function __construct($date, $language = 'en')
     {
         $this->date = $date;
         $this->language = $language;
     }
 
-    public function convertToShamsi(): string
+    public function convertToShamsi()
     {
-<<<<<<< HEAD
-        $timestamp = strtotime($this->date);
-
-        if ($timestamp === false) {
-            return '';
-=======
         if ($this->language == 'fa') {
             return $this->isPersian() ? $this->date : jDateTime::date('H:i:s  Y/m/d', strtotime($this->date));
         } else {
             return date('Y/m/d H:i:s', strtotime($this->date));
->>>>>>> 5591029... some change
         }
-
-        if ($this->language === 'fa') {
-            return $this->isPersian()
-                ? $this->date
-                : jDateTime::date('H:i:s  Y/m/d', $timestamp);
-        }
-
-        return date('Y/m/d H:i:s', $timestamp);
     }
 
-    public function getDayDifference(): int
+    public function getDayDifference()
     {
         $timestamp = strtotime($this->date);
-
-        if ($timestamp === false) {
-            return 0;
-        }
-
         $todayTimestamp = strtotime('today');
-
-        return (int) floor(($todayTimestamp - $timestamp) / 86400);
+        $difference = floor(($todayTimestamp - $timestamp) / (60 * 60 * 24));
+        return $difference;
     }
 
-    public function getWeekday(): string
+    public function getWeekday()
     {
-        $timestamp = strtotime($this->date);
-
-        return $timestamp === false ? '' : date('l', $timestamp);
+        return date('l', strtotime($this->date));
     }
 
-    public function getMonthName(): string
+    public function getMonthName()
     {
-        $timestamp = strtotime($this->date);
-
-        return $timestamp === false ? '' : date('F', $timestamp);
+        return date('F', strtotime($this->date));
     }
 
-    public function getMonthNameInPersian(): string
+    public function getMonthNameInPersian()
     {
-        $timestamp = strtotime($this->date);
-
-        if ($timestamp === false) {
-            return '';
-        }
-
-        if ($this->language !== 'fa') {
-            return date('F', $timestamp);
-        }
-
         $monthNames = [
             1 => 'فروردین',
             2 => 'اردیبهشت',
@@ -89,28 +51,17 @@ class DateConverter extends jDateTime
             9 => 'آذر',
             10 => 'دی',
             11 => 'بهمن',
-            12 => 'اسفند',
+            12 => 'اسفند'
         ];
 
-        $monthNumber = (int) jDateTime::date('m', $timestamp);
-
-        return $monthNames[$monthNumber] ?? '';
+        $monthNumber = $this->convertNumbers(jDateTime::date('m', strtotime($this->date)),'fa');
+        return($this->language == 'fa') ? $monthNames[$monthNumber] : date('F', strtotime($this->date));
     }
 
-    public function getWeekdayInPersian(): string
+
+
+    public function getWeekdayInPersian()
     {
-        $timestamp = strtotime($this->date);
-
-        if ($timestamp === false) {
-            return '';
-        }
-
-        $weekday = date('l', $timestamp);
-
-        if ($this->language !== 'fa') {
-            return $weekday;
-        }
-
         $weekdays = [
             'Saturday' => 'شنبه',
             'Sunday' => 'یک‌شنبه',
@@ -121,22 +72,27 @@ class DateConverter extends jDateTime
             'Friday' => 'جمعه',
         ];
 
-        return $weekdays[$weekday] ?? '';
+        return($this->language == 'fa') ? $weekdays[date('l', strtotime($this->date))] : date('l', strtotime($this->date));
     }
 
-    protected function isPersian(): bool
+    protected function isPersian()
     {
-        return preg_match('/\p{Arabic}/u', $this->date) === 1;
+        return preg_match('/\p{Arabic}/u', $this->date);
     }
 
-    public static function convertNumbers(string $value, string $target = 'fa'): string
-    {
-        $persian = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-        $english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
-        return $target === 'fa'
-            ? str_replace($english, $persian, $value)
-            : str_replace($persian, $english, $value);
+    private static function convertNumbers($matches,$lang)
+    {
+        $farsi_array = array('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹');
+        $english_array = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+
+        // اگر عدد فارسی بود، به انگلیسی تبدیل کن
+        if ($lang == 'fa') {
+            return str_replace($farsi_array, $english_array, $matches);
+        } else {
+            // در غیر این صورت، به فارسی تبدیل کن
+            return str_replace($english_array, $farsi_array, $matches);
+        }
     }
 }
 

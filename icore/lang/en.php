@@ -647,10 +647,7 @@ return [
     'report_not_approved_yet' => 'This report has not been approved yet.',
     'progress_percentage_cannot_be_zero' => 'Progress percentage cannot be zero.',
     'start_date_required' => 'Start date is required.',
-<<<<<<< HEAD
-    'remember_login' => 'Remember email and password',
-=======
->>>>>>> 5591029... some change
+    'condition_canceled_by_customer' => 'Canceled by Customer',
 
 ];
 

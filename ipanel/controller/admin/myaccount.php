@@ -13,17 +13,10 @@ $admin = new AdminModel($db);
 $dbHandler = new DatabaseHandler($db);
 $uploadDir = '../irepository/profile/';
 $uploadDirDb = './irepository/profile/';
-<<<<<<< HEAD
-=======
-
-$fileManager = new FileManager($db, $uploadDir);
->>>>>>> 5591029... some change
 
 $fileManager = new FileManager($db, $uploadDir);
 
-$adminName = $_SESSION["name"] ?? '';
-$adminMobile = $_SESSION["mobile"] ?? '';
-$adminEmail = $_SESSION["email"] ?? '';
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -109,7 +102,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         redirectTo('./logout', $message);
     }
-
 
 
 }

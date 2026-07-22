@@ -1,62 +1,40 @@
 <?php
-
 class Router
 {
-    private array $routes = [];
-
-    private static ?Router $instance = null;
+    private $routes = [];
+    private static $instance = null;
 
     private function __construct()
     {
     }
 
-    public static function getInstance(): Router
+    public static function getInstance()
     {
         if (self::$instance === null) {
             self::$instance = new self();
         }
-
         return self::$instance;
     }
 
-    public function addRoute(string $url, string $handler): void
+    public function addRoute($url, $handler)
     {
-        $url = '/' . trim($url, '/');
-
         $this->routes[$url] = $handler;
     }
 
-    public function handleRequest(string $url, string $base = '.'): void
+    public function handleRequest($url, $base = '.')
     {
-<<<<<<< HEAD
-        $url = parse_url($url, PHP_URL_PATH) ?? '/';
-        $url = '/' . trim($url, '/');
-
-        if ($url === '/') {
-            $url = '/index';
-        }
-
-=======
->>>>>>> 5591029... some change
         $handler = $this->getHandler($url);
 
-        if ($handler === null) {
+        if ($handler !== null) {
+            $this->invokeHandler($handler, $base);
+        } else {
             $this->notFound();
-            return;
         }
-
-        $this->invokeHandler($handler, $base);
     }
 
-<<<<<<< HEAD
-    private function getHandler(string $url): ?string
-=======
     private function getHandler($url)
->>>>>>> 5591029... some change
     {
         foreach ($this->routes as $route => $handler) {
-            $params = [];
-
             if ($this->matchRoute($route, $url, $params)) {
                 $_GET = array_merge($_GET, $params);
                 return $handler;
@@ -66,25 +44,22 @@ class Router
         return null;
     }
 
-    private function matchRoute(string $route, string $url, array &$params): bool
+    private function matchRoute($route, $url, &$params)
     {
-        $routeParts = explode('/', trim($route, '/'));
         $urlParts = explode('/', trim($url, '/'));
+        $routeParts = explode('/', trim($route, '/'));
 
-        if (count($routeParts) !== count($urlParts)) {
+        if (count($urlParts) !== count($routeParts)) {
             return false;
         }
 
         $params = [];
 
         foreach ($routeParts as $index => $part) {
-            if ($this->isParameter($part)) {
+            if (strpos($part, '{') !== false && strpos($part, '}') !== false) {
                 $paramName = trim($part, '{}');
-                $params[$paramName] = urldecode($urlParts[$index]);
-                continue;
-            }
-
-            if ($urlParts[$index] !== $part) {
+                $params[$paramName] = $urlParts[$index];
+            } elseif ($urlParts[$index] !== $part) {
                 return false;
             }
         }
@@ -92,11 +67,8 @@ class Router
         return true;
     }
 
-    private function isParameter(string $part): bool
+    private function invokeHandler($handler, $base)
     {
-<<<<<<< HEAD
-        return str_starts_with($part, '{') && str_ends_with($part, '}');
-=======
         $handlerPath = "$base/page/$handler.php";
         
         if (file_exists($handlerPath)) {
@@ -104,44 +76,11 @@ class Router
         } else {
             $this->notFound();
         }
->>>>>>> 5591029... some change
     }
 
-    private function invokeHandler(string $handler, string $base): void
+    private function notFound()
     {
-        $handler = trim($handler, '/');
-        $base = rtrim($base, '/');
-
-        $handlerPath = $base . '/page/' . $handler . '.php';
-
-        if (!is_file($handlerPath)) {
-            $this->notFound();
-            return;
-        }
-
-        include_once $handlerPath;
-    }
-<<<<<<< HEAD
-
-    private function notFound(): void
-    {
-        if (!headers_sent()) {
-            http_response_code(404);
-        }
-
-        echo '404 Not Found';
-        exit;
-    }
-
-    private function __clone()
-    {
-    }
-
-    public function __wakeup()
-    {
-        throw new Exception('Cannot unserialize Router singleton.');
+        header("HTTP/1.0 404 Not Found");
+        echo "404 Not Found";
     }
 }
-=======
-}
->>>>>>> 5591029... some change

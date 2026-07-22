@@ -25,10 +25,6 @@
   "autoload": {
     "classmap": ["icore","./icore"],
     "psr-4": {
-<<<<<<< HEAD
-      "ICore\\": "icore/class/",
-=======
->>>>>>> 5591029... some change
       "conf\\": "icore/conf",
       "ipanel\\model\\": "ipanel/model/",  
       "iweb\\model\\": "iweb/model/"       

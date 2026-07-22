@@ -14,11 +14,7 @@ $uploadDir = './irepository/profile/';
 $uploadDirDb = './irepository/profile/';
 $fileManager = new FileManager($db, $uploadDir);
 
-$userName = $_SESSION["name"] ?? '';
-$userMobile = $_SESSION["mobile"] ?? '';
-$userEmail = $_SESSION["email"] ?? '';
-$userCompany = $_SESSION["user_company"] ?? '';
-$userUnit = $_SESSION["user_unit"] ?? '';
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 

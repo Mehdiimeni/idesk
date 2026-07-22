@@ -1,10 +1,6 @@
 <?php
 ///template/user/login.php
 $defaultUserDir = !empty($_COOKIE['userLanguageDir']) ? $_COOKIE['userLanguageDir'] : $userLanguageDir;
-<<<<<<< HEAD
-$rememberLogin = !empty($_COOKIE['remember_user_token']);
-=======
->>>>>>> 5591029... some change
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo ($userLanguage); ?>" data-layout="topnav" dir="<?php echo ($defaultUserDir); ?>">
@@ -340,74 +336,6 @@ $rememberLogin = !empty($_COOKIE['remember_user_token']);
 									</div>
 								</div>
 							</div>
-<<<<<<< HEAD
-
-							<div class="col-lg-6">
-								<div class="login-form-side">
-
-									<div class="text-center d-lg-none mb-4">
-										<img src="./itheme/panel/images/intek.png" alt="logo" style="height:42px;">
-									</div>
-
-									<h3 class="login-title">
-										<?php echo (_lang['login_user']); ?>
-									</h3>
-
-									<div class="login-subtitle">
-										<?php echo _lang['project_name_owner']; ?>
-									</div>
-
-									<?php if (!empty($loginMessage) && $loginMessage != '') { ?>
-										<div class="alert login-alert alert-dismissible fade show mb-4" role="alert">
-											<?php echo $loginMessage; ?>
-											<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-										</div>
-									<?php } ?>
-
-									<div class="mb-3">
-										<label for="language" class="form-label">
-											<?php echo (_lang['language_selection']); ?>
-										</label>
-
-										<select class="form-select" id="language" name="language">
-											<option value="">
-												<?php echo (_lang['language_selection']); ?>
-											</option>
-
-											<?php foreach ($allLanguages as $key => $value) { ?>
-												<option value="<?php echo $key; ?>">
-													<?php echo $value; ?>
-												</option>
-											<?php } ?>
-										</select>
-									</div>
-
-									<form role="form" method="POST" action="" autocomplete="on">
-										<div class="mb-3">
-											<label for="emailaddress" class="form-label">
-												<?php echo (_lang['email']); ?>
-											</label>
-
-											<div class="input-group">
-												<span class="input-group-text">
-													<i class="ri-mail-line"></i>
-												</span>
-
-												<input
-													class="form-control"
-													type="email"
-													name="email"
-													id="emailaddress"
-													required
-													autocomplete="username"
-													placeholder="<?php echo (_lang['email']); ?>">
-											</div>
-										</div>
-
-										<div class="mb-3">
-											<label for="password" class="form-label">
-												<?php echo (_lang['password']); ?>
-=======
 
 							<div class="col-lg-6">
 								<div class="login-form-side">
@@ -453,28 +381,10 @@ $rememberLogin = !empty($_COOKIE['remember_user_token']);
 										<div class="mb-3">
 											<label for="emailaddress" class="form-label">
 												<?php echo (_lang['email']); ?>
->>>>>>> 5591029... some change
 											</label>
 
 											<div class="input-group">
 												<span class="input-group-text">
-<<<<<<< HEAD
-													<i class="ri-lock-line"></i>
-												</span>
-
-												<input
-													type="password"
-													id="password"
-													name="password"
-													class="form-control"
-													required
-													autocomplete="current-password"
-													placeholder="<?php echo (_lang['password']); ?>">
-
-												<button class="btn toggle-password" type="button">
-													<i class="ri-eye-line"></i>
-												</button>
-=======
 													<i class="ri-mail-line"></i>
 												</span>
 
@@ -485,25 +395,10 @@ $rememberLogin = !empty($_COOKIE['remember_user_token']);
 													id="emailaddress"
 													required
 													placeholder="<?php echo (_lang['email']); ?>">
->>>>>>> 5591029... some change
 											</div>
 										</div>
 
 										<div class="mb-4">
-<<<<<<< HEAD
-											<div class="form-check">
-												<input
-													class="form-check-input"
-													type="checkbox"
-													id="remember_login"
-													name="remember_login"
-													value="1"
-													<?php echo !empty($_COOKIE['remember_user_token']) ? 'checked' : ''; ?>>
-
-												<label class="form-check-label" for="remember_login">
-													<?php echo _lang['remember_login']; ?>
-												</label>
-=======
 											<label for="password" class="form-label">
 												<?php echo (_lang['password']); ?>
 											</label>
@@ -523,7 +418,6 @@ $rememberLogin = !empty($_COOKIE['remember_user_token']);
 												<button class="btn toggle-password" type="button">
 													<i class="ri-eye-line"></i>
 												</button>
->>>>>>> 5591029... some change
 											</div>
 										</div>
 
@@ -542,21 +436,12 @@ $rememberLogin = !empty($_COOKIE['remember_user_token']);
 
 						</div>
 					</div>
-<<<<<<< HEAD
 
 					<div class="login-footer d-lg-none">
 						<script>document.write(new Date().getFullYear())</script>
 						© <?php echo _lang['company_copy_right']; ?>
 					</div>
 
-=======
-
-					<div class="login-footer d-lg-none">
-						<script>document.write(new Date().getFullYear())</script>
-						© <?php echo _lang['company_copy_right']; ?>
-					</div>
-
->>>>>>> 5591029... some change
 				</div>
 			</div>
 		</div>

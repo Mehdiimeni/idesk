@@ -36,8 +36,3 @@ function includeFiles($objFileCaller, $specificFile)
 }
 $_SESSION['pageUserTitle'][] = 'kanban_board';
 includeFiles($objFileCaller, 'kanban_board');
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 5591029... some change

@@ -3,6 +3,12 @@ class RBAC
 {
     private $conn;
 
+    private $permissionDataCache = [];
+    private $decodedPermissionCache = [];
+    private $userDetailsCache = [];
+    private $adminDetailsCache = [];
+    private $operationIdCache = [];
+
     public function __construct($db)
     {
         $this->conn = $db;
@@ -97,7 +103,8 @@ class RBAC
                 $placeholders = implode(",", array_fill(0, count($arrRbacId), "?"));
                 $sqlQuery = "SELECT id, rbac_name FROM rbac WHERE id IN ($placeholders)";
             } else {
-                return null;;
+                return null;
+                ;
             }
 
 
@@ -320,11 +327,11 @@ class RBAC
     {
 
 
-      
-            $adminDetails = $this->getAdminDetailsRback($admin_id);
-            if ($adminDetails["all_rbac"])
-                return true;
-        
+
+        $adminDetails = $this->getAdminDetailsRback($admin_id);
+        if ($adminDetails["all_rbac"])
+            return true;
+
 
         $sqlQuery = "SELECT id FROM operations WHERE operation_name = ?";
         $stmt = $this->conn->prepare($sqlQuery);
@@ -438,11 +445,13 @@ class RBAC
         $sqlQuery = "";
         if ($type == 'u') {
             $userDetails = $this->getUserDetails($_SESSION['user_id']);
-            if ($userDetails["all_rbac"]) return true;
+            if ($userDetails["all_rbac"])
+                return true;
             $sqlQuery = "SELECT id FROM users_groups WHERE users_groups_caption = ?";
         } else if ($type == 'a') {
             $adminDetails = $this->getAdminDetails($_SESSION['admin_id']);
-            if ($adminDetails["all_rbac"]) return true;
+            if ($adminDetails["all_rbac"])
+                return true;
             $sqlQuery = "SELECT id FROM admins_groups WHERE admins_groups_caption = ?";
         }
 
@@ -540,11 +549,13 @@ class RBAC
         $sqlQuery = "";
         if ($type == 'u') {
             $userDetails = $this->getUserDetails($_SESSION['user_id']);
-            if ($userDetails["all_rbac"]) return true;
+            if ($userDetails["all_rbac"])
+                return true;
             $sqlQuery = "SELECT id FROM users_parts WHERE users_parts_caption = ? and users_groups_id = ?";
         } else if ($type == 'a') {
             $adminDetails = $this->getAdminDetails($_SESSION['admin_id']);
-            if ($adminDetails["all_rbac"]) return true;
+            if ($adminDetails["all_rbac"])
+                return true;
             $sqlQuery = "SELECT id FROM admins_parts WHERE admins_parts_caption = ? and  admins_groups_id = ?";
         }
 
@@ -625,11 +636,13 @@ class RBAC
         $sqlQuery = "";
         if ($type == 'u') {
             $userDetails = $this->getUserDetails($_SESSION['user_id']);
-            if ($userDetails["all_rbac"]) return true;
+            if ($userDetails["all_rbac"])
+                return true;
             $sqlQuery = "SELECT id FROM users_subparts WHERE users_subparts_caption = ? and users_parts_id = ?";
         } else if ($type == 'a') {
             $adminDetails = $this->getAdminDetails($_SESSION['admin_id']);
-            if ($adminDetails["all_rbac"]) return true;
+            if ($adminDetails["all_rbac"])
+                return true;
             $sqlQuery = "SELECT id FROM admins_subparts WHERE admins_subparts_caption = ? and admins_parts_id = ?";
         }
 
@@ -651,52 +664,90 @@ class RBAC
 
     private function checkPermissionInData($serializedData, $permission)
     {
-
-        if ($serializedData != null) {
-            $decodedData = unserialize($serializedData);
-            if (is_array($decodedData)) {
-                return in_array($permission, $decodedData);
-            } else {
-                return null;
-            }
-        } else {
+        if ($serializedData === null || $serializedData === '') {
             return null;
         }
+
+        $cacheKey = md5($serializedData);
+
+        if (!array_key_exists($cacheKey, $this->decodedPermissionCache)) {
+            $decodedData = @unserialize($serializedData, ['allowed_classes' => false]);
+
+            $this->decodedPermissionCache[$cacheKey] = is_array($decodedData)
+                ? array_fill_keys(array_map('strval', $decodedData), true)
+                : null;
+        }
+
+        $permissionData = $this->decodedPermissionCache[$cacheKey];
+
+        if (!is_array($permissionData)) {
+            return null;
+        }
+
+        return isset($permissionData[(string) $permission]);
     }
 
     private function checkPermissionInDataType($serializedData, $permission, $type)
     {
-
-        if ($serializedData != null) {
-            $decodedData = unserialize($serializedData);
-            if (is_array($decodedData)) {
-                return in_array($type . $permission, $decodedData);
-            } else {
-                return null;
-            }
-        } else {
+        if ($serializedData === null || $serializedData === '') {
             return null;
         }
+
+        $cacheKey = md5($serializedData);
+
+        if (!array_key_exists($cacheKey, $this->decodedPermissionCache)) {
+            $decodedData = @unserialize($serializedData, ['allowed_classes' => false]);
+
+            $this->decodedPermissionCache[$cacheKey] = is_array($decodedData)
+                ? array_fill_keys(array_map('strval', $decodedData), true)
+                : null;
+        }
+
+        $permissionData = $this->decodedPermissionCache[$cacheKey];
+
+        if (!is_array($permissionData)) {
+            return null;
+        }
+
+        return isset($permissionData[(string) $type . (string) $permission]);
     }
 
 
     private function getPermissionData($table, $field, $rbac_id)
     {
-        $sqlQuery = "SELECT $field FROM $table WHERE rbac_id = ?";
+        $cacheKey = $table . '|' . $field . '|' . (int) $rbac_id;
+
+        if (array_key_exists($cacheKey, $this->permissionDataCache)) {
+            return $this->permissionDataCache[$cacheKey];
+        }
+
+        $allowedSources = [
+            'permissions_structure' => ['structure'],
+            'permissions_operation' => ['operation', 'parts']
+        ];
+
+        if (!isset($allowedSources[$table]) || !in_array($field, $allowedSources[$table], true)) {
+            return null;
+        }
+
+        $sqlQuery = "SELECT $field FROM $table WHERE rbac_id = ? LIMIT 1";
         $stmt = $this->conn->prepare($sqlQuery);
+
+        if ($stmt === false) {
+            return null;
+        }
 
         $stmt->bind_param("i", $rbac_id);
         $stmt->execute();
 
         $result = $stmt->get_result();
+        $arrResult = $result->fetch_assoc();
         $stmt->close();
 
-        $arrResult = $result->fetch_assoc();
-        if ($result->num_rows > 0) {
-            return $arrResult[$field];
-        } else {
-            return null;
-        }
+        $value = $arrResult ? $arrResult[$field] : null;
+        $this->permissionDataCache[$cacheKey] = $value;
+
+        return $value;
     }
 
     public function getPermissionById($permission_id)
@@ -717,90 +768,146 @@ class RBAC
 
     public function getUserDetails($userId)
     {
+        $userId = (int) $userId;
 
-        $sqlQuery = "SELECT u.status, u.rbac_id, r.all_rbac, u.unit_id, u.role 
-        FROM users u 
-        JOIN rbac r ON u.rbac_id = r.id 
-        WHERE u.id = ?";
+        if (array_key_exists($userId, $this->userDetailsCache)) {
+            return $this->userDetailsCache[$userId];
+        }
+
+        if (
+            isset($_SESSION['userDetails'], $_SESSION['user_id']) &&
+            (int) $_SESSION['user_id'] === $userId &&
+            is_array($_SESSION['userDetails'])
+        ) {
+            $this->userDetailsCache[$userId] = $_SESSION['userDetails'];
+            return $_SESSION['userDetails'];
+        }
+
+        $sqlQuery = "SELECT u.status, u.rbac_id, r.all_rbac, u.unit_id, u.role
+        FROM users u
+        JOIN rbac r ON u.rbac_id = r.id
+        WHERE u.id = ?
+        LIMIT 1";
+
         $stmt = $this->conn->prepare($sqlQuery);
+
+        if ($stmt === false) {
+            return null;
+        }
 
         $stmt->bind_param("i", $userId);
         $stmt->execute();
 
         $result = $stmt->get_result();
+        $arrResult = $result->fetch_assoc();
         $stmt->close();
 
-
-        $arrResult = $result->fetch_assoc();
-
-        if ($result->num_rows > 0) {
-            if ($arrResult['status'] === 'Active') {
-                $_SESSION['userDetails'] = $arrResult;
-                return $arrResult;
-            } else {
-                return false;
-            }
-        } else {
+        if (!$arrResult) {
+            $this->userDetailsCache[$userId] = null;
             return null;
         }
+
+        if ($arrResult['status'] !== 'Active') {
+            $this->userDetailsCache[$userId] = false;
+            return false;
+        }
+
+        $_SESSION['userDetails'] = $arrResult;
+        $this->userDetailsCache[$userId] = $arrResult;
+
+        return $arrResult;
     }
 
     public function getAdminDetails($adminId)
     {
+        $adminId = (int) $adminId;
 
-        $sqlQuery = "SELECT u.status, u.rbac_id, r.all_rbac, u.unit_id, u.role 
-        FROM admins u 
-        JOIN rbac r ON u.rbac_id = r.id 
-        WHERE u.id = ?";
+        if (array_key_exists($adminId, $this->adminDetailsCache)) {
+            return $this->adminDetailsCache[$adminId];
+        }
+
+        if (
+            isset($_SESSION['adminDetails'], $_SESSION['admin_id']) &&
+            (int) $_SESSION['admin_id'] === $adminId &&
+            is_array($_SESSION['adminDetails'])
+        ) {
+            $this->adminDetailsCache[$adminId] = $_SESSION['adminDetails'];
+            return $_SESSION['adminDetails'];
+        }
+
+        $sqlQuery = "SELECT u.status, u.rbac_id, r.all_rbac, u.unit_id, u.role
+        FROM admins u
+        JOIN rbac r ON u.rbac_id = r.id
+        WHERE u.id = ?
+        LIMIT 1";
+
         $stmt = $this->conn->prepare($sqlQuery);
+
+        if ($stmt === false) {
+            return null;
+        }
 
         $stmt->bind_param("i", $adminId);
         $stmt->execute();
 
         $result = $stmt->get_result();
+        $arrResult = $result->fetch_assoc();
         $stmt->close();
 
-
-        $arrResult = $result->fetch_assoc();
-
-        if ($result->num_rows > 0) {
-            if ($arrResult['status'] === 'Active') {
-                $_SESSION['adminDetails'] = $arrResult;
-                return $arrResult;
-            } else {
-                return false;
-            }
-        } else {
+        if (!$arrResult) {
+            $this->adminDetailsCache[$adminId] = null;
             return null;
         }
+
+        if ($arrResult['status'] !== 'Active') {
+            $this->adminDetailsCache[$adminId] = false;
+            return false;
+        }
+
+        $_SESSION['adminDetails'] = $arrResult;
+        $this->adminDetailsCache[$adminId] = $arrResult;
+
+        return $arrResult;
     }
 
     public function getAdminDetailsRback($adminId)
     {
+        $adminId = (int) $adminId;
 
-        $sqlQuery = "SELECT u.status, u.rbac_id, r.all_rbac, u.unit_id, u.role 
-        FROM admins u 
-        JOIN rbac r ON u.rbac_id = r.id 
-        WHERE u.id = ?";
+        if (array_key_exists($adminId, $this->adminDetailsCache)) {
+            return $this->adminDetailsCache[$adminId];
+        }
+
+        $sqlQuery = "SELECT u.status, u.rbac_id, r.all_rbac, u.unit_id, u.role
+        FROM admins u
+        JOIN rbac r ON u.rbac_id = r.id
+        WHERE u.id = ?
+        LIMIT 1";
+
         $stmt = $this->conn->prepare($sqlQuery);
+
+        if ($stmt === false) {
+            return null;
+        }
 
         $stmt->bind_param("i", $adminId);
         $stmt->execute();
 
         $result = $stmt->get_result();
+        $arrResult = $result->fetch_assoc();
         $stmt->close();
 
-
-        $arrResult = $result->fetch_assoc();
-
-        if ($result->num_rows > 0) {
-            if ($arrResult['status'] === 'Active') {
-                return $arrResult;
-            } else {
-                return false;
-            }
-        } else {
+        if (!$arrResult) {
+            $this->adminDetailsCache[$adminId] = null;
             return null;
         }
+
+        if ($arrResult['status'] !== 'Active') {
+            $this->adminDetailsCache[$adminId] = false;
+            return false;
+        }
+
+        $this->adminDetailsCache[$adminId] = $arrResult;
+        return $arrResult;
     }
 }

@@ -2,22 +2,30 @@
 
 class Database
 {
-    private static ?Database $instance = null;
-    private Configuration $config;
-    private ?mysqli $connection = null;
-    private string $host;
-    private string $user;
-    private string $password;
-    private string $database;
+    private static $instance;
 
+    private $host;
+    private $user;
+    private $password;
+    private $database;
+    private $config;
+
+    /**
+     * اتصال فعال دیتابیس
+     *
+     * @var mysqli|null
+     */
+    private $connection = null;
+
+    // Dependency Injection
     private function __construct(Configuration $config)
     {
         $this->config = $config;
-        $this->loadConfig();
-        $this->connect();
+        $this->initializeConnection();
     }
 
-    public static function getInstance(Configuration $config): Database
+    // Use getInstance for Singleton pattern
+    public static function getInstance(Configuration $config)
     {
         if (self::$instance === null) {
             self::$instance = new self($config);
@@ -26,13 +34,19 @@ class Database
         return self::$instance;
     }
 
-    private function loadConfig(): void
+    private function initializeConnection()
     {
-        $allowedHosts = $this->config->getConfig('allowedHosts') ?? [];
+        $allowedHosts = $this->config->getConfig('allowedHosts');
 
-        $httpHost = $_SERVER['HTTP_HOST'] ?? '';
+        if (!is_array($allowedHosts)) {
+            $allowedHosts = [];
+        }
 
-        $environment = in_array($httpHost, $allowedHosts, true)
+        $currentHost = isset($_SERVER['HTTP_HOST'])
+            ? $_SERVER['HTTP_HOST']
+            : '';
+
+        $environment = in_array($currentHost, $allowedHosts, true)
             ? 'localhost'
             : 'production';
 
@@ -40,14 +54,10 @@ class Database
         $this->user = $this->config->getDB($environment, 'user');
         $this->password = $this->config->getDB($environment, 'password');
         $this->database = $this->config->getDB($environment, 'database');
-<<<<<<< HEAD
-    }
 
-    private function connect(): void
-    {
-        mysqli_report(MYSQLI_REPORT_OFF);
-
-        $charset = (stripos(PHP_OS, 'WIN') === 0) ? "utf8" : "utf8mb4";
+        $charset = (stripos(PHP_OS, 'WIN') === 0)
+            ? 'utf8'
+            : 'utf8mb4';
 
         $this->connection = new mysqli(
             $this->host,
@@ -57,77 +67,39 @@ class Database
         );
 
         if ($this->connection->connect_error) {
-            throw new Exception(
-                "Error failed to connect to MySQL: " . $this->connection->connect_error
+            die(
+                'Error failed to connect to MySQL: ' .
+                $this->connection->connect_error
             );
         }
 
         if (!$this->connection->set_charset($charset)) {
-            throw new Exception(
-                "Error failed to set MySQL charset: " . $this->connection->error
+            die(
+                'Error loading character set ' .
+                $charset .
+                ': ' .
+                $this->connection->error
             );
-        }
-    }
-
-    public function getConnection(): mysqli
-    {
-        if ($this->connection === null) {
-            $this->connect();
-=======
-    
-        $charset = (stripos(PHP_OS, 'WIN') === 0) ? "utf8" : "utf8mb4";
-    
-        $conn = new mysqli($this->host, $this->user, $this->password, $this->database);
-        $conn->set_charset($charset);
-    
-        if ($conn->connect_error) {
-            die("Error failed to connect to MySQL: " . $conn->connect_error);
-        } else {
-            return $conn;
-        }
-    }
-    
-    
-    public function getConnection()
-    {
-        $charset = (stripos(PHP_OS, 'WIN') === 0) ? "utf8" : "utf8mb4";
-    
-        $conn = new mysqli($this->host, $this->user, $this->password, $this->database);
-        $conn->set_charset($charset);
-    
-        if ($conn->connect_error) {
-            die("Error failed to connect to MySQL: " . $conn->connect_error);
-        } else {
-            return $conn;
->>>>>>> 5591029... some change
-        }
-
-        if (!$this->connection->ping()) {
-            $this->connect();
         }
 
         return $this->connection;
     }
 
-    public function closeConnection(): void
+    public function getConnection()
     {
-        if ($this->connection instanceof mysqli) {
-            $this->connection->close();
-            $this->connection = null;
+        /*
+         * اگر اتصال ساخته نشده یا قطع شده باشد،
+         * دوباره اتصال ایجاد می‌شود.
+         */
+        if (
+            $this->connection === null ||
+            !$this->connection->ping()
+        ) {
+            $this->initializeConnection();
         }
-    }
 
-    private function __clone()
-    {
+        return $this->connection;
     }
-
-    public function __wakeup()
-    {
-        throw new Exception("Cannot unserialize Database singleton.");
-    }
-    
-    
-    
 }
 
 ?>

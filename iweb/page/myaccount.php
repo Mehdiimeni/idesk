@@ -29,11 +29,7 @@ function includeFiles($objFileCaller, $specificFile)
     $objFileCaller->includeFileWithController('./iweb', 'global/', 'page_footer');
     $objFileCaller->includeFileWithController('./iweb', 'global/', 'page_js');
 }
-<<<<<<< HEAD
-$_SESSION['pageUserTitle'][] = 'my_account';
-=======
 $_SESSION['pageUserTitle'][] = 'profile';
->>>>>>> 5591029... some change
 includeFiles($objFileCaller, 'myaccount');
 
 

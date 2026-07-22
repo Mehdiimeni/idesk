@@ -647,11 +647,7 @@ return [
     'report_not_approved_yet' => 'این گزارش هنوز تایید نشده است.',
     'progress_percentage_cannot_be_zero' => 'درصد پیشرفت نمی‌تواند صفر باشد.',
     'start_date_required' => 'تاریخ شروع الزامی است.',
-<<<<<<< HEAD
-    'remember_login' => 'نگهداری ایمیل و رمز عبور',
-=======
->>>>>>> 5591029... some change
-
+    'condition_canceled_by_customer' => 'وضعیت لغو شده از طرف کارفرما',
 
 ];
 

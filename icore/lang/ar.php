@@ -647,9 +647,6 @@ return [
     'report_not_approved_yet' => 'لم يتم اعتماد هذا التقرير بعد.',
     'progress_percentage_cannot_be_zero' => 'لا يمكن أن تكون نسبة التقدم صفرًا.',
     'start_date_required' => 'تاريخ البدء مطلوب.',
-<<<<<<< HEAD
-    'remember_login' => 'حفظ البريد الإلكتروني وكلمة المرور',
-=======
->>>>>>> 5591029... some change
+    'condition_canceled_by_customer' => 'تم الإلغاء من قبل العميل',
 
 ];
