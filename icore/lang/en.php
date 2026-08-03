@@ -648,6 +648,10 @@ return [
     'progress_percentage_cannot_be_zero' => 'Progress percentage cannot be zero.',
     'start_date_required' => 'Start date is required.',
     'condition_canceled_by_customer' => 'Canceled by Customer',
+    'deactivation_operation' => 'Deactivation Operation',
+    'deactivate' => 'Deactivate',
+    'deactivated' => 'Deactivated',
+    'deactivate_comment_confirm' => 'Are you sure you want to deactivate this comment?',
 
 ];
 

@@ -17,6 +17,9 @@ $db = $database->getConnection();
 $rbacClass = new RBAC($db);
 $textToolsClass = TextTools::getInstance();
 
+// دسترسی غیرفعال‌سازی کامنت بر اساس لیست مدیران مجاز عملیات
+$canDeactivateCommentByOperation =$rbacClass->getAdminsByOperationName('deactivation_operation') ;
+
 // models
 $userModel = new UserModel($db);
 $adminModel = new AdminModel($db);
@@ -177,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
 
-// forward
+    // forward
     if (isset($_POST['forward'])) {
 
         $table_set = 'forwards';
@@ -477,6 +480,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+
+    // غیرفعال‌سازی نرم کامنت
+    // Flow:
+    // 1) شناسه کامنت فقط از POST دریافت و عددی‌سازی می‌شود.
+    // 2) رکورد از دیتابیس خوانده می‌شود تا مالکیت و تعلق آن به همین تیکت کنترل شود.
+    // 3) فقط سازنده کامنت یا مدیر دارای deactivation_operation اجازه تغییر is_active را دارد.
+    // 4) رکورد حذف نمی‌شود و فقط is_active = 0 می‌گردد.
+    if (isset($_POST['deactivate_comment'])) {
+        $commentId = isset($_POST['comment_id']) ? (int) $_POST['comment_id'] : 0;
+
+        if ($commentId > 0) {
+            $commentToDeactivate = $ticketsModel->getCommentById($commentId);
+
+            $commentBelongsToTicket =
+                !empty($commentToDeactivate) &&
+                (int) $commentToDeactivate['part_id'] === (int) $ticket_id &&
+                $commentToDeactivate['part_name'] === $part_name;
+
+            $isCommentCreator =
+                $commentBelongsToTicket &&
+                !empty($commentToDeactivate['admin_id']) &&
+                (int) $commentToDeactivate['admin_id'] === (int) $_SESSION['admin_id'];
+
+            if ($commentBelongsToTicket && ($isCommentCreator || $canDeactivateCommentByOperation)) {
+                $ticketsModel->deactivateComment($commentId, $ticket_id);
+            }
+        }
+
+        header("Refresh:0; url=tickets?ticket_id=" . $ticket_id_encrypt);
+        exit;
+    }
 
     // comment
     if (isset($_POST['comment_text']) && !empty($_POST['comment_text'])) {

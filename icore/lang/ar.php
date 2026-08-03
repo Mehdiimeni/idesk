@@ -648,5 +648,9 @@ return [
     'progress_percentage_cannot_be_zero' => 'لا يمكن أن تكون نسبة التقدم صفرًا.',
     'start_date_required' => 'تاريخ البدء مطلوب.',
     'condition_canceled_by_customer' => 'تم الإلغاء من قبل العميل',
+    'deactivation_operation' => 'عملية إلغاء التفعيل',
+    'deactivate' => 'تعطيل',
+    'deactivated' => 'تم التعطيل',
+    'deactivate_comment_confirm' => 'هل أنت متأكد من تعطيل هذا التعليق؟',
 
 ];

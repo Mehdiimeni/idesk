@@ -1,0 +1,36 @@
+[02-Aug-2026 08:38:38 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'idesk'@'localhost' (using password: YES) in E:\xampp\htdocs\idesk\icore\class\mysql.php:62
+Stack trace:
+#0 E:\xampp\htdocs\idesk\icore\class\mysql.php(62): mysqli->__construct('localhost', 'idesk', Object(SensitiveParameterValue), 'idesk')
+#1 E:\xampp\htdocs\idesk\icore\class\mysql.php(24): Database->initializeConnection()
+#2 E:\xampp\htdocs\idesk\icore\class\mysql.php(31): Database->__construct(Object(Configuration))
+#3 E:\xampp\htdocs\idesk\ipanel\page\tickets.php(8): Database::getInstance(Object(Configuration))
+#4 E:\xampp\htdocs\idesk\icore\class\router.php(75): include_once('E:\\xampp\\htdocs...')
+#5 E:\xampp\htdocs\idesk\icore\class\router.php(29): Router->invokeHandler('tickets', '.')
+#6 E:\xampp\htdocs\idesk\ipanel\core\route.php(27): Router->handleRequest('/tickets')
+#7 E:\xampp\htdocs\idesk\ipanel\index.php(33): require('E:\\xampp\\htdocs...')
+#8 {main}
+  thrown in E:\xampp\htdocs\idesk\icore\class\mysql.php on line 62
+[02-Aug-2026 08:42:38 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'idesk'@'localhost' (using password: YES) in E:\xampp\htdocs\idesk\icore\class\mysql.php:62
+Stack trace:
+#0 E:\xampp\htdocs\idesk\icore\class\mysql.php(62): mysqli->__construct('localhost', 'idesk', Object(SensitiveParameterValue), 'idesk')
+#1 E:\xampp\htdocs\idesk\icore\class\mysql.php(24): Database->initializeConnection()
+#2 E:\xampp\htdocs\idesk\icore\class\mysql.php(31): Database->__construct(Object(Configuration))
+#3 E:\xampp\htdocs\idesk\ipanel\page\tickets.php(8): Database::getInstance(Object(Configuration))
+#4 E:\xampp\htdocs\idesk\icore\class\router.php(75): include_once('E:\\xampp\\htdocs...')
+#5 E:\xampp\htdocs\idesk\icore\class\router.php(29): Router->invokeHandler('tickets', '.')
+#6 E:\xampp\htdocs\idesk\ipanel\core\route.php(27): Router->handleRequest('/tickets')
+#7 E:\xampp\htdocs\idesk\ipanel\index.php(33): require('E:\\xampp\\htdocs...')
+#8 {main}
+  thrown in E:\xampp\htdocs\idesk\icore\class\mysql.php on line 62
+[02-Aug-2026 09:18:23 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: YES) in E:\xampp\htdocs\idesk\icore\class\mysql.php:62
+Stack trace:
+#0 E:\xampp\htdocs\idesk\icore\class\mysql.php(62): mysqli->__construct('localhost', 'root', Object(SensitiveParameterValue), 'idesk')
+#1 E:\xampp\htdocs\idesk\icore\class\mysql.php(24): Database->initializeConnection()
+#2 E:\xampp\htdocs\idesk\icore\class\mysql.php(31): Database->__construct(Object(Configuration))
+#3 E:\xampp\htdocs\idesk\ipanel\page\tickets.php(8): Database::getInstance(Object(Configuration))
+#4 E:\xampp\htdocs\idesk\icore\class\router.php(75): include_once('E:\\xampp\\htdocs...')
+#5 E:\xampp\htdocs\idesk\icore\class\router.php(29): Router->invokeHandler('tickets', '.')
+#6 E:\xampp\htdocs\idesk\ipanel\core\route.php(27): Router->handleRequest('/tickets')
+#7 E:\xampp\htdocs\idesk\ipanel\index.php(33): require('E:\\xampp\\htdocs...')
+#8 {main}
+  thrown in E:\xampp\htdocs\idesk\icore\class\mysql.php on line 62

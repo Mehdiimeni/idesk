@@ -583,90 +583,115 @@
                     </div> <!-- end card-->
 
                     <?php if ($rbacClass->checkPermissionOperationByName('view_comment_operation')) { ?>
-                    
+
                         <style>
                             .comment-card {
                                 border: 1px solid #edf0f2 !important;
                                 border-radius: 10px;
                                 transition: all .2s ease;
                             }
-                    
+
                             .comment-card:hover {
                                 box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
                             }
-                    
+
                             .comment-border-success {
                                 border-inline-start: 4px solid #b7f0d6 !important;
                             }
-                    
+
                             .comment-border-danger {
                                 border-inline-start: 4px solid #ffd6d6 !important;
                             }
-                    
+
                             .comment-border-primary {
                                 border-inline-start: 4px solid #cfe2ff !important;
                             }
-                    
+
                             .reply-card {
                                 background: #fafafa;
                             }
-                    
+
                             .comment-text {
                                 line-height: 1.8;
                                 color: #6c757d;
                             }
-                    
+
                             .comment-badge {
                                 font-weight: 400;
                                 opacity: .75;
                             }
+
+                            .comment-inactive {
+                                background-color: #f3f4f6 !important;
+                                border-color: #d7dce1 !important;
+                                opacity: .58;
+                                filter: grayscale(1);
+                            }
+
+                            .comment-inactive .comment-text,
+                            .comment-inactive strong,
+                            .comment-inactive small {
+                                color: #8a9198 !important;
+                            }
                         </style>
-                    
+
                         <div class="card border shadow-sm">
                             <div class="card-body">
-                    
+
                                 <h4 class="mt-0 mb-3">
                                     <?php echo _lang['comments']; ?>
                                 </h4>
-                    
+
                                 <form validate action="./tickets?ticket_id=<?php echo $_GET['ticket_id']; ?>" method="post">
                                     <input type="hidden" name="parent_id" value="">
                                     <input type="hidden" name="creator_id" value="">
-                    
-                                    <textarea class="form-control form-control-light mb-2" placeholder="<?php echo _lang['write_message']; ?>"
-                                        required rows="3" name="comment_text"></textarea>
-                    
+
+                                    <textarea class="form-control form-control-light mb-2"
+                                        placeholder="<?php echo _lang['write_message']; ?>" required rows="3"
+                                        name="comment_text"></textarea>
+
                                     <div class="d-flex justify-content-between align-items-center mb-3">
-                    
+
                                         <div>
                                             <?php if ($rbacClass->checkPermissionOperationByName('local_comment_operation')) { ?>
                                                 <span class="me-2">
                                                     <?php echo _lang['show_for_customers']; ?>
                                                 </span>
-                    
+
                                                 <input type="checkbox" id="switch_comment" name="global" data-switch="info" />
-                    
+
                                                 <label for="switch_comment" data-on-label="<?php echo _lang['yes']; ?>"
                                                     data-off-label="<?php echo _lang['no']; ?>">
                                                 </label>
                                             <?php } ?>
                                         </div>
-                    
+
                                         <?php if ($rbacClass->checkPermissionOperationByName('add_comment_operation')) { ?>
                                             <button type="submit" name="submit" class="btn btn-primary btn-sm px-3">
                                                 <?php echo _lang['submit']; ?>
                                             </button>
                                         <?php } ?>
-                    
+
                                     </div>
                                 </form>
-                    
+
                                 <?php while ($commentDetail = $allComments->fetch_assoc()) { ?>
-                    
+
                                     <?php
                                     if ($commentDetail['local'] != 0 && $commentDetail['company_id'] != $_SESSION['company_id']) {
                                         continue;
                                     }
+
+                                    $commentIsActive = !isset($commentDetail['is_active']) || (int) $commentDetail['is_active'] === 1;
+                                    $isCommentOwner = !empty($commentDetail['admin_id']) &&
+                                        (int) $commentDetail['admin_id'] === (int) $_SESSION['admin_id'];
+
+                                    if (!$commentIsActive && !$isCommentOwner && !$canDeactivateCommentByOperation) {
+                                        continue;
+                                    }
+
+                                    $canDeactivateThisComment = $commentIsActive &&
+                                        ($isCommentOwner || $canDeactivateCommentByOperation);
 
                                     $creator_id = $commentDetail['user_id'] != ''
                                         ? $commentDetail['user_id']
@@ -700,41 +725,65 @@
                                         'UTF-8'
                                     );
                                     ?>
-                    
-                                    <div class="card comment-card mb-3 <?php echo $commentBorderClass; ?>">
+
+                                    <div
+                                        class="card comment-card mb-3 <?php echo $commentBorderClass; ?> <?php echo !$commentIsActive ? 'comment-inactive' : ''; ?>">
                                         <div class="card-body">
-                    
+
                                             <div class="d-flex justify-content-between align-items-start mb-2">
                                                 <div>
                                                     <strong><?php echo htmlspecialchars($commentDetail['name'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></strong>
-                    
+
                                                     <span class="badge comment-badge <?php echo $commentBadgeClass; ?> ms-2">
                                                         <?php echo $commentBadgeText; ?>
                                                     </span>
+
+                                                    <?php if (!$commentIsActive) { ?>
+                                                        <span class="badge bg-secondary ms-1">
+                                                            <?php echo isset(_lang['deactivated']) ? _lang['deactivated'] : 'غیرفعال شده'; ?>
+                                                        </span>
+                                                    <?php } ?>
                                                 </div>
-                    
+
                                                 <small class="text-muted">
                                                     <?php echo $commentDate; ?>
                                                 </small>
                                             </div>
-                    
+
                                             <div class="comment-text">
                                                 <?= nl2br($commentText) ?>
                                             </div>
-                    
-                                            <?php if ($rbacClass->checkPermissionOperationByName('reply_comment_operation')) { ?>
-                                                <div class="mt-3 text-end">
-                                                    <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 reply-comment-btn"
-                                                        data-bs-toggle="modal" data-bs-target="#replyCommentModal"
-                                                        data-parent-id="<?php echo $commentDetail['id']; ?>"
-                                                        data-creator-id="<?php echo $creator_id; ?>"
-                                                        data-reply-to="<?php echo htmlspecialchars($commentDetail['name'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>">
-                                                        <i class="mdi mdi-reply"></i>
-                                                        <?php echo _lang['reply']; ?>
-                                                    </button>
+
+                                            <?php if ($commentIsActive && ($rbacClass->checkPermissionOperationByName('reply_comment_operation') || $canDeactivateThisComment)) { ?>
+                                                <div class="mt-3 text-end d-flex justify-content-end gap-2">
+                                                    <?php if ($rbacClass->checkPermissionOperationByName('reply_comment_operation')) { ?>
+                                                        <button type="button"
+                                                            class="btn btn-sm btn-outline-primary rounded-pill px-3 reply-comment-btn"
+                                                            data-bs-toggle="modal" data-bs-target="#replyCommentModal"
+                                                            data-parent-id="<?php echo $commentDetail['id']; ?>"
+                                                            data-creator-id="<?php echo $creator_id; ?>"
+                                                            data-reply-to="<?php echo htmlspecialchars($commentDetail['name'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>">
+                                                            <i class="mdi mdi-reply"></i>
+                                                            <?php echo _lang['reply']; ?>
+                                                        </button>
+                                                    <?php } ?>
+
+                                                    <?php if ($canDeactivateThisComment) { ?>
+                                                        <form method="post"
+                                                            action="./tickets?ticket_id=<?php echo $_GET['ticket_id']; ?>"
+                                                            onsubmit="return confirm('<?php echo isset(_lang['deactivate_comment_confirm']) ? _lang['deactivate_comment_confirm'] : 'آیا از غیرفعال‌سازی این کامنت مطمئن هستید؟'; ?>');">
+                                                            <input type="hidden" name="comment_id"
+                                                                value="<?php echo (int) $commentDetail['id']; ?>">
+                                                            <button type="submit" name="deactivate_comment" value="1"
+                                                                class="btn btn-sm btn-outline-secondary rounded-pill px-3">
+                                                                <i class="mdi mdi-eye-off-outline"></i>
+                                                                <?php echo isset(_lang['deactivate']) ? _lang['deactivate'] : 'غیرفعال کردن'; ?>
+                                                            </button>
+                                                        </form>
+                                                    <?php } ?>
                                                 </div>
                                             <?php } ?>
-                    
+
                                             <?php
                                             $replyComments = $commentModel->getCommentPartByParentId($commentDetail['id']);
 
@@ -743,6 +792,17 @@
                                                 if ($replyDetail['local'] != 0 && $replyDetail['company_id'] != $_SESSION['company_id']) {
                                                     continue;
                                                 }
+
+                                                $replyIsActive = !isset($replyDetail['is_active']) || (int) $replyDetail['is_active'] === 1;
+                                                $isReplyOwner = !empty($replyDetail['admin_id']) &&
+                                                    (int) $replyDetail['admin_id'] === (int) $_SESSION['admin_id'];
+
+                                                if (!$replyIsActive && !$isReplyOwner && !$canDeactivateCommentByOperation) {
+                                                    continue;
+                                                }
+
+                                                $canDeactivateThisReply = $replyIsActive &&
+                                                    ($isReplyOwner || $canDeactivateCommentByOperation);
 
                                                 $replyBorderClass = 'comment-border-primary';
                                                 $replyBadgeClass = 'bg-primary';
@@ -772,93 +832,119 @@
                                                     'UTF-8'
                                                 );
                                                 ?>
-                    
+
                                                 <div class="ms-md-5 ms-3 mt-3">
-                                                    <div class="card comment-card reply-card <?php echo $replyBorderClass; ?>">
+                                                    <div
+                                                        class="card comment-card reply-card <?php echo $replyBorderClass; ?> <?php echo !$replyIsActive ? 'comment-inactive' : ''; ?>">
                                                         <div class="card-body py-3">
-                    
+
                                                             <div class="d-flex justify-content-between align-items-start mb-2">
                                                                 <div>
                                                                     <strong><?php echo htmlspecialchars($replyDetail['name'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></strong>
-                    
-                                                                    <span class="badge comment-badge <?php echo $replyBadgeClass; ?> ms-2">
+
+                                                                    <span
+                                                                        class="badge comment-badge <?php echo $replyBadgeClass; ?> ms-2">
                                                                         <?php echo $replyBadgeText; ?>
                                                                     </span>
+
+                                                                    <?php if (!$replyIsActive) { ?>
+                                                                        <span class="badge bg-secondary ms-1">
+                                                                            <?php echo isset(_lang['deactivated']) ? _lang['deactivated'] : 'غیرفعال شده'; ?>
+                                                                        </span>
+                                                                    <?php } ?>
                                                                 </div>
-                    
+
                                                                 <small class="text-muted">
                                                                     <?php echo $replyDate; ?>
                                                                 </small>
                                                             </div>
-                    
+
                                                             <div class="comment-text">
                                                                 <?= nl2br($replyText) ?>
                                                             </div>
-                    
+
+                                                            <?php if ($canDeactivateThisReply) { ?>
+                                                                <div class="mt-3 text-end">
+                                                                    <form method="post"
+                                                                        action="./tickets?ticket_id=<?php echo $_GET['ticket_id']; ?>"
+                                                                        onsubmit="return confirm('<?php echo isset(_lang['deactivate_comment_confirm']) ? _lang['deactivate_comment_confirm'] : 'آیا از غیرفعال‌سازی این کامنت مطمئن هستید؟'; ?>');">
+                                                                        <input type="hidden" name="comment_id"
+                                                                            value="<?php echo (int) $replyDetail['id']; ?>">
+                                                                        <button type="submit" name="deactivate_comment" value="1"
+                                                                            class="btn btn-sm btn-outline-secondary rounded-pill px-3">
+                                                                            <i class="mdi mdi-eye-off-outline"></i>
+                                                                            <?php echo isset(_lang['deactivate']) ? _lang['deactivate'] : 'غیرفعال کردن'; ?>
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
+                                                            <?php } ?>
+
                                                         </div>
                                                     </div>
                                                 </div>
-                    
+
                                             <?php } ?>
-                    
+
                                         </div>
                                     </div>
-                    
+
                                 <?php } ?>
-                    
+
                             </div>
                         </div>
-                    
+
                         <div class="modal fade" id="replyCommentModal" tabindex="-1" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
-                                <form validate class="modal-content" action="./tickets?ticket_id=<?php echo $_GET['ticket_id']; ?>"
-                                    method="post">
-                    
+                                <form validate class="modal-content"
+                                    action="./tickets?ticket_id=<?php echo $_GET['ticket_id']; ?>" method="post">
+
                                     <div class="modal-header">
                                         <h5 class="modal-title">
                                             <?php echo _lang['reply']; ?>
                                             <small class="text-muted" id="replyToName"></small>
                                         </h5>
-                    
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
-                    
+
                                     <div class="modal-body">
                                         <input type="hidden" name="parent_id" id="modal_parent_id">
                                         <input type="hidden" name="creator_id" id="modal_creator_id">
-                    
-                                        <textarea class="form-control mb-3" name="comment_text" id="modal_comment_text" rows="4" required
-                                            placeholder="<?php echo _lang['your_answer']; ?>"></textarea>
-                    
+
+                                        <textarea class="form-control mb-3" name="comment_text" id="modal_comment_text"
+                                            rows="4" required placeholder="<?php echo _lang['your_answer']; ?>"></textarea>
+
                                         <?php if ($rbacClass->checkPermissionOperationByName('local_comment_operation')) { ?>
                                             <div class="d-flex align-items-center">
                                                 <span class="me-2">
                                                     <?php echo _lang['show_for_customers']; ?>
                                                 </span>
-                    
-                                                <input type="checkbox" id="switch_reply_comment" name="global" data-switch="info" />
-                    
+
+                                                <input type="checkbox" id="switch_reply_comment" name="global"
+                                                    data-switch="info" />
+
                                                 <label for="switch_reply_comment" data-on-label="<?php echo _lang['yes']; ?>"
                                                     data-off-label="<?php echo _lang['no']; ?>">
                                                 </label>
                                             </div>
                                         <?php } ?>
                                     </div>
-                    
+
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">
                                             <?php echo defined('_lang') && isset(_lang['cancel']) ? _lang['cancel'] : 'انصراف'; ?>
                                         </button>
-                    
+
                                         <button type="submit" name="submit" class="btn btn-primary">
                                             <?php echo _lang['answer']; ?>
                                         </button>
                                     </div>
-                    
+
                                 </form>
                             </div>
                         </div>
-                    
+
                         <script>
                             document.addEventListener('DOMContentLoaded', function () {
                                 document.querySelectorAll('.reply-comment-btn').forEach(function (button) {
@@ -876,7 +962,7 @@
                                 });
                             });
                         </script>
-                    
+
                     <?php } ?>
 
                     <?php if ($rbacClass->checkPermissionOperationByName('view_schedule_operation') && $allSchedule->num_rows > 0) { ?>

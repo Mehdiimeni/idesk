@@ -181,6 +181,70 @@ $allKanbanTag = $ticketsModel->getAllKabanTag();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    /*
+     * Flow غیرفعال‌سازی کامنت در سمت کاربر:
+     * 1) شناسه کامنت از فرم دریافت و به عدد صحیح تبدیل می‌شود.
+     * 2) رکورد فقط در صورتی انتخاب می‌شود که متعلق به همین تیکت و همین بخش باشد.
+     * 3) مالکیت با user_id نشست جاری بررسی می‌شود؛ بنابراین کاربر نمی‌تواند کامنت دیگران را غیرفعال کند.
+     * 4) حذف فیزیکی انجام نمی‌شود و فقط is_active از 1 به 0 تغییر می‌کند.
+     * 5) پس از پایان عملیات، صفحه با الگوی PRG مجدداً بارگذاری می‌شود تا ارسال دوباره فرم رخ ندهد.
+     */
+    if (isset($_POST['deactivate_comment'])) {
+        $commentId = isset($_POST['deactivate_comment_id']) ? (int) $_POST['deactivate_comment_id'] : 0;
+        $currentUserId = (int) ($_SESSION['user_id'] ?? 0);
+
+        if ($commentId > 0 && $currentUserId > 0) {
+            $checkSql = "
+                SELECT id
+                FROM comments
+                WHERE id = ?
+                  AND part_id = ?
+                  AND part_name = ?
+                  AND user_id = ?
+                  AND is_active = 1
+                LIMIT 1
+            ";
+
+
+            $checkStmt = $db->prepare($checkSql);
+
+            if ($checkStmt !== false) {
+                $checkStmt->bind_param("iisi", $commentId, $ticket_id, $part_name, $currentUserId);
+                $checkStmt->execute();
+                $checkResult = $checkStmt->get_result();
+                $canDeactivateComment = $checkResult && $checkResult->num_rows === 1;
+
+                if ($checkResult) {
+                    $checkResult->free();
+                }
+
+                $checkStmt->close();
+
+                if ($canDeactivateComment) {
+                    $updateSql = "
+                        UPDATE comments
+                        SET is_active = 0
+                        WHERE id = ?
+                          AND part_id = ?
+                          AND part_name = ?
+                          AND user_id = ?
+                          AND is_active = 1
+                    ";
+
+                    $updateStmt = $db->prepare($updateSql);
+
+                    if ($updateStmt !== false) {
+                        $updateStmt->bind_param("iisi", $commentId, $ticket_id, $part_name, $currentUserId);
+                        $updateStmt->execute();
+                        $updateStmt->close();
+                    }
+                }
+            }
+        }
+
+        header("Location: ./tickets?ticket_id=" . urlencode($ticket_id_encrypt));
+        exit;
+    }
 
 
     // attach file

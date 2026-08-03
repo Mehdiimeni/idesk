@@ -648,6 +648,10 @@ return [
     'progress_percentage_cannot_be_zero' => 'درصد پیشرفت نمی‌تواند صفر باشد.',
     'start_date_required' => 'تاریخ شروع الزامی است.',
     'condition_canceled_by_customer' => 'وضعیت لغو شده از طرف کارفرما',
+    'deactivation_operation' => 'عملیات غیرفعال کردن',
+    'deactivate' => 'غیرفعال کردن',
+    'deactivated' => 'غیرفعال شده',
+    'deactivate_comment_confirm' => 'آیا از غیرفعال‌سازی این کامنت مطمئن هستید؟',
 
 ];
 

@@ -3341,6 +3341,77 @@ class TicketModel
     }
 
 
+
+    /**
+     * دریافت یک کامنت برای کنترل مالکیت و ارتباط آن با تیکت.
+     *
+     * Flow:
+     * 1) شناسه کامنت دریافت می‌شود.
+     * 2) رکورد فقط از جدول comments خوانده می‌شود.
+     * 3) کنترل نهایی part_name و part_id در کنترلر انجام می‌شود تا کامنت تیکت دیگری تغییر نکند.
+     */
+    public function getCommentById(int $commentId): ?array
+    {
+        $sql = "
+            SELECT id, part_id, part_name, admin_id, user_id, parent_id, is_active
+            FROM comments
+            WHERE id = ?
+            LIMIT 1
+        ";
+
+        $stmt = $this->conn->prepare($sql);
+
+        if ($stmt === false) {
+            throw new \Exception('Prepare failed: ' . $this->conn->error);
+        }
+
+        $stmt->bind_param('i', $commentId);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $comment = $result->fetch_assoc() ?: null;
+
+        $result->free();
+        $stmt->close();
+
+        return $comment;
+    }
+
+    /**
+     * غیرفعال‌سازی نرم کامنت.
+     *
+     * Flow:
+     * 1) فقط رکورد متعلق به همان تیکت و بخش tickets هدف قرار می‌گیرد.
+     * 2) مقدار is_active از 1 به 0 تغییر می‌کند و متن کامنت حذف نمی‌شود.
+     * 3) شرط is_active = 1 از اجرای تکراری عملیات جلوگیری می‌کند.
+     */
+    public function deactivateComment(int $commentId, int $ticketId): bool
+    {
+        $sql = "
+            UPDATE comments
+            SET is_active = 0
+            WHERE id = ?
+              AND part_id = ?
+              AND part_name = 'tickets'
+              AND COALESCE(is_active, 1) = 1
+        ";
+
+        $stmt = $this->conn->prepare($sql);
+
+        if ($stmt === false) {
+            throw new \Exception('Prepare failed: ' . $this->conn->error);
+        }
+
+        $stmt->bind_param('ii', $commentId, $ticketId);
+        $stmt->execute();
+
+        $updated = $stmt->affected_rows === 1;
+        $stmt->close();
+
+        return $updated;
+    }
+
+
 }
 
 

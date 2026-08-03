@@ -930,18 +930,18 @@ LIMIT 1
         return $partIds;
     }
 
-public function getMarkingTagsByTicketIds(array $ticketIds): array
-{
-    if (empty($ticketIds)) {
-        return [];
-    }
+    public function getMarkingTagsByTicketIds(array $ticketIds): array
+    {
+        if (empty($ticketIds)) {
+            return [];
+        }
 
-    $ticketIds = array_map('intval', $ticketIds);
-    $userId = (int)$_SESSION['user_id'];
+        $ticketIds = array_map('intval', $ticketIds);
+        $userId = (int) $_SESSION['user_id'];
 
-    $placeholders = implode(',', array_fill(0, count($ticketIds), '?'));
+        $placeholders = implode(',', array_fill(0, count($ticketIds), '?'));
 
-    $sql = "
+        $sql = "
         SELECT
             m.part_id,
             mt.id,
@@ -953,24 +953,24 @@ public function getMarkingTagsByTicketIds(array $ticketIds): array
           AND mt.user_id = ?
     ";
 
-    $stmt = $this->conn->prepare($sql);
+        $stmt = $this->conn->prepare($sql);
 
-    $types = str_repeat('i', count($ticketIds)) . 'i';
-    $params = [...$ticketIds, $userId];
+        $types = str_repeat('i', count($ticketIds)) . 'i';
+        $params = [...$ticketIds, $userId];
 
-    $stmt->bind_param($types, ...$params);
-    $stmt->execute();
+        $stmt->bind_param($types, ...$params);
+        $stmt->execute();
 
-    $result = $stmt->get_result();
+        $result = $stmt->get_result();
 
-    $tags = [];
+        $tags = [];
 
-    while ($row = $result->fetch_assoc()) {
-        $tags[$row['part_id']] = $row;
+        while ($row = $result->fetch_assoc()) {
+            $tags[$row['part_id']] = $row;
+        }
+
+        return $tags;
     }
-
-    return $tags;
-}
 
     public function getMarkingTagByTicketId(int $ticketId): ?array
     {
@@ -996,4 +996,48 @@ public function getMarkingTagsByTicketIds(array $ticketIds): array
 
         return $result->fetch_assoc() ?: null;
     }
+
+
+    /**
+     * غیرفعال‌سازی نرم یک کامنت توسط سازنده آن در سمت کاربر.
+     *
+     * ترتیب کنترل:
+     * 1) شناسه‌ها به عدد صحیح تبدیل می‌شوند.
+     * 2) فقط رکورد متعلق به همان تیکت و همان کاربر انتخاب می‌شود.
+     * 3) تنها رکورد فعال به is_active = 0 تغییر می‌کند.
+     *
+     * این محدودیت مانع غیرفعال‌سازی کامنت سایر کاربران یا کامنت تیکت دیگر می‌شود.
+     */
+    public function deactivateOwnComment(int $commentId, int $ticketId, int $userId): bool
+    {
+        if ($commentId <= 0 || $ticketId <= 0 || $userId <= 0) {
+            return false;
+        }
+
+        $sql = "
+            UPDATE comments
+            SET is_active = 0
+            WHERE id = ?
+              AND part_id = ?
+              AND part_name = 'tickets'
+              AND user_id = ?
+              AND is_active = 1
+            LIMIT 1
+        ";
+
+        $stmt = $this->conn->prepare($sql);
+
+        if ($stmt === false) {
+            throw new \Exception('Prepare failed: ' . $this->conn->error);
+        }
+
+        $stmt->bind_param('iii', $commentId, $ticketId, $userId);
+        $stmt->execute();
+
+        $updated = $stmt->affected_rows === 1;
+        $stmt->close();
+
+        return $updated;
+    }
+
 }
