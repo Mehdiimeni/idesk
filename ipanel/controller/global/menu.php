@@ -51,6 +51,7 @@ $permissions = [
             'daily_report' => './daily_report',
             'chat_center' => './chat_center',
             'marking_tags' => './marking_tags',
+            'department_current_works' => './department_current_works',
             
         ]
     ],

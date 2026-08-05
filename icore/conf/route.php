@@ -91,7 +91,9 @@ return [
     ['path' => '/priority_list_logs', 'file' => 'priority_list_logs'],
     ['path' => '/priority_list_logs/{param}', 'file' => 'priority_list_logs'],
     ['path' => '/marking_tags', 'file' => 'marking_tags'],
-    
+    ['path' => '/department_current_works', 'file' => 'department_current_works'],
+
+
 
 ];
 ?>
