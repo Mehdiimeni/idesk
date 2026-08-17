@@ -735,5 +735,6 @@ return [
     'current_support_work_operation' => 'عملية الدعم الحالية',
     'current_work_management_view_operation' => 'عملية إدارة العمل الحالية',
     'filter' => 'تصفية',
+    'view_deactivation_operation' => 'عرض التذاكر غير النشطة',
 
 ];

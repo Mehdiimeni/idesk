@@ -19,6 +19,7 @@ $textToolsClass = TextTools::getInstance();
 
 // دسترسی غیرفعال‌سازی کامنت بر اساس لیست مدیران مجاز عملیات
 $canDeactivateCommentByOperation =$rbacClass->getAdminsByOperationName('deactivation_operation') ;
+$canViewDeactivateCommentByOperation =$rbacClass->checkPermissionOperationByName('view_deactivation_operation') ;
 
 // models
 $userModel = new UserModel($db);

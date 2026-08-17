@@ -735,6 +735,7 @@ return [
     'current_support_work_operation' => 'Current Support Work Operation',
     'current_work_management_view_operation' => 'Current Work Management View Operation',
     'filter' => 'Filter',
+    'view_deactivation_operation' => 'View Inactive Tickets',
 
 ];
 

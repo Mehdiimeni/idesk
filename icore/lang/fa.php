@@ -736,6 +736,7 @@ return [
     'current_support_work_operation' => 'عملیات جاری پشتیبانی',
     'current_work_management_view_operation' => 'عملیات جاری مشاهده مدیریت کار',
     'filter' => 'فیلتر',
+    'view_deactivation_operation' => 'عملیات مشاهده تیکت های غیر فعال',
     
 
 ];

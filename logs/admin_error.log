@@ -30,3 +30,16 @@ Stack trace:
 #7 E:\xampp\htdocs\idesk\ipanel\index.php(33): require('E:\\xampp\\htdocs...')
 #8 {main}
   thrown in E:\xampp\htdocs\idesk\ipanel\template\ticket\department_current_works.php on line 225
+[17-Aug-2026 10:10:24 Europe/Berlin] PHP Fatal error:  Uncaught ArgumentCountError: var_dump() expects at least 1 argument, 0 given in E:\xampp\htdocs\idesk\ipanel\controller\ticket\ticket_details.php:23
+Stack trace:
+#0 E:\xampp\htdocs\idesk\ipanel\controller\ticket\ticket_details.php(23): var_dump()
+#1 E:\xampp\htdocs\idesk\ipanel\view\ticket\ticket_details.php(3): include('E:\\xampp\\htdocs...')
+#2 E:\xampp\htdocs\idesk\icore\class\file_caller.php(30): require_once('E:\\xampp\\htdocs...')
+#3 E:\xampp\htdocs\idesk\ipanel\page\tickets.php(34): FileCaller->includeFileWithController('.', 'ticket/', 'ticket_details')
+#4 E:\xampp\htdocs\idesk\ipanel\page\tickets.php(49): includeFiles(Object(FileCaller), 'ticket_details')
+#5 E:\xampp\htdocs\idesk\icore\class\router.php(75): include_once('E:\\xampp\\htdocs...')
+#6 E:\xampp\htdocs\idesk\icore\class\router.php(29): Router->invokeHandler('tickets', '.')
+#7 E:\xampp\htdocs\idesk\ipanel\core\route.php(27): Router->handleRequest('/tickets')
+#8 E:\xampp\htdocs\idesk\ipanel\index.php(33): require('E:\\xampp\\htdocs...')
+#9 {main}
+  thrown in E:\xampp\htdocs\idesk\ipanel\controller\ticket\ticket_details.php on line 23

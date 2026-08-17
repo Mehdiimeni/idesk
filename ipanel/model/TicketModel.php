@@ -3412,89 +3412,137 @@ class TicketModel
     }
 
 
-    public function SetAutoCondition(array $listAutoChangeCondition): void
-    {
-        $currentHour = (int) date('H');
+public function SetAutoCondition(array $listAutoChangeCondition): void
+{
+    $currentHour = (int) date('H');
 
-        if ($currentHour >= 8 && $currentHour < 14) {
-            return;
-        }
+ 
 
-        if (empty($listAutoChangeCondition)) {
-            return;
-        }
-
-        $stmt = null;
-
-        try {
-            $this->conn->begin_transaction();
-
-            $sql = "
-            UPDATE tickets
-            SET status = ?
-            WHERE status = ?
-              AND last_updated_date IS NOT NULL
-              AND last_updated_date >= DATE_SUB(NOW(), INTERVAL 2 MONTH)
-              AND last_updated_date < ?
-        ";
-
-            $stmt = $this->conn->prepare($sql);
-
-            if ($stmt === false) {
-                $this->conn->rollback();
-                return;
-            }
-
-            foreach ($listAutoChangeCondition as $autoCondition) {
-                if (
-                    !is_array($autoCondition) ||
-                    count($autoCondition) < 3
-                ) {
-                    continue;
-                }
-
-                $currentCondition = trim((string) $autoCondition[0]);
-                $newCondition = trim((string) $autoCondition[1]);
-                $days = (int) $autoCondition[2];
-
-                if (
-                    $currentCondition === '' ||
-                    $newCondition === '' ||
-                    $days <= 0
-                ) {
-                    continue;
-                }
-
-                $timeLimit = date(
-                    'Y-m-d H:i:s',
-                    strtotime("-{$days} days")
-                );
-
-                $stmt->bind_param(
-                    'sss',
-                    $newCondition,
-                    $currentCondition,
-                    $timeLimit
-                );
-
-                if (!$stmt->execute()) {
-                    $stmt->close();
-                    $this->conn->rollback();
-                    return;
-                }
-            }
-
-            $stmt->close();
-            $this->conn->commit();
-        } catch (\Throwable $e) {
-            if ($stmt !== null) {
-                $stmt->close();
-            }
-
-            $this->conn->rollback();
-        }
+    if (empty($listAutoChangeCondition)) {
+        return;
     }
 
+    $conditions = [];
+
+    foreach ($listAutoChangeCondition as $autoCondition) {
+        if (!is_array($autoCondition) || count($autoCondition) < 3) {
+            continue;
+        }
+
+        $currentCondition = trim((string) $autoCondition[0]);
+        $newCondition     = trim((string) $autoCondition[1]);
+        $days             = (int) $autoCondition[2];
+
+        if (
+            $currentCondition === '' ||
+            $newCondition === '' ||
+            $days <= 0
+        ) {
+            continue;
+        }
+
+        $conditions[] = [
+            'current' => $currentCondition,
+            'new'     => $newCondition,
+            'days'    => $days,
+        ];
+    }
+
+    if (empty($conditions)) {
+        return;
+    }
+
+    $caseParts  = [];
+    $whereParts = [];
+    $params     = [];
+    $types      = '';
+
+    foreach ($conditions as $condition) {
+
+        /*
+         * CASE:
+         * اگر وضعیت فعلی برابر current بود
+         * و تعداد روز لازم گذشته بود،
+         * status به مقدار جدید تغییر کند.
+         */
+        $caseParts[] = "
+            WHEN status = ?
+             AND last_updated_date < DATE_SUB(NOW(), INTERVAL ? DAY)
+            THEN ?
+        ";
+
+        $params[] = $condition['current'];
+        $params[] = $condition['days'];
+        $params[] = $condition['new'];
+
+        $types .= 'sis';
+
+        /*
+         * WHERE:
+         * فقط رکوردهایی وارد UPDATE شوند
+         * که حداقل یکی از Ruleها روی آنها قابل اعمال باشد.
+         */
+        $whereParts[] = "
+            (
+                status = ?
+                AND last_updated_date < DATE_SUB(NOW(), INTERVAL ? DAY)
+            )
+        ";
+
+        $params[] = $condition['current'];
+        $params[] = $condition['days'];
+
+        $types .= 'si';
+    }
+
+    $sql = "
+        UPDATE tickets
+        SET status = CASE
+            " . implode("\n", $caseParts) . "
+            ELSE status
+        END
+        WHERE last_updated_date IS NOT NULL
+          AND last_updated_date >= DATE_SUB(NOW(), INTERVAL 2 MONTH)
+          AND (
+              " . implode("\n OR \n", $whereParts) . "
+          )
+    ";
+
+    $stmt = null;
+
+    try {
+        $this->conn->begin_transaction();
+
+        $stmt = $this->conn->prepare($sql);
+
+        if ($stmt === false) {
+            $this->conn->rollback();
+            return;
+        }
+
+        $stmt->bind_param(
+            $types,
+            ...$params
+        );
+
+        if (!$stmt->execute()) {
+            $stmt->close();
+            $this->conn->rollback();
+            return;
+        }
+
+        $stmt->close();
+        $this->conn->commit();
+
+    } catch (\Throwable $e) {
+
+        if ($stmt !== null) {
+            $stmt->close();
+        }
+
+        $this->conn->rollback();
+    }
+}
 
 }
 

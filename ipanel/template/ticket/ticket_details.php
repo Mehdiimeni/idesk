@@ -686,7 +686,7 @@
                                     $isCommentOwner = !empty($commentDetail['admin_id']) &&
                                         (int) $commentDetail['admin_id'] === (int) $_SESSION['admin_id'];
 
-                                    if (!$commentIsActive && !$isCommentOwner && !$canDeactivateCommentByOperation) {
+                                    if (!$commentIsActive && !$isCommentOwner && !$canViewDeactivateCommentByOperation) {
                                         continue;
                                     }
 
