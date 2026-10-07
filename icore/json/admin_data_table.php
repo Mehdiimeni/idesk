@@ -299,6 +299,30 @@ foreach ($allTicketsResult as $row) {
     $dateConverter = new DateConverter($row['ticket_creation_date'], $config->getNowLanguage('a'));
     $rowJson['ticket_creation_date_shamsi'] = $dateConverter->convertToShamsi();
 
+    // Ticket older than 14 days
+    $rowJson['is_overdue'] = 0;
+
+    if (!empty($row['ticket_creation_date'])) {
+
+        $createdTime = strtotime($row['ticket_creation_date']);
+
+        if (
+            $createdTime !== false &&
+            $createdTime < strtotime('-14 days')
+        ) {
+            $rowJson['is_overdue'] = 1;
+        }
+    }
+
+    if (!empty($row['ticket_creation_date'])) {
+        $ticketCreatedAt = strtotime($row['ticket_creation_date']);
+        $fourteenDaysAgo = strtotime('-14 days');
+
+        if ($ticketCreatedAt !== false && $ticketCreatedAt < $fourteenDaysAgo) {
+            $rowJson['is_overdue'] = 1;
+        }
+    }
+
     $rowJson['type_group'] = '<span class="badge bg-soft-primary text-primary">' . htmlspecialchars($row['type_group'], ENT_QUOTES, 'UTF-8') . '</span>';
     $rowJson['ticket_priority'] = getPriorityBadge($row['ticket_priority']);
 

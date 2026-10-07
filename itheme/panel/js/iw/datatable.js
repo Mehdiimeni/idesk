@@ -93,182 +93,189 @@ $(document).ready(function () {
     });
 
     // Datatable with Alternative Pagination and Buttons
-$(document).ready(function () {
-    "use strict";
+    $(document).ready(function () {
+        "use strict";
 
-    let urlParams = new URLSearchParams(window.location.search);
-    let mark = urlParams.get('mark') || '';
-    let referred = urlParams.get('referred') || '';
-    let condition = urlParams.get('condition_name') || '';
-    let details = urlParams.get('details') || '';
+        let urlParams = new URLSearchParams(window.location.search);
+        let mark = urlParams.get('mark') || '';
+        let referred = urlParams.get('referred') || '';
+        let condition = urlParams.get('condition_name') || '';
+        let details = urlParams.get('details') || '';
 
-    let currentSearch = '';
-    let originalTitle = document.title;
-    let tabHasUpdate = false;
+        let currentSearch = '';
+        let originalTitle = document.title;
+        let tabHasUpdate = false;
 
-    if (!$("#alternative-page-datatable").length) {
-        return;
-    }
+        if (!$("#alternative-page-datatable").length) {
+            return;
+        }
 
-    let table = $("#alternative-page-datatable").DataTable({
-        pagingType: "full_numbers",
-        responsive: true,
-        order: [[0, 'desc']],
-        lengthMenu: [10, 25, 50, 100, 250, 500],
-        pageLength: 25,
-        processing: true,
-        serverSide: true,
-        stateSave: true,
-        deferRender: true,
+        let table = $("#alternative-page-datatable").DataTable({
+            pagingType: "full_numbers",
+            responsive: true,
+            order: [[0, 'desc']],
+            lengthMenu: [10, 25, 50, 100, 250, 500],
+            pageLength: 25,
+            processing: true,
+            serverSide: true,
+            stateSave: true,
+            deferRender: true,
 
-        ajax: {
-            url: "../icore/json/admin_data_table.php",
-            type: "POST",
-            data: function (d) {
-                d.mark = mark;
-                d.referred = referred;
-                d.condition = condition;
-                d.details = details;
-                d.search.value = currentSearch;
-                return d;
-            }
-        },
-
-        columns: window.datatableColumns,
-
-        dom:
-            "<'ticket-table-toolbar d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2'lfB>" +
-            "rt" +
-            "<'d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3'ip>",
-
-        buttons: [
-            { extend: 'copy', className: 'btn btn-sm btn-light border rounded-pill' },
-            { extend: 'csv', className: 'btn btn-sm btn-light border rounded-pill' },
-            { extend: 'excel', className: 'btn btn-sm btn-light border rounded-pill' },
-            { extend: 'print', className: 'btn btn-sm btn-light border rounded-pill' }
-        ],
-
-        language: {
-            processing:
-                "<div class='ticket-loading'>" +
-                "<div class='spinner-border spinner-border-sm text-primary me-2'></div>" +
-                "در حال بارگذاری اطلاعات..." +
-                "</div>",
-            paginate: {
-                first: "<i class='mdi mdi-page-first'></i>",
-                last: "<i class='mdi mdi-page-last'></i>",
-                previous: "<i class='mdi mdi-chevron-left'></i>",
-                next: "<i class='mdi mdi-chevron-right'></i>"
+            ajax: {
+                url: "../icore/json/admin_data_table.php",
+                type: "POST",
+                data: function (d) {
+                    d.mark = mark;
+                    d.referred = referred;
+                    d.condition = condition;
+                    d.details = details;
+                    d.search.value = currentSearch;
+                    return d;
+                }
             },
-            search: "",
-            lengthMenu: "نمایش _MENU_ ردیف",
-            info: "نمایش _START_ تا _END_ از مجموع _TOTAL_ تیکت",
-            emptyTable: "تیکتی برای نمایش وجود ندارد",
-            zeroRecords: "نتیجه‌ای مطابق جستجو پیدا نشد"
-        },
 
-        drawCallback: function () {
-            $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
+            columns: window.datatableColumns,
+            createdRow: function (row, data) {
+                if (referred === '0' && Number(data.is_overdue) === 1) {
+                    $(row).addClass('ticket-overdue');
+                }
+            },
 
-            if (typeof bootstrap !== 'undefined') {
-                document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
-                    new bootstrap.Tooltip(el);
+
+
+            dom:
+                "<'ticket-table-toolbar d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2'lfB>" +
+                "rt" +
+                "<'d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3'ip>",
+
+            buttons: [
+                { extend: 'copy', className: 'btn btn-sm btn-light border rounded-pill' },
+                { extend: 'csv', className: 'btn btn-sm btn-light border rounded-pill' },
+                { extend: 'excel', className: 'btn btn-sm btn-light border rounded-pill' },
+                { extend: 'print', className: 'btn btn-sm btn-light border rounded-pill' }
+            ],
+
+            language: {
+                processing:
+                    "<div class='ticket-loading'>" +
+                    "<div class='spinner-border spinner-border-sm text-primary me-2'></div>" +
+                    "در حال بارگذاری اطلاعات..." +
+                    "</div>",
+                paginate: {
+                    first: "<i class='mdi mdi-page-first'></i>",
+                    last: "<i class='mdi mdi-page-last'></i>",
+                    previous: "<i class='mdi mdi-chevron-left'></i>",
+                    next: "<i class='mdi mdi-chevron-right'></i>"
+                },
+                search: "",
+                lengthMenu: "نمایش _MENU_ ردیف",
+                info: "نمایش _START_ تا _END_ از مجموع _TOTAL_ تیکت",
+                emptyTable: "تیکتی برای نمایش وجود ندارد",
+                zeroRecords: "نتیجه‌ای مطابق جستجو پیدا نشد"
+            },
+
+            drawCallback: function () {
+                $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
+
+                if (typeof bootstrap !== 'undefined') {
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
+                        new bootstrap.Tooltip(el);
+                    });
+                }
+            },
+
+            initComplete: function () {
+                let searchInput = $('#alternative-page-datatable_filter input');
+
+                searchInput.off();
+                searchInput.off('.DT');
+
+                searchInput
+                    .addClass('form-control form-control-sm rounded-pill ticket-search-input')
+                    .attr('placeholder', 'جستجو با حداقل ۴ کاراکتر + Enter');
+
+                searchInput.on('input', function () {
+                    let value = $(this).val().trim();
+
+                    if (value.length === 0 && currentSearch !== '') {
+                        currentSearch = '';
+                        table.search('').draw();
+                    }
+                });
+
+                searchInput.on('keydown', function (e) {
+                    if (e.key !== 'Enter') {
+                        return;
+                    }
+
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    let value = $(this).val().trim();
+
+                    if (value.length === 0) {
+                        currentSearch = '';
+                        table.search('').draw();
+                        return false;
+                    }
+
+                    if (value.length < 4) {
+                        alert('حداقل ۴ کاراکتر برای جستجو وارد کنید');
+                        return false;
+                    }
+
+                    currentSearch = value;
+                    table.search(value).draw();
+
+                    return false;
                 });
             }
-        },
+        });
 
-        initComplete: function () {
-            let searchInput = $('#alternative-page-datatable_filter input');
+        window.ticketDataTable = table;
 
-            searchInput.off();
-            searchInput.off('.DT');
+        setupTicketAutoReload(table);
 
-            searchInput
-                .addClass('form-control form-control-sm rounded-pill ticket-search-input')
-                .attr('placeholder', 'جستجو با حداقل ۴ کاراکتر + Enter');
+        function setupTicketAutoReload(table) {
+            const reloadInterval = 15 * 60 * 1000;
 
-            searchInput.on('input', function () {
-                let value = $(this).val().trim();
+            setInterval(function () {
+                table.ajax.reload(function () {
+                    if (document.hidden) {
+                        tabHasUpdate = true;
+                        document.title = "🔴 " + originalTitle;
+                    } else {
+                        showTicketReloadToast('لیست تیکت‌ها به‌روزرسانی شد');
+                    }
+                }, false);
+            }, reloadInterval);
+        }
 
-                if (value.length === 0 && currentSearch !== '') {
-                    currentSearch = '';
-                    table.search('').draw();
-                }
-            });
+        document.addEventListener('visibilitychange', function () {
+            if (!document.hidden && tabHasUpdate) {
+                tabHasUpdate = false;
+                document.title = originalTitle;
+                showTicketReloadToast('لیست تیکت‌ها به‌روزرسانی شد');
+            }
+        });
 
-            searchInput.on('keydown', function (e) {
-                if (e.key !== 'Enter') {
-                    return;
-                }
+        function showTicketReloadToast(message) {
+            if (!document.getElementById('ticketReloadToast')) {
+                $('body').append(
+                    '<div id="ticketReloadToast" ' +
+                    'class="position-fixed bottom-0 end-0 m-3 alert alert-primary shadow-sm rounded-pill px-3 py-2" ' +
+                    'style="z-index:9999; display:none;"></div>'
+                );
+            }
 
-                e.preventDefault();
-                e.stopPropagation();
-
-                let value = $(this).val().trim();
-
-                if (value.length === 0) {
-                    currentSearch = '';
-                    table.search('').draw();
-                    return false;
-                }
-
-                if (value.length < 4) {
-                    alert('حداقل ۴ کاراکتر برای جستجو وارد کنید');
-                    return false;
-                }
-
-                currentSearch = value;
-                table.search(value).draw();
-
-                return false;
-            });
+            $('#ticketReloadToast')
+                .text(message)
+                .stop(true, true)
+                .fadeIn(150)
+                .delay(2500)
+                .fadeOut(300);
         }
     });
-
-    window.ticketDataTable = table;
-
-    setupTicketAutoReload(table);
-
-    function setupTicketAutoReload(table) {
-        const reloadInterval = 15 * 60 * 1000;
-
-        setInterval(function () {
-            table.ajax.reload(function () {
-                if (document.hidden) {
-                    tabHasUpdate = true;
-                    document.title = "🔴 " + originalTitle;
-                } else {
-                    showTicketReloadToast('لیست تیکت‌ها به‌روزرسانی شد');
-                }
-            }, false);
-        }, reloadInterval);
-    }
-
-    document.addEventListener('visibilitychange', function () {
-        if (!document.hidden && tabHasUpdate) {
-            tabHasUpdate = false;
-            document.title = originalTitle;
-            showTicketReloadToast('لیست تیکت‌ها به‌روزرسانی شد');
-        }
-    });
-
-    function showTicketReloadToast(message) {
-        if (!document.getElementById('ticketReloadToast')) {
-            $('body').append(
-                '<div id="ticketReloadToast" ' +
-                'class="position-fixed bottom-0 end-0 m-3 alert alert-primary shadow-sm rounded-pill px-3 py-2" ' +
-                'style="z-index:9999; display:none;"></div>'
-            );
-        }
-
-        $('#ticketReloadToast')
-            .text(message)
-            .stop(true, true)
-            .fadeIn(150)
-            .delay(2500)
-            .fadeOut(300);
-    }
-});
 
 });
 

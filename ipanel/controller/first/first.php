@@ -106,13 +106,24 @@ function getTextLimit($text)
 {
     return TextTools::getInstance()->truncateText($text, 85);
 }
-
+/*  
 $listAutoChangeCondition = [
-    ['condition_done', 'condition_acepted_test_auto', 10],
-    ['condition_invoice', 'condition_acepted_invoice_auto', 12],
+    [
+        'condition_done',
+        'condition_acepted_test_auto',
+        10
+    ],
+    [
+        'condition_invoice',
+        'condition_acepted_invoice_auto',
+        12
+    ],
 ];
 
-$ticketModel->SetAutoCondition($listAutoChangeCondition);
+$ticketModel->SetAutoCondition(
+    $listAutoChangeCondition
+);
+*/
 
 
 ?>

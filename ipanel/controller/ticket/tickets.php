@@ -124,11 +124,19 @@ $viewUrlWithDetails = './tickets?' . http_build_query($viewParamsWithDetails);
 
 
 ////
-
 $columns = [
     ["data" => "ticket_id", "title" => "#", "visible" => false],
     ["data" => "ticket_number", "title" => _lang['ticket_number']],
     ["data" => "ticket_creation_date_shamsi", "title" => _lang['added_date']],
+
+    [
+        "data" => "is_overdue",
+        "title" => "overdue",
+        "visible" => false,
+        "searchable" => false,
+        "orderable" => false
+    ],
+
     ["data" => "type_group", "title" => _lang['group']],
     ["data" => "ticket_priority", "title" => _lang['priority']],
     ["data" => "ticket_comments", "title" => _lang['comments']],
@@ -141,15 +149,28 @@ $columns = [
 ];
 
 if ($permissionViewLocation) {
-    $columns[] = ["data" => "last_receiver_name_display", "title" => _lang['inbox']];
-
+    $columns[] = [
+        "data" => "last_receiver_name_display",
+        "title" => _lang['inbox']
+    ];
 }
 
 if ($permissionAddTicket or $permissionViewIndicatorNumbert) {
-    $columns[] = ["data" => "indicator_number_display", "title" => _lang['indicator']];
+    $columns[] = [
+        "data" => "indicator_number_display",
+        "title" => _lang['indicator']
+    ];
 }
 
-$columns[] = ["data" => "actions_html", "title" => _lang['action'], "orderable" => false, "searchable" => false];
+$columns[] = [
+    "data" => "actions_html",
+    "title" => _lang['action'],
+    "orderable" => false,
+    "searchable" => false
+];
 
-$datatableColumnsJson = json_encode($columns, JSON_UNESCAPED_UNICODE);
+$datatableColumnsJson = json_encode(
+    $columns,
+    JSON_UNESCAPED_UNICODE
+);
 

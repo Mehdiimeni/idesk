@@ -1,45 +1,7 @@
-[05-Aug-2026 11:06:21 Europe/Berlin] PHP Warning:  Undefined array key "filter" in E:\xampp\htdocs\idesk\ipanel\template\ticket\department_current_works.php on line 301
-[05-Aug-2026 11:06:21 Europe/Berlin] PHP Warning:  Undefined array key "filter" in E:\xampp\htdocs\idesk\ipanel\template\ticket\department_current_works.php on line 301
-[05-Aug-2026 11:06:52 Europe/Berlin] PHP Warning:  Undefined array key "filter" in E:\xampp\htdocs\idesk\ipanel\template\ticket\department_current_works.php on line 301
-[05-Aug-2026 11:06:52 Europe/Berlin] PHP Warning:  Undefined array key "filter" in E:\xampp\htdocs\idesk\ipanel\template\ticket\department_current_works.php on line 301
-[05-Aug-2026 11:06:59 Europe/Berlin] PHP Warning:  Undefined array key "filter" in E:\xampp\htdocs\idesk\ipanel\template\ticket\department_current_works.php on line 301
-[05-Aug-2026 11:06:59 Europe/Berlin] PHP Warning:  Undefined array key "filter" in E:\xampp\htdocs\idesk\ipanel\template\ticket\department_current_works.php on line 301
-[05-Aug-2026 11:17:23 Europe/Berlin] PHP Warning:  Undefined variable $encryptorClass in E:\xampp\htdocs\idesk\ipanel\template\ticket\department_current_works.php on line 225
-[05-Aug-2026 11:17:23 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function encrypt() on null in E:\xampp\htdocs\idesk\ipanel\template\ticket\department_current_works.php:225
-Stack trace:
-#0 E:\xampp\htdocs\idesk\ipanel\view\ticket\department_current_works.php(4): include()
-#1 E:\xampp\htdocs\idesk\icore\class\file_caller.php(30): require_once('E:\\xampp\\htdocs...')
-#2 E:\xampp\htdocs\idesk\ipanel\page\department_current_works.php(28): FileCaller->includeFileWithController('.', 'ticket/', 'department_curr...')
-#3 E:\xampp\htdocs\idesk\ipanel\page\department_current_works.php(34): includeFiles(Object(FileCaller), 'department_curr...')
-#4 E:\xampp\htdocs\idesk\icore\class\router.php(75): include_once('E:\\xampp\\htdocs...')
-#5 E:\xampp\htdocs\idesk\icore\class\router.php(29): Router->invokeHandler('department_curr...', '.')
-#6 E:\xampp\htdocs\idesk\ipanel\core\route.php(27): Router->handleRequest('/department_cur...')
-#7 E:\xampp\htdocs\idesk\ipanel\index.php(33): require('E:\\xampp\\htdocs...')
-#8 {main}
-  thrown in E:\xampp\htdocs\idesk\ipanel\template\ticket\department_current_works.php on line 225
-[05-Aug-2026 11:17:30 Europe/Berlin] PHP Warning:  Undefined variable $encryptorClass in E:\xampp\htdocs\idesk\ipanel\template\ticket\department_current_works.php on line 225
-[05-Aug-2026 11:17:30 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function encrypt() on null in E:\xampp\htdocs\idesk\ipanel\template\ticket\department_current_works.php:225
-Stack trace:
-#0 E:\xampp\htdocs\idesk\ipanel\view\ticket\department_current_works.php(4): include()
-#1 E:\xampp\htdocs\idesk\icore\class\file_caller.php(30): require_once('E:\\xampp\\htdocs...')
-#2 E:\xampp\htdocs\idesk\ipanel\page\department_current_works.php(28): FileCaller->includeFileWithController('.', 'ticket/', 'department_curr...')
-#3 E:\xampp\htdocs\idesk\ipanel\page\department_current_works.php(34): includeFiles(Object(FileCaller), 'department_curr...')
-#4 E:\xampp\htdocs\idesk\icore\class\router.php(75): include_once('E:\\xampp\\htdocs...')
-#5 E:\xampp\htdocs\idesk\icore\class\router.php(29): Router->invokeHandler('department_curr...', '.')
-#6 E:\xampp\htdocs\idesk\ipanel\core\route.php(27): Router->handleRequest('/department_cur...')
-#7 E:\xampp\htdocs\idesk\ipanel\index.php(33): require('E:\\xampp\\htdocs...')
-#8 {main}
-  thrown in E:\xampp\htdocs\idesk\ipanel\template\ticket\department_current_works.php on line 225
-[17-Aug-2026 10:10:24 Europe/Berlin] PHP Fatal error:  Uncaught ArgumentCountError: var_dump() expects at least 1 argument, 0 given in E:\xampp\htdocs\idesk\ipanel\controller\ticket\ticket_details.php:23
-Stack trace:
-#0 E:\xampp\htdocs\idesk\ipanel\controller\ticket\ticket_details.php(23): var_dump()
-#1 E:\xampp\htdocs\idesk\ipanel\view\ticket\ticket_details.php(3): include('E:\\xampp\\htdocs...')
-#2 E:\xampp\htdocs\idesk\icore\class\file_caller.php(30): require_once('E:\\xampp\\htdocs...')
-#3 E:\xampp\htdocs\idesk\ipanel\page\tickets.php(34): FileCaller->includeFileWithController('.', 'ticket/', 'ticket_details')
-#4 E:\xampp\htdocs\idesk\ipanel\page\tickets.php(49): includeFiles(Object(FileCaller), 'ticket_details')
-#5 E:\xampp\htdocs\idesk\icore\class\router.php(75): include_once('E:\\xampp\\htdocs...')
-#6 E:\xampp\htdocs\idesk\icore\class\router.php(29): Router->invokeHandler('tickets', '.')
-#7 E:\xampp\htdocs\idesk\ipanel\core\route.php(27): Router->handleRequest('/tickets')
-#8 E:\xampp\htdocs\idesk\ipanel\index.php(33): require('E:\\xampp\\htdocs...')
-#9 {main}
-  thrown in E:\xampp\htdocs\idesk\ipanel\controller\ticket\ticket_details.php on line 23
+[18-Aug-2026 13:02:09 Europe/Berlin] PHP Warning:  Undefined array key "adminLanguageDir" in C:\site\idesk\ipanel\template\global\page_top.php on line 5
+[07-Oct-2026 18:08:37 Europe/Berlin] [SetAutoCondition] condition_done -> condition_acepted_test_auto | tickets updated: 34 | status inserted: 435
+[07-Oct-2026 18:08:38 Europe/Berlin] [SetAutoCondition] condition_invoice -> condition_acepted_invoice_auto | tickets updated: 3 | status inserted: 23
+[07-Oct-2026 18:10:03 Europe/Berlin] [SetAutoCondition] condition_done -> condition_acepted_test_auto | tickets updated: 0 | status inserted: 0
+[07-Oct-2026 18:10:03 Europe/Berlin] [SetAutoCondition] condition_invoice -> condition_acepted_invoice_auto | tickets updated: 0 | status inserted: 0
+[07-Oct-2026 18:11:21 Europe/Berlin] [SetAutoCondition] condition_done -> condition_acepted_test_auto | tickets updated: 0 | status inserted: 0
+[07-Oct-2026 18:11:22 Europe/Berlin] [SetAutoCondition] condition_invoice -> condition_acepted_invoice_auto | tickets updated: 0 | status inserted: 0

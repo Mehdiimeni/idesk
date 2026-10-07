@@ -291,4 +291,26 @@
 .dt-buttons .btn {
     margin-inline-start: 1px;
 }
+
+/* DataTable Loading - keep loader at top of grid */
+#alternative-page-datatable_wrapper {
+    position: relative;
+}
+
+#alternative-page-datatable_wrapper .dataTables_processing,
+#alternative-page-datatable_wrapper .dt-processing {
+    position: absolute !important;
+
+    top: 45px !important;
+    left: 50% !important;
+
+    transform: translateX(-50%) !important;
+
+    margin: 0 !important;
+
+    width: auto !important;
+    height: auto !important;
+
+    z-index: 9999 !important;
+}
 </style>

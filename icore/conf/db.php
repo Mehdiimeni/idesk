@@ -3,8 +3,8 @@
 return [
     'localhost' => [
         'host' => 'localhost',
-        'user' => 'root',
-        'password' => '',
+        'user' => 'idesk',
+        'password' => 'Massbin44@2',
         'database' => 'idesk',
     ],
     'production' => [
