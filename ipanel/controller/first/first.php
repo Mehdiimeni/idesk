@@ -65,14 +65,64 @@ $adminCompanyName = $structureModel->getCompanyById($companyId)['company_name'];
 $adminRbacName = $structureModel->getRBACById($rbacClassId)['rbac_name'];
 
 
-// No action ticket count
+// Dashboard current inbox: use the same methods as tickets?referred=0
+// so the first-page count stays aligned with the real ticket list and active filters.
+$dashboardExceptConditions = [
+    'condition_archive',
+    'condition_final_done',
+    'condition_pendency'
+];
+
 if ($isEntry) {
-    $intNoActionTicketCount = $ticketModel->getAdminNoActionTicketsWithExceptCount($adminId, ['condition_archive', 'condition_final_done', 'condition_pendency']);
+    $dashboardInboxTickets = $ticketModel->getAllAdminNoActionTicketsWithExcept(
+        $adminId,
+        $dashboardExceptConditions
+    );
+
+    $intNoActionTicketCount = (int) $ticketModel->getAllAdminNoActionTicketsWithExceptCount(
+        $adminId,
+        $dashboardExceptConditions
+    );
 } else {
-    $intNoActionTicketCount = $ticketModel->getAdminNoActionTicketsCount($adminId);
+    $dashboardInboxTickets = $ticketModel->getAllAdminNoActionTickets($adminId);
+    $intNoActionTicketCount = (int) $ticketModel->getAllAdminNoActionTicketsCount($adminId);
 }
-// forward ticket count
-$intForwardTicketCount = $ticketModel->getAdminForwardTicketCount($adminId);
+
+// Same source as tickets?referred=1.
+$intForwardTicketCount = (int) $ticketModel->getAllAdminForwardTicketsCount($adminId);
+
+// Breakdown of the tickets that are actually visible in the current inbox.
+$dashboardInboxBreakdown = [
+    'high' => 0,
+    'medium' => 0,
+    'low' => 0,
+    'overdue' => 0,
+];
+
+$dashboardOverdueThreshold = strtotime('-14 days');
+
+foreach ($dashboardInboxTickets as $dashboardTicket) {
+    $dashboardPriority = strtolower((string) ($dashboardTicket['ticket_priority'] ?? ''));
+
+    if (isset($dashboardInboxBreakdown[$dashboardPriority])) {
+        $dashboardInboxBreakdown[$dashboardPriority]++;
+    }
+
+    if (!empty($dashboardTicket['ticket_creation_date'])) {
+        $dashboardCreatedTime = strtotime($dashboardTicket['ticket_creation_date']);
+
+        if (
+            $dashboardCreatedTime !== false &&
+            $dashboardCreatedTime < $dashboardOverdueThreshold
+        ) {
+            $dashboardInboxBreakdown['overdue']++;
+        }
+    }
+}
+
+// Management report: number of received/sent ticket forward operations
+// during the last 7 and 30 days. No Done/Status/completion-rate KPI.
+$dashboardActivityStats = $ticketModel->getAdminDashboardActivityStats($adminId);
 
 // check permission opration person hour and delivery time
 if ($rbacClass->checkPermissionOperationByName(operation_name: 'person_hour_operation') || $rbacClass->checkPermissionOperationByName('delivery_time_operation')) {

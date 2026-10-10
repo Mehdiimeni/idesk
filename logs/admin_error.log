@@ -5,3 +5,41 @@
 [07-Oct-2026 18:10:03 Europe/Berlin] [SetAutoCondition] condition_invoice -> condition_acepted_invoice_auto | tickets updated: 0 | status inserted: 0
 [07-Oct-2026 18:11:21 Europe/Berlin] [SetAutoCondition] condition_done -> condition_acepted_test_auto | tickets updated: 0 | status inserted: 0
 [07-Oct-2026 18:11:22 Europe/Berlin] [SetAutoCondition] condition_invoice -> condition_acepted_invoice_auto | tickets updated: 0 | status inserted: 0
+[10-Oct-2026 08:33:28 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_current_inbox_caption" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 55
+[10-Oct-2026 08:33:28 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_overdue" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 58
+[10-Oct-2026 08:33:28 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_high_priority" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 62
+[10-Oct-2026 08:33:28 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_forwarded_by_me_caption" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 80
+[10-Oct-2026 08:33:28 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_last_7_days" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 87
+[10-Oct-2026 08:33:28 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_weekly_performance" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 88
+[10-Oct-2026 08:33:28 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_completion_rate" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 105
+[10-Oct-2026 08:33:28 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_last_30_days" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 113
+[10-Oct-2026 08:33:28 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_monthly_performance" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 114
+[10-Oct-2026 08:33:28 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_completion_rate" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 131
+[10-Oct-2026 08:34:00 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_current_inbox_caption" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 55
+[10-Oct-2026 08:34:00 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_overdue" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 58
+[10-Oct-2026 08:34:00 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_high_priority" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 62
+[10-Oct-2026 08:34:00 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_forwarded_by_me_caption" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 80
+[10-Oct-2026 08:34:00 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_last_7_days" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 87
+[10-Oct-2026 08:34:00 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_weekly_performance" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 88
+[10-Oct-2026 08:34:00 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_completion_rate" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 105
+[10-Oct-2026 08:34:00 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_last_30_days" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 113
+[10-Oct-2026 08:34:00 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_monthly_performance" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 114
+[10-Oct-2026 08:34:00 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_completion_rate" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 131
+[10-Oct-2026 08:39:14 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_current_inbox_caption" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 55
+[10-Oct-2026 08:39:14 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_overdue" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 58
+[10-Oct-2026 08:39:14 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_high_priority" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 62
+[10-Oct-2026 08:39:14 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_forwarded_by_me_caption" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 80
+[10-Oct-2026 08:39:14 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_last_7_days" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 87
+[10-Oct-2026 08:39:14 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_weekly_performance" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 88
+[10-Oct-2026 08:39:14 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_completion_rate" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 105
+[10-Oct-2026 08:39:14 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_last_30_days" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 113
+[10-Oct-2026 08:39:14 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_monthly_performance" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 114
+[10-Oct-2026 08:39:14 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_completion_rate" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 131
+[10-Oct-2026 09:40:40 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_my_inbox" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 54
+[10-Oct-2026 09:40:40 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_forwarded_tickets" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 89
+[10-Oct-2026 09:40:40 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_activity_report" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 98
+[10-Oct-2026 09:40:40 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_received_tickets" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 106
+[10-Oct-2026 09:40:40 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_sent_tickets" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 111
+[10-Oct-2026 09:40:40 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_activity_report" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 120
+[10-Oct-2026 09:40:40 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_received_tickets" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 128
+[10-Oct-2026 09:40:40 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_sent_tickets" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 133

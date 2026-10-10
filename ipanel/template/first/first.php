@@ -40,49 +40,107 @@
                 </div>
             </div>
 
-            <div class="row g-4 mb-4">
-                <div class="col-md-6">
-                    <a href="./tickets?referred=0" class="text-decoration-none">
-                        <div class="dashboard-stat-card">
-                            <div class="stat-icon primary">
-                                <i class="ri-inbox-archive-fill"></i>
-                            </div>
-
-                            <div>
-                                <div class="stat-label">
-                                    <?php echo _lang['referred_from']; ?>
-                                </div>
-                                <div class="stat-number text-primary">
-                                    <?php echo $intNoActionTicketCount; ?>
-                                </div>
-                            </div>
+            <div class="dashboard-summary-grid mb-4">
+                <a href="./tickets?referred=0"
+                   class="dashboard-summary-card dashboard-summary-card-primary text-decoration-none">
+                    <div class="summary-card-top">
+                        <div class="stat-icon primary">
+                            <i class="ri-inbox-archive-fill"></i>
                         </div>
-                    </a>
+                        <span class="summary-open-icon"><i class="ri-arrow-left-up-line"></i></span>
+                    </div>
+
+                    <div class="summary-card-body">
+                        <div class="stat-label"><?php echo _lang['dashboard_my_inbox']; ?></div>
+                        <div class="stat-number text-primary"><?php echo number_format($intNoActionTicketCount); ?></div>
+                        <div class="summary-caption"><?php echo _lang['dashboard_current_inbox_caption']; ?></div>
+
+                        <div class="summary-mini-stats dashboard-inbox-breakdown">
+                            <span>
+                                <?php echo _lang['high']; ?>
+                                <strong><?php echo number_format($dashboardInboxBreakdown['high']); ?></strong>
+                            </span>
+                            <span>
+                                <?php echo _lang['medium']; ?>
+                                <strong><?php echo number_format($dashboardInboxBreakdown['medium']); ?></strong>
+                            </span>
+                            <span>
+                                <?php echo _lang['low']; ?>
+                                <strong><?php echo number_format($dashboardInboxBreakdown['low']); ?></strong>
+                            </span>
+                            <span>
+                                <?php echo _lang['dashboard_overdue']; ?>
+                                <strong><?php echo number_format($dashboardInboxBreakdown['overdue']); ?></strong>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="./tickets?referred=1"
+                   class="dashboard-summary-card dashboard-summary-card-success text-decoration-none">
+                    <div class="summary-card-top">
+                        <div class="stat-icon success">
+                            <i class="ri-inbox-unarchive-fill"></i>
+                        </div>
+                        <span class="summary-open-icon"><i class="ri-arrow-left-up-line"></i></span>
+                    </div>
+
+                    <div class="summary-card-body">
+                        <div class="stat-label"><?php echo _lang['dashboard_forwarded_tickets']; ?></div>
+                        <div class="stat-number text-success"><?php echo number_format($intForwardTicketCount); ?></div>
+                        <div class="summary-caption"><?php echo _lang['dashboard_forwarded_by_me_caption']; ?></div>
+                    </div>
+                </a>
+
+                <div class="dashboard-summary-card dashboard-activity-card dashboard-period-card dashboard-period-week">
+                    <div class="activity-card-header">
+                        <div>
+                            <span class="activity-eyebrow"><?php echo _lang['dashboard_activity_report']; ?></span>
+                            <strong><?php echo _lang['dashboard_last_7_days']; ?></strong>
+                        </div>
+                        <div class="activity-icon weekly"><i class="ri-calendar-check-line"></i></div>
+                    </div>
+
+                    <div class="activity-values">
+                        <div class="activity-value">
+                            <span><?php echo _lang['dashboard_received_tickets']; ?></span>
+                            <strong><?php echo number_format($dashboardActivityStats['received_7d']); ?></strong>
+                        </div>
+                        <div class="activity-divider"></div>
+                        <div class="activity-value">
+                            <span><?php echo _lang['dashboard_sent_tickets']; ?></span>
+                            <strong><?php echo number_format($dashboardActivityStats['sent_7d']); ?></strong>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="col-md-6">
-                    <a href="./tickets?referred=1" class="text-decoration-none">
-                        <div class="dashboard-stat-card">
-                            <div class="stat-icon success">
-                                <i class="ri-inbox-unarchive-fill"></i>
-                            </div>
-
-                            <div>
-                                <div class="stat-label">
-                                    <?php echo _lang['referred_to']; ?>
-                                </div>
-                                <div class="stat-number text-success">
-                                    <?php echo $intForwardTicketCount; ?>
-                                </div>
-                            </div>
+                <div class="dashboard-summary-card dashboard-activity-card dashboard-period-card dashboard-period-month">
+                    <div class="activity-card-header">
+                        <div>
+                            <span class="activity-eyebrow"><?php echo _lang['dashboard_activity_report']; ?></span>
+                            <strong><?php echo _lang['dashboard_last_30_days']; ?></strong>
                         </div>
-                    </a>
+                        <div class="activity-icon monthly"><i class="ri-bar-chart-box-line"></i></div>
+                    </div>
+
+                    <div class="activity-values">
+                        <div class="activity-value">
+                            <span><?php echo _lang['dashboard_received_tickets']; ?></span>
+                            <strong><?php echo number_format($dashboardActivityStats['received_30d']); ?></strong>
+                        </div>
+                        <div class="activity-divider"></div>
+                        <div class="activity-value">
+                            <span><?php echo _lang['dashboard_sent_tickets']; ?></span>
+                            <strong><?php echo number_format($dashboardActivityStats['sent_30d']); ?></strong>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <div class="dashboard-lower-grid mb-4">
 <?php if($allKanbanTag->num_rows > 0){ ?>
 
-                <div class="dashboard-panel mb-4">
+                <div class="dashboard-panel dashboard-grid-panel">
                     <div class="dashboard-panel-header">
                         <div>
                             <h4>
@@ -173,7 +231,7 @@
             
 <?php } ?>
 <?php if ($allTodo->num_rows > 0) { ?>
-                <div class="dashboard-panel mb-4">
+                <div class="dashboard-panel dashboard-grid-panel">
                     <div class="dashboard-panel-header">
                         <div>
                             <h4>
@@ -219,7 +277,7 @@
           
 <?php } ?>
             <?php  if ($permissionProjects && count($allProjects) > 0) { ?>
-                <div class="dashboard-panel mb-4">
+                <div class="dashboard-panel dashboard-grid-panel">
                     <div class="dashboard-panel-header">
                         <div>
                             <h4>
@@ -260,9 +318,10 @@
                     </div>
                 </div>
             <?php } ?>
+            </div>
 
                         <?php if (($personHourDeliveryTimePermissionOperation || $personHourDeliveryTimePermissionRequest) and $allRequests->num_rows > 0): ?>
-                            <div class="dashboard-panel mb-4">
+                            <div class="dashboard-panel dashboard-requests-panel mb-4">
                                 <div class="dashboard-panel-header">
                                     <div>
                                         <h4>
@@ -273,7 +332,7 @@
                                 </div>
                         
                                 <div class="table-responsive" data-simplebar style="max-height: 330px; overflow-x:hidden">
-                                    <table id="datatable-buttons" class="table dashboard-table align-middle mb-0">
+                                    <table id="dashboard-requests-table" class="table dashboard-table align-middle mb-0">
                                         <thead>
                                             <tr>
                                                 <th width="20%">
@@ -441,6 +500,226 @@
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
     }
 
+    .dashboard-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .dashboard-summary-card {
+        min-height: 190px;
+        background: var(--bs-secondary-bg);
+        color: var(--bs-body-color);
+        border: 1px solid var(--bs-border-color);
+        border-radius: 20px;
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+        transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+
+    .dashboard-summary-card::after {
+        content: '';
+        position: absolute;
+        inset: auto -35px -55px auto;
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        background: rgba(75, 108, 183, .05);
+        pointer-events: none;
+    }
+
+    .dashboard-summary-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 34px rgba(15, 23, 42, 0.13);
+        border-color: rgba(75, 108, 183, .28);
+    }
+
+    .dashboard-summary-card-primary {
+        border-top: 3px solid #5f8cff;
+    }
+
+    .dashboard-summary-card-success {
+        border-top: 3px solid #2fd18a;
+    }
+
+
+    .dashboard-period-week {
+        border-top: 3px solid #8b5cf6;
+    }
+
+    .dashboard-period-month {
+        border-top: 3px solid #f59e0b;
+    }
+
+    .dashboard-inbox-breakdown {
+        margin-top: 14px;
+    }
+
+    .dashboard-inbox-breakdown span:nth-child(1) strong {
+        font-weight: 800;
+    }
+
+    .dashboard-period-card .activity-values {
+        margin-top: 20px;
+    }
+
+    .summary-mini-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+    }
+
+    .summary-mini-stats span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 9px;
+        border-radius: 999px;
+        background: var(--bs-tertiary-bg);
+        border: 1px solid var(--bs-border-color);
+        color: var(--bs-secondary-color);
+        font-size: 11px;
+    }
+
+    .summary-mini-stats strong {
+        color: var(--bs-body-color);
+        font-size: 12px;
+    }
+
+    .summary-card-top,
+    .activity-card-header,
+    .activity-values {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .summary-open-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--bs-secondary-color);
+        background: var(--bs-tertiary-bg);
+        border: 1px solid var(--bs-border-color);
+    }
+
+    .summary-card-body {
+        margin-top: 18px;
+    }
+
+    .summary-caption {
+        margin-top: 9px;
+        color: var(--bs-secondary-color);
+        font-size: 12px;
+    }
+
+    .dashboard-activity-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .dashboard-referral-card .summary-card-body {
+        position: relative;
+        z-index: 1;
+    }
+
+    .dashboard-referral-card .stat-number {
+        margin-top: 8px;
+        letter-spacing: -.5px;
+    }
+
+    .activity-card-header strong {
+        display: block;
+        margin-top: 3px;
+        font-size: 15px;
+        color: var(--bs-body-color);
+    }
+
+    .activity-eyebrow {
+        color: var(--bs-secondary-color);
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .activity-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+    }
+
+    .activity-icon.weekly {
+        color: #8b5cf6;
+        background: rgba(139, 92, 246, .12);
+    }
+
+    .activity-icon.monthly {
+        color: #f59e0b;
+        background: rgba(245, 158, 11, .12);
+    }
+
+    .activity-values {
+        margin-top: 25px;
+        background: var(--bs-tertiary-bg);
+        border: 1px solid var(--bs-border-color);
+        border-radius: 14px;
+        padding: 12px 14px;
+        gap: 10px;
+    }
+
+    .activity-value {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .activity-value span {
+        display: block;
+        color: var(--bs-secondary-color);
+        font-size: 11px;
+        margin-bottom: 4px;
+    }
+
+    .activity-value strong {
+        display: block;
+        color: var(--bs-body-color);
+        font-size: 22px;
+        line-height: 1.1;
+    }
+
+    .activity-divider {
+        width: 1px;
+        align-self: stretch;
+        background: var(--bs-border-color);
+    }
+
+
+    .dashboard-lower-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(520px, 100%), 1fr));
+        gap: 16px;
+        align-items: start;
+    }
+
+    .dashboard-grid-panel {
+        min-width: 0;
+        margin-bottom: 0 !important;
+    }
+
+    .dashboard-grid-panel .kanban-list,
+    .dashboard-grid-panel .todo-list {
+        max-height: 360px !important;
+    }
+
     .dashboard-stat-card {
         padding: 24px;
         display: flex;
@@ -534,9 +813,9 @@
         padding: 14px;
         margin-bottom: 10px;
         display: grid;
-        grid-template-columns: 1fr 180px auto;
+        grid-template-columns: minmax(0, 1fr) auto;
         align-items: center;
-        gap: 14px;
+        gap: 10px 12px;
     }
 
     .kanban-meta {
@@ -583,6 +862,10 @@
         color: #5f8cff;
     }
 
+    .todo-progress {
+        grid-column: 1 / -1;
+    }
+
     .todo-progress .progress {
         height: 6px;
         border-radius: 999px;
@@ -591,6 +874,15 @@
 
     .todo-progress .progress-bar {
         border-radius: 999px;
+    }
+
+    .dashboard-requests-panel {
+        overflow: hidden;
+    }
+
+    .dashboard-requests-panel .table-responsive {
+        max-height: 360px !important;
+        overflow-x: auto !important;
     }
 
     .dashboard-table {
@@ -693,6 +985,22 @@
 
     .dashboard-page .form-control::placeholder {
         color: var(--bs-secondary-color);
+    }
+
+    @media (max-width: 1199.98px) {
+        .dashboard-summary-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .dashboard-summary-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .dashboard-summary-card {
+            min-height: auto;
+        }
     }
 
     @media (max-width: 768px) {

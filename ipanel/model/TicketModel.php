@@ -1935,6 +1935,108 @@ class TicketModel
         }
     }
 
+    /**
+     * Management dashboard referral-flow summary for the current admin.
+     *
+     * The dashboard deliberately measures workflow movement only:
+     * - received_Nd: number of forward operations received by this admin.
+     * - sent_Nd: number of forward operations sent by this admin.
+     * - unique_sent_Nd: distinct tickets included in those outgoing forwards.
+     * - carryover_Nd: distinct tickets received in the immediately preceding
+     *   period and forwarded by this admin during the current period.
+     *
+     * No ticket status, current inbox size, done count or completion rate is
+     * used in these management KPIs.
+     */
+    public function getAdminDashboardActivityStats($admin_id)
+    {
+        $stats = [
+            'received_7d' => 0,
+            'sent_7d' => 0,
+            'received_30d' => 0,
+            'sent_30d' => 0,
+        ];
+
+        try {
+            $admin_id = (int) $admin_id;
+
+            if ($admin_id <= 0) {
+                return $stats;
+            }
+
+            $sql = "
+                SELECT
+                    COALESCE(SUM(CASE
+                        WHEN forward_receiver_id = ?
+                         AND forward_creation_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+                        THEN 1 ELSE 0
+                    END), 0) AS received_7d,
+
+                    COALESCE(SUM(CASE
+                        WHEN forward_sender_id = ?
+                         AND forward_creation_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+                        THEN 1 ELSE 0
+                    END), 0) AS sent_7d,
+
+                    COALESCE(SUM(CASE
+                        WHEN forward_receiver_id = ?
+                        THEN 1 ELSE 0
+                    END), 0) AS received_30d,
+
+                    COALESCE(SUM(CASE
+                        WHEN forward_sender_id = ?
+                        THEN 1 ELSE 0
+                    END), 0) AS sent_30d
+
+                FROM general_forward_view
+                WHERE forward_creation_date >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+                  AND (
+                        forward_receiver_id = ?
+                        OR forward_sender_id = ?
+                  )
+            ";
+
+            $stmt = $this->conn->prepare($sql);
+
+            if ($stmt === false) {
+                throw new \Exception('Dashboard referral query prepare failed: ' . $this->conn->error);
+            }
+
+            $stmt->bind_param(
+                'iiiiii',
+                $admin_id,
+                $admin_id,
+                $admin_id,
+                $admin_id,
+                $admin_id,
+                $admin_id
+            );
+            $stmt->execute();
+
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+
+            if ($row) {
+                $stats = [
+                    'received_7d' => (int) ($row['received_7d'] ?? 0),
+                    'sent_7d' => (int) ($row['sent_7d'] ?? 0),
+                    'received_30d' => (int) ($row['received_30d'] ?? 0),
+                    'sent_30d' => (int) ($row['sent_30d'] ?? 0),
+                ];
+            }
+
+            if ($result) {
+                $result->free();
+            }
+
+            $stmt->close();
+            return $stats;
+        } catch (\Exception $e) {
+            // Dashboard statistics must never prevent the first page from loading.
+            return $stats;
+        }
+    }
+
 
     public function getAdminForwardTicketCount($forward_sender_id)
     {

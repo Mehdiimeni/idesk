@@ -47,6 +47,234 @@ class TicketModel
 
     }
 
+    /**
+     * Dashboard metrics for the customer/user home page.
+     * The management window is always the last 30 days.
+     * Company-wide scope is used only when the logged-in user already has
+     * permission to view all company tickets; otherwise the scope is the user.
+     */
+    public function getDashboardStats($company_id = null)
+    {
+        $scopeField = ($company_id !== null) ? 'tuv.company_id' : 'tuv.user_id';
+        $scopeId = ($company_id !== null) ? (int) $company_id : (int) $this->getUserIdFromSession();
+
+        $sql = "
+            SELECT
+                COUNT(*) AS total_30d,
+                SUM(CASE WHEN LOWER(COALESCE(tuv.priority, '')) = 'high' THEN 1 ELSE 0 END) AS blocker_30d,
+                SUM(CASE WHEN LOWER(COALESCE(tuv.priority, '')) = 'medium' THEN 1 ELSE 0 END) AS critical_30d,
+                SUM(CASE WHEN LOWER(COALESCE(tuv.priority, '')) = 'low' THEN 1 ELSE 0 END) AS normal_30d
+            FROM grid_user_ticket_data tuv
+            WHERE $scopeField = ?
+              AND tuv.creation_date >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+        ";
+
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            throw new \Exception('Prepare failed: ' . $this->conn->error);
+        }
+
+        $stmt->bind_param('i', $scopeId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc() ?: [];
+        $stmt->close();
+
+        return [
+            'total_30d' => (int) ($row['total_30d'] ?? 0),
+            'blocker_30d' => (int) ($row['blocker_30d'] ?? 0),
+            'critical_30d' => (int) ($row['critical_30d'] ?? 0),
+            'normal_30d' => (int) ($row['normal_30d'] ?? 0),
+        ];
+    }
+
+    /**
+     * Current status distribution of tickets created during the last 30 days
+     * in the same company/user scope used by the dashboard totals.
+     */
+    public function getDashboardStatusSummary($company_id = null)
+    {
+        $scopeField = ($company_id !== null) ? 'tuv.company_id' : 'tuv.user_id';
+        $scopeId = ($company_id !== null) ? (int) $company_id : (int) $this->getUserIdFromSession();
+
+        $sql = "
+            SELECT
+                COALESCE(tuv.ticket_status, 'condition_pending') AS status_name,
+                COUNT(*) AS total
+            FROM grid_user_ticket_data tuv
+            WHERE $scopeField = ?
+              AND tuv.creation_date >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+            GROUP BY COALESCE(tuv.ticket_status, 'condition_pending')
+            ORDER BY total DESC, status_name ASC
+        ";
+
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            throw new \Exception('Prepare failed: ' . $this->conn->error);
+        }
+
+        $stmt->bind_param('i', $scopeId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $rows = [];
+        while ($row = $result->fetch_assoc()) {
+            $row['total'] = (int) $row['total'];
+            $rows[] = $row;
+        }
+
+        $stmt->close();
+        return $rows;
+    }
+
+    /**
+     * Latest finance-status distribution for tickets created during the last
+     * 30 days in the same company/user scope as the dashboard.
+     *
+     * Finance statuses are identified dynamically from conditions.finance = 1.
+     * For each ticket only its latest finance status is counted.
+     */
+    public function getDashboardFinanceStatusSummary($company_id = null)
+    {
+        $scopeField = ($company_id !== null) ? 'tuv.company_id' : 'tuv.user_id';
+        $scopeId = ($company_id !== null) ? (int) $company_id : (int) $this->getUserIdFromSession();
+
+        $sql = "
+            WITH ranked_finance AS (
+                SELECT
+                    tuv.ticket_id,
+                    LOWER(s.status_name) AS status_name,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY tuv.ticket_id
+                        ORDER BY s.creation_date DESC, s.id DESC
+                    ) AS rn
+                FROM grid_user_ticket_data tuv
+                INNER JOIN status s
+                    ON s.part_id = tuv.ticket_id
+                   AND s.part_name = 'tickets'
+                INNER JOIN conditions c
+                    ON LOWER(c.condition_name) = LOWER(s.status_name)
+                   AND c.condition_part = 'tickets'
+                   AND c.finance = 1
+                WHERE $scopeField = ?
+                  AND tuv.creation_date >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+            )
+            SELECT
+                status_name,
+                COUNT(*) AS total
+            FROM ranked_finance
+            WHERE rn = 1
+            GROUP BY status_name
+            ORDER BY total DESC, status_name ASC
+        ";
+
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            throw new \Exception('Prepare failed: ' . $this->conn->error);
+        }
+
+        $stmt->bind_param('i', $scopeId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $rows = [];
+        while ($row = $result->fetch_assoc()) {
+            $row['total'] = (int) $row['total'];
+            $rows[] = $row;
+        }
+
+        if ($result) {
+            $result->free();
+        }
+        $stmt->close();
+
+        return $rows;
+    }
+
+    /**
+     * Dashboard-only list of recent tickets in a specific current status.
+     * This method is read-only; automatic status transitions are handled by
+     * the scheduled database process and not by loading the dashboard.
+     */
+    public function getDashboardRecentStatusTickets($condition_name, $days = 14)
+    {
+        $userId = (int) $this->getUserIdFromSession();
+        $days = max(1, min(90, (int) $days));
+
+        $sql = "
+            SELECT *
+            FROM grid_user_ticket_data AS tuv
+            WHERE tuv.user_id = ?
+              AND LOWER(tuv.ticket_status) = LOWER(?)
+              AND tuv.last_updated_date >= DATE_SUB(NOW(), INTERVAL {$days} DAY)
+            ORDER BY tuv.last_updated_date DESC, tuv.ticket_id DESC
+        ";
+
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            throw new \Exception('Prepare failed: ' . $this->conn->error);
+        }
+
+        $stmt->bind_param('is', $userId, $condition_name);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $rows = [];
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+
+        if ($result) {
+            $result->free();
+        }
+        $stmt->close();
+
+        return $rows;
+    }
+
+    /**
+     * Most recently updated tickets in the current dashboard scope.
+     */
+    public function getDashboardRecentTickets($company_id = null, $limit = 6)
+    {
+        $scopeField = ($company_id !== null) ? 'tuv.company_id' : 'tuv.user_id';
+        $scopeId = ($company_id !== null) ? (int) $company_id : (int) $this->getUserIdFromSession();
+        $limit = max(1, min(12, (int) $limit));
+
+        $sql = "
+            SELECT
+                tuv.ticket_id,
+                tuv.ticket_number,
+                tuv.ticket_title,
+                tuv.ticket_status,
+                tuv.priority,
+                tuv.type_name,
+                tuv.creation_date,
+                tuv.last_updated_date
+            FROM grid_user_ticket_data tuv
+            WHERE $scopeField = ?
+            ORDER BY tuv.last_updated_date DESC, tuv.ticket_id DESC
+            LIMIT $limit
+        ";
+
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            throw new \Exception('Prepare failed: ' . $this->conn->error);
+        }
+
+        $stmt->bind_param('i', $scopeId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $rows = [];
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+
+        $stmt->close();
+        return $rows;
+    }
+
     function generateSqlWhereFromSession($company_id = null)
     {
         if ($company_id != null) {
@@ -519,49 +747,52 @@ class TicketModel
         }
     }
 
-    public function getTicketRejectDescription($condition_name = '', $company_id = null)
+    public function getTicketRejectDescription($condition_name = '', $company_id = null, $days = null)
     {
         try {
-            $userId = $this->getUserIdFromSession();
-
-            $sql = "
-            SELECT *
-            FROM grid_user_ticket_data AS tuv
-            WHERE
-        ";
+            $userId = (int) $this->getUserIdFromSession();
+            $where = [];
+            $params = [];
+            $types = '';
 
             if ($company_id !== null) {
-                $sql .= " tuv.company_id = ?";
-
-                $stmt = $this->conn->prepare($sql);
-
-                if ($stmt === false) {
-                    throw new \Exception('Prepare failed: ' . $this->conn->error);
-                }
-
-                $stmt->bind_param("i", $company_id);
+                $where[] = 'tuv.company_id = ?';
+                $params[] = (int) $company_id;
+                $types .= 'i';
             } else {
-                $sql .= " tuv.user_id = ?";
+                $where[] = 'tuv.user_id = ?';
+                $params[] = $userId;
+                $types .= 'i';
+            }
 
-                if ($condition_name != '') {
-                    $sql .= " AND tuv.ticket_status = ?";
-                }
+            if ($condition_name !== '') {
+                $where[] = 'LOWER(tuv.ticket_status) = LOWER(?)';
+                $params[] = $condition_name;
+                $types .= 's';
+            }
 
-                $stmt = $this->conn->prepare($sql);
+            if ($days !== null) {
+                $days = max(1, min(90, (int) $days));
+                $where[] = "tuv.last_updated_date >= DATE_SUB(NOW(), INTERVAL {$days} DAY)";
+            }
 
-                if ($stmt === false) {
-                    throw new \Exception('Prepare failed: ' . $this->conn->error);
-                }
+            $sql = "
+                SELECT *
+                FROM grid_user_ticket_data AS tuv
+                WHERE " . implode(' AND ', $where) . "
+                ORDER BY tuv.last_updated_date DESC, tuv.ticket_id DESC
+            ";
 
-                if ($condition_name != '') {
-                    $stmt->bind_param("is", $userId, $condition_name);
-                } else {
-                    $stmt->bind_param("i", $userId);
-                }
+            $stmt = $this->conn->prepare($sql);
+            if ($stmt === false) {
+                throw new \Exception('Prepare failed: ' . $this->conn->error);
+            }
+
+            if (!empty($params)) {
+                $stmt->bind_param($types, ...$params);
             }
 
             $stmt->execute();
-
             return $stmt->get_result();
         } catch (\Exception $e) {
             throw new \Exception("Failed to get ticket reject description: " . $e->getMessage());

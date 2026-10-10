@@ -1,0 +1,15 @@
+[10-Oct-2026 08:11:34 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'idesk'@'localhost' (using password: YES) in E:\xampp\htdocs\idesk\icore\class\mysql.php:62
+Stack trace:
+#0 E:\xampp\htdocs\idesk\icore\class\mysql.php(62): mysqli->__construct('localhost', 'idesk', Object(SensitiveParameterValue), 'idesk')
+#1 E:\xampp\htdocs\idesk\icore\class\mysql.php(24): Database->initializeConnection()
+#2 E:\xampp\htdocs\idesk\icore\class\mysql.php(31): Database->__construct(Object(Configuration))
+#3 E:\xampp\htdocs\idesk\iweb\controller\user\logout.php(6): Database::getInstance(Object(Configuration))
+#4 E:\xampp\htdocs\idesk\iweb\view\user\logout.php(3): include('E:\\xampp\\htdocs...')
+#5 E:\xampp\htdocs\idesk\icore\class\file_caller.php(30): require_once('E:\\xampp\\htdocs...')
+#6 E:\xampp\htdocs\idesk\iweb\page\logout.php(6): FileCaller->includeFileWithController('./iweb', 'user/', 'logout')
+#7 E:\xampp\htdocs\idesk\icore\class\router.php(75): include_once('E:\\xampp\\htdocs...')
+#8 E:\xampp\htdocs\idesk\icore\class\router.php(29): Router->invokeHandler('logout', './iweb')
+#9 E:\xampp\htdocs\idesk\iweb\core\route.php(26): Router->handleRequest('/logout', './iweb')
+#10 E:\xampp\htdocs\idesk\index.php(32): require('E:\\xampp\\htdocs...')
+#11 {main}
+  thrown in E:\xampp\htdocs\idesk\icore\class\mysql.php on line 62
