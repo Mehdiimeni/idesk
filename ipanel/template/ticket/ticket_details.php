@@ -1,4 +1,38 @@
 <?php ///template/ticket/ticket_details.php ?>
+<?php
+$statusDescriptionLang = _lang;
+$statusDescriptionFormatter = static function ($description) use ($statusDescriptionLang) {
+    $description = trim((string) ($description ?? ''));
+
+    if ($description === '') {
+        return '';
+    }
+
+    if (preg_match(
+        '/^Auto status change:\s*([a-z0-9_]+)\s*->\s*([a-z0-9_]+)(?:\s+after\s+(\d+)\s+days?)?$/i',
+        $description,
+        $matches
+    )) {
+        $fromKey = strtolower($matches[1]);
+        $toKey = strtolower($matches[2]);
+
+        $fromLabel = $statusDescriptionLang[$fromKey];
+        $toLabel = $statusDescriptionLang[$toKey];
+
+        $formatted = $statusDescriptionLang['auto_status_change']
+            . ': ' . $fromLabel . ' → ' . $toLabel;
+
+        if (!empty($matches[3])) {
+            $daysTemplate = $statusDescriptionLang['auto_status_after_days'];
+            $formatted .= ' - ' . sprintf($daysTemplate, (int) $matches[3]);
+        }
+
+        return $formatted;
+    }
+
+    return $description;
+};
+?>
 <style>
     input[data-switch]+label {
 
@@ -348,7 +382,7 @@
                                                                     <?php if ($ticketStatusHistory['status_description'] != NULL): ?>
                                                                         <div class="mt-2 text-muted small">
                                                                             <i class="fas fa-comment-alt me-1"></i>
-                                                                            <?php echo $ticketStatusHistory['status_description']; ?>
+                                                                            <?php echo htmlspecialchars($statusDescriptionFormatter($ticketStatusHistory['status_description']), ENT_QUOTES, 'UTF-8'); ?>
                                                                         </div>
                                                                     <?php endif; ?>
                                                                 </div>
@@ -457,7 +491,7 @@
                                     <i class="ri-alert-line me-1 align-middle font-16"></i><strong>
                                         <?php echo _lang['stop_description']; ?> :
                                     </strong>
-                                    <?php echo $lastStatusDescription['status_description']; ?>
+                                    <?php echo htmlspecialchars($statusDescriptionFormatter($lastStatusDescription['status_description']), ENT_QUOTES, 'UTF-8'); ?>
                                 </div>
                             <?php } ?>
 

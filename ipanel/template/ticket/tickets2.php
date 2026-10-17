@@ -1,5 +1,37 @@
 <?php
 ///template/ticket/tickets.php
+$statusDescriptionLang = _lang;
+$statusDescriptionFormatter = static function ($description) use ($statusDescriptionLang) {
+    $description = trim((string) ($description ?? ''));
+
+    if ($description === '') {
+        return '';
+    }
+
+    if (preg_match(
+        '/^Auto status change:\s*([a-z0-9_]+)\s*->\s*([a-z0-9_]+)(?:\s+after\s+(\d+)\s+days?)?$/i',
+        $description,
+        $matches
+    )) {
+        $fromKey = strtolower($matches[1]);
+        $toKey = strtolower($matches[2]);
+
+        $fromLabel = $statusDescriptionLang[$fromKey];
+        $toLabel = $statusDescriptionLang[$toKey];
+
+        $formatted = $statusDescriptionLang['auto_status_change']
+            . ': ' . $fromLabel . ' → ' . $toLabel;
+
+        if (!empty($matches[3])) {
+            $daysTemplate = $statusDescriptionLang['auto_status_after_days'];
+            $formatted .= ' - ' . sprintf($daysTemplate, (int) $matches[3]);
+        }
+
+        return $formatted;
+    }
+
+    return $description;
+};
 ?>
 <div class="content-page">
     <div class="content">
@@ -138,7 +170,7 @@
                                         <?php foreach ($allTickets as $ticket_data) {
                                             if ($permissionViewBeforeStatus) {
                                                 $beforeStatus = (isset($ticket_data['before_status_name']) && $ticket_data['before_status_name'] != '')
-                                                    ? _lang['condition_backward'] . " : " . _lang[strtolower($ticket_data['before_status_name'])] . ' - ' . $ticket_data['before_person_name'] . " ( " . $ticket_data['status_description'] . " ) "
+                                                    ? _lang['condition_backward'] . " : " . _lang[strtolower($ticket_data['before_status_name'])] . ' - ' . $ticket_data['before_person_name'] . " ( " . $statusDescriptionFormatter($ticket_data['status_description']) . " ) "
                                                     : '';
                                             } else {
                                                 $beforeStatus = '';

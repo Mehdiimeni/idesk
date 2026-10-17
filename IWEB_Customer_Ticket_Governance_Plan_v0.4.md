@@ -1,9 +1,9 @@
 # برنامه توسعه مرحله‌ای IWEB برای ساختار شرکت، نقش‌ها و کنترل ارسال تیکت به INTEK
 
-**نسخه:** 0.3  
-**تاریخ:** 1405/07/15  
-**وضعیت:** Phase 1 - چهار جدول Additive ساخته شده / بدون تغییر در جداول Legacy  
-**پروژه مبنا:** `icore.zip` + `back261007.sql`
+**نسخه:** 0.4  
+**تاریخ:** 1405/07/25  
+**وضعیت:** Phase 1 - چهار جدول Additive ساخته شده / قواعد Phase 2 و Phase 3 به‌روزرسانی شده / بدون تغییر در جداول Legacy  
+**پروژه مبنا:** `icore.zip` + `back261017.sql`
 
 > **هشدار مهم:** این سند در نسخه فعلی فقط برنامه طراحی و اجرای مرحله‌ای است. در این مرحله هیچ SQL، Migration یا تغییر کدی روی Production نباید اجرا شود.
 
@@ -12,7 +12,7 @@
 از نسخه 0.2، موارد زیر به عنوان مبنای فنی قطعی پروژه در نظر گرفته می‌شوند:
 
 - دیتابیس عملیاتی: **MariaDB 11.3.2** با سازگاری MySQL.
-- فایل Baseline فعلی دیتابیس: `back261007.sql`.
+- فایل Baseline فعلی دیتابیس: `back261017.sql`.
 - Backend: **PHP**.
 - UI: **Bootstrap**.
 - Engine جداول جدید: `InnoDB`.
@@ -173,17 +173,25 @@ INTEK باید در صورت نیاز پشتیبانی بتواند:
   - زیرساخت
   - یا هر نام دلخواه
 - ویرایش نام/وضعیت بخش.
-- تعیین مدیر یک بخش.
-- افزودن کارشناسان به بخش.
-- ایجاد User فقط برای شرکت خودش.
+- مشاهده نقش فعلی، بخش و وضعیت هر User.
 - ویرایش اطلاعات User شرکت خودش در محدوده مجاز.
 - Active کردن User.
 - Inactive کردن User.
 - **عدم امکان Delete کاربر**.
-- مشاهده نقش فعلی، بخش و وضعیت هر User.
 - مشاهده تمام تیکت‌های شرکت به صورت مدیریتی.
 - مشاهده Audit مدیران و کارشناسان شرکت.
 - مشاهده گزارش عملکرد مدیران، کارشناسان و تیکت‌ها.
+
+### قاعده جدید User Management
+
+نقش `ADMIN` به‌تنهایی مجوز ساخت Manager یا Expert ایجاد نمی‌کند.
+
+- ایجاد Manager توسط Company Admin فقط در صورت اعطای دسترسی صریح از سمت **INTEK / مدیریت سامانه** مجاز است.
+- ایجاد Expert توسط Company Admin فقط در صورت اعطای دسترسی صریح از سمت **INTEK / مدیریت سامانه** مجاز است.
+- Default برای هر دو دسترسی: **Deny / 0**.
+- Customer Admin حق Grant/Revoke این دسترسی‌ها برای خودش یا دیگران را ندارد.
+- اگر دسترسی داده نشده باشد، ایجاد Manager/Expert فقط توسط INTEK انجام می‌شود.
+- تمام Grant/Revokeها و ایجاد کاربران باید Audit شوند.
 
 ### نکته مهم
 
@@ -207,14 +215,30 @@ INTEK باید در صورت نیاز پشتیبانی بتواند:
 
 - مشاهده تیکت‌های بخش خودش.
 - مشاهده کامنت‌های تیکت‌های بخش خودش.
-- ایجاد Ticket Request برای ارسال به INTEK.
 - تعیین/تغییر اولویت تیکت.
 - ویرایش تیکت وقتی تیکت در اختیار مدیر است.
-- ارسال تیکت به یکی از کارشناسان **همان بخش** فقط برای تکمیل یا اصلاح درخواست INTEK.
-- دریافت مجدد تیکت از کارشناس.
+- دریافت تیکت ارسالی از Expert و ارسال نهایی آن به INTEK.
 - ارسال نهایی تیکت به INTEK.
 - مشاهده Audit کارشناسان بخش خودش.
 - مشاهده گزارش عملکرد کارشناسان و تیکت‌های بخش خودش.
+
+### قاعده جدید ایجاد Ticket توسط Manager
+
+حق ایجاد Ticket Request توسط Manager یک Permission ثابت نیست و از وضعیت Section محاسبه می‌شود:
+
+- اگر Section مدیر **هیچ Expert فعال** نداشته باشد، Manager به صورت پیش‌فرض می‌تواند Ticket Request جدید ایجاد کند.
+- به محض فعال‌شدن حداقل یک Expert در همان Section، این حق به صورت خودکار سلب می‌شود.
+- اگر بعداً تعداد Expert فعال همان Section دوباره به صفر برسد، حق پایه ایجاد Ticket برای Manager به صورت خودکار برمی‌گردد.
+- INTEK می‌تواند به صورت استثنایی Permission بدهد که Manager حتی با وجود Expert فعال نیز Ticket ایجاد کند.
+- Customer Admin و Manager حق فعال‌کردن این Override را ندارند.
+
+### قاعده جدید Manager -> Expert
+
+- برگشت/ارجاع Ticket Request از Manager به Expert برای Revision به صورت پیش‌فرض **ممنوع** است.
+- این Action فقط در صورت اعطای Permission صریح توسط **INTEK / مدیریت سامانه** فعال می‌شود.
+- حتی در صورت اعطای Permission، مقصد فقط Expert فعال همان Section است و هدف فقط تکمیل همان درخواست با مقصد INTEK خواهد بود.
+- Manager می‌تواند Permission ایجاد Expert در Section خودش را نیز فقط در صورت Grant صریح INTEK داشته باشد؛ Default = Deny.
+- Manager هیچ‌گاه مجاز به ایجاد Manager دیگر نیست.
 
 ### محدودیت
 
@@ -314,13 +338,16 @@ SENT_TO_INTEK
 
 ## 6.2 محدودیت ارجاع مدیر
 
-مدیر فقط می‌تواند Ticket Request را به **یک کارشناس در بخش خودش** برای تکمیل/اصلاح همان درخواست INTEK ارسال کند.
+اصل پیش‌فرض این است که Manager نباید Ticket Request را برای گردش داخلی به Expert برگرداند.
 
-کارشناس فقط یک Action برای برگشت دارد:
+- `Manager -> Expert Revision` به صورت پیش‌فرض غیرفعال است.
+- فقط INTEK می‌تواند این قابلیت را برای Manager مجاز کند.
+- در صورت مجاز بودن، Manager فقط می‌تواند Ticket Request را به **یک Expert فعال همان Section** و فقط برای تکمیل/اصلاح همان درخواست INTEK ارسال کند.
+- Expert فقط یک Action برای برگشت دارد: `ارسال به مدیر بخش`.
+- Expert نمی‌تواند آن را به Expert دیگر، Manager دیگر یا Section دیگر گردش دهد.
+- Customer Admin حق فعال‌کردن این قابلیت را ندارد.
 
-`ارسال به مدیر بخش`
-
-یعنی کارشناس نمی‌تواند آن را به فرد بعدی گردش دهد.
+این محدودیت یک کنترل محصولی مستقیم برای جلوگیری از تبدیل Customer Portal به اتوماسیون داخلی مشتری است.
 
 ## 6.3 عدم وجود بستن داخلی
 
@@ -551,6 +578,10 @@ Audit جدید و Append Only.
 - `USER_UPDATED`
 - `USER_ACTIVATED`
 - `USER_DEACTIVATED`
+- `USER_MANAGEMENT_PERMISSION_GRANTED`
+- `USER_MANAGEMENT_PERMISSION_REVOKED`
+- `MANAGER_CREATED`
+- `EXPERT_CREATED`
 - `SECTION_CREATED`
 - `SECTION_UPDATED`
 - `SECTION_ACTIVATED`
@@ -659,32 +690,58 @@ Audit جدید و Append Only.
 
 ## 11.1 سمت INTEK
 
+INTEK مرجع نهایی User Management Permission است.
+
 روال اصلی:
 
 - ایجاد Admin اولیه شرکت.
-
-قابلیت پشتیبانی اختیاری:
-
-- ایجاد Manager برای Section موجود.
-- ایجاد Expert برای Section موجود.
+- ایجاد Manager/Expert در صورت نیاز.
 - Active/Inactive کردن User.
+- Grant/Revoke دسترسی‌های محدود User Management برای Customer Admin و Manager.
 
-این عملیات باید Audit شود.
+تمام این عملیات باید Audit شوند.
 
 ## 11.2 سمت Admin شرکت
 
-ادمین شرکت می‌تواند:
+Company Admin فقط در `company_id` خودش عمل می‌کند و دسترسی ساخت User به صورت پیش‌فرض ندارد.
 
-- User جدید فقط برای Company خودش ایجاد کند.
-- Manager/Expert تعیین کند.
-- User را Active/Inactive کند.
-- User را Delete نمی‌کند.
+دسترسی‌های قابل اعطا توسط INTEK:
+
+- اجازه ایجاد Manager برای Company خودش. Default = `0`.
+- اجازه ایجاد Expert برای Company خودش. Default = `0`.
+
+در صورت نداشتن Permission مربوطه، Action باید در Backend رد شود؛ مخفی‌بودن دکمه در UI کافی نیست.
+
+Company Admin حق Grant/Revoke Permissionهای فوق را ندارد.
+
+## 11.3 سمت Manager
+
+Manager به صورت پیش‌فرض حق ایجاد User ندارد.
+
+INTEK می‌تواند Permission ایجاد Expert را به Manager بدهد. در این حالت:
+
+- فقط Expert برای Company خودش.
+- فقط Expert برای Section خودش.
+- Manager حق ایجاد Manager دیگر ندارد.
+- Default = `0`.
+
+## 11.4 Permissionهای منطقی مصوب
+
+نام فنی نهایی جدول Permission هنوز طراحی نشده، اما Permissionهای Business زیر قطعی هستند:
+
+- `customer_admin_create_manager`
+- `customer_admin_create_expert`
+- `manager_create_expert`
+- `manager_create_ticket_with_experts`
+- `manager_return_ticket_to_expert`
+
+همه Permissionهای استثنایی فوق **Default Deny** هستند.
 
 ### Rule امنیتی مهم
 
-`company_id` نباید از POST ادمین پذیرفته شود.
+`company_id` نباید از POST ادمین/مدیر پذیرفته شود.
 
-Company باید در Backend از Session/Admin Profile استخراج شود.
+Company و Section باید در Backend از Session + Portal Profile استخراج و مجدداً اعتبارسنجی شوند.
 
 ---
 
@@ -727,30 +784,48 @@ Feature «Create User توسط Customer Admin» پیاده‌سازی نهایی
 7. Owner = Manager Section
 8. Expert دیگر حق Edit ندارد.
 
-## حالت B - مدیر برای اصلاح به Expert می‌دهد
+## حالت B - Revision توسط Expert فقط با Permission ویژه
+
+این مسیر **Default نیست** و فقط وقتی فعال می‌شود که `manager_return_ticket_to_expert` توسط INTEK برای Manager مجاز شده باشد.
 
 1. Manager Ticket Request را بررسی می‌کند.
-2. Manager می‌تواند به Expert همان Section برای **اصلاح/تکمیل درخواست INTEK** ارجاع دهد.
-3. Status = `EXPERT_REVISION`
-4. Owner = Expert انتخاب‌شده
-5. Expert حق Edit دارد.
-6. Expert فقط می‌تواند آن را به Manager همان Section برگرداند.
-7. Status = `MANAGER_REVIEW`
-8. Owner = Manager
+2. Backend Permission ویژه را بررسی می‌کند.
+3. مقصد فقط Expert فعال همان Section است.
+4. Status = `EXPERT_REVISION`.
+5. Owner = Expert انتخاب‌شده.
+6. Expert حق Edit همان Request را دارد.
+7. Expert فقط می‌تواند آن را به همان Manager Section برگرداند.
+8. Status دوباره = `MANAGER_REVIEW`.
+9. Owner = Manager.
+
+بدون Permission ویژه، Action برگشت به Expert باید هم در UI مخفی و هم در Backend رد شود.
 
 ## حالت C - ایجاد توسط Manager
 
-1. Manager Ticket Request را ایجاد می‌کند.
-2. Owner = Manager
-3. Status = `MANAGER_REVIEW`
-4. Manager می‌تواند:
-   - Priority تعیین کند.
-   - مستقیماً Send To INTEK کند.
-   - برای تکمیل/اصلاح به Expert همان Section بدهد.
+قبل از ایجاد Request، Backend تعداد Expert فعال همان Section را محاسبه می‌کند.
+
+### C1 - Section بدون Expert فعال
+
+1. اگر `active_expert_count = 0` باشد، Manager به صورت پیش‌فرض می‌تواند Ticket Request ایجاد کند.
+2. Owner = Manager.
+3. Status = `MANAGER_REVIEW`.
+4. Manager می‌تواند Priority تعیین و Request را مستقیماً Send To INTEK کند.
+
+### C2 - Section دارای Expert فعال
+
+1. اگر `active_expert_count > 0` باشد، Manager به صورت پیش‌فرض حق ایجاد Ticket Request ندارد.
+2. فقط اگر INTEK Permission `manager_create_ticket_with_experts` را Grant کرده باشد، Manager می‌تواند Request ایجاد کند.
+3. Customer Admin یا Manager نمی‌توانند این Permission را برای خود فعال کنند.
+
+### تغییر خودکار Permission مؤثر
+
+- اضافه/Active شدن اولین Expert: حق پایه Create Ticket مدیر خودکار سلب می‌شود.
+- Inactive/Remove شدن آخرین Expert فعال: حق پایه Create Ticket مدیر خودکار برمی‌گردد.
+- این رفتار باید در Backend بر اساس وضعیت فعلی داده محاسبه شود و صرفاً یک Flag ذخیره‌شده نباشد.
 
 ### تأکید
 
-ایجاد توسط Manager به معنی ایجاد Task برای کارمند نیست. این رکورد از ابتدا یک **درخواست با مقصد INTEK** است.
+هدف این محدودیت جلوگیری از استفاده Customer Portal به عنوان Task/Workflow داخلی مشتری است. هر Request باید از ابتدا مقصد نهایی INTEK داشته باشد.
 
 ---
 
@@ -870,15 +945,21 @@ Default:
 - [ ] نمایش Role/Section کاربران
 - [ ] Audit تمام عملیات
 
-### User Creation
+### User Creation و Permission Governance
 
 بعد از حل تصمیم `unit_id/rbac_id`:
 
-- [ ] Create User
+- [ ] Create User توسط INTEK
+- [ ] Permission-based Create Manager توسط Company Admin
+- [ ] Permission-based Create Expert توسط Company Admin
+- [ ] Permission-based Create Expert توسط Manager فقط در Section خودش
+- [ ] Grant/Revoke Permission فقط از سمت INTEK
+- [ ] Default Deny برای تمام Permissionهای User Creation مشتری
 - [ ] Edit User محدود
 - [ ] Active
 - [ ] Inactive
 - [ ] عدم Delete
+- [ ] Audit کامل Grant/Revoke/Create/Activate/Inactive
 
 در این Phase هنوز Draft Workflow فعال نمی‌شود.
 
@@ -888,9 +969,9 @@ Default:
 
 - [ ] `iweb_customer_portal_ticket_drafts`
 - [ ] ایجاد Draft توسط Expert
-- [ ] ایجاد Request توسط Manager
+- [ ] ایجاد Request توسط Manager فقط طبق Rule تعداد Expert فعال / Override INTEK
 - [ ] Send To Manager
-- [ ] Manager -> Expert Revision
+- [ ] Manager -> Expert Revision فقط با Permission صریح INTEK
 - [ ] Expert -> Manager Return
 - [ ] Priority فقط Manager
 - [ ] Owner-based Edit
@@ -992,6 +1073,13 @@ Ticket منتشرشده باید از دید IPanel دقیقاً مانند Tick
 - Expert نتواند مستقیم Publish کند.
 - Manager نتواند به Expert شرکت دیگر ارجاع دهد.
 - Manager نتواند به Expert Section دیگر ارجاع دهد.
+- Company Admin بدون Permission نتواند Manager/Expert بسازد، حتی با POST مستقیم.
+- Manager بدون Permission نتواند Expert بسازد، حتی با POST مستقیم.
+- Customer Admin/Manager نتوانند Permissionهای مدیریتی را برای خود یا دیگران Grant/Revoke کنند.
+- Manager وقتی حداقل یک Expert فعال در Section دارد نتواند بدون Override INTEK Ticket Request جدید بسازد.
+- اضافه/Active شدن اولین Expert باید حق پایه Create Ticket Manager را خودکار سلب کند.
+- Inactive/Remove شدن آخرین Expert فعال باید حق پایه Create Ticket Manager را خودکار برگرداند.
+- Manager بدون Permission `manager_return_ticket_to_expert` نتواند Request را به Expert برگرداند.
 - Draft منتشرشده دوباره Publish نشود.
 - Audit توسط Customer قابل Delete/Update نباشد.
 - Inactive User امکان Login نداشته باشد.
@@ -1004,11 +1092,12 @@ Ticket منتشرشده باید از دید IPanel دقیقاً مانند Tick
 
 1. Draft بعد از چند روز بدون ارسال به INTEK Aging/Expire شود؟
 2. آیا Expert می‌تواند Draft خودش را قبل از Send To Manager حذف/Cancel کند یا فقط Cancel؟
-3. Manager چند بار مجاز است Ticket را برای Revision به Expert برگرداند؟ محدود یا نامحدود ولی قابل گزارش؟
+3. اگر Permission `manager_return_ticket_to_expert` توسط INTEK داده شد، تعداد دفعات Revision محدود باشد یا نامحدود ولی قابل گزارش؟
 4. دسترسی مالی Manager که قبلاً مطرح شد در نسخه اول فعال شود یا فاز بعد؟
 5. Commentهای قبل از Publish آیا بعد از ارسال به INTEK هم برای تیم INTEK نمایش داده شوند یا فقط History داخلی Preparation باشند؟
 6. Attachmentهای Draft هنگام Publish همگی منتقل شوند یا Manager هنگام Publish انتخاب کند؟
-7. Mapping امن `unit_id/rbac_id` برای Userهای ساخته‌شده توسط Customer Admin.
+7. Mapping امن `unit_id/rbac_id` برای Userهای ساخته‌شده توسط Customer Admin/Manager.
+8. مدل نهایی نگهداری Permissionهای Customer Portal: جدول مستقل Permission/Grant یا Extension دیگر؛ Business Ruleها قطعی ولی Schema هنوز نیازمند Approval است.
 
 ---
 
@@ -1039,6 +1128,21 @@ Ticket منتشرشده باید از دید IPanel دقیقاً مانند Tick
 ---
 
 # 21. Change Log
+
+## v0.4 - 1405/07/25
+
+- Baseline مرجع دیتابیس برای بررسی‌های بعدی به `back261017.sql` به‌روزرسانی شد.
+- User Creation سمت Customer از حالت Role-based unconditional خارج و به **Explicit Permission + Default Deny** تبدیل شد.
+- Company Admin فقط با Grant صریح INTEK می‌تواند Manager یا Expert ایجاد کند.
+- Manager فقط با Grant صریح INTEK می‌تواند Expert همان Section را ایجاد کند و هیچ‌گاه Manager دیگر نمی‌سازد.
+- Grant/Revoke Permissionهای Customer Portal فقط در اختیار INTEK / مدیریت سامانه است.
+- حق ایجاد Ticket Request توسط Manager به تعداد Expert فعال Section وابسته شد: بدون Expert مجاز، با Expert به صورت خودکار ممنوع.
+- Override ایجاد Ticket توسط Manager در حضور Expert فقط با Permission صریح INTEK ممکن است.
+- `Manager -> Expert Revision` از حالت پیش‌فرض خارج شد و Default آن Deny است؛ فقط با Permission INTEK فعال می‌شود.
+- Anti Internal Automation تقویت شد تا Customer Portal به Workflow/Task Management داخلی مشتری تبدیل نشود.
+- Audit Eventهای Grant/Revoke Permission و ایجاد Manager/Expert به الزامات اضافه شدند.
+- Security Testهای مربوط به Permission Bypass، Scope و سلب/بازگشت خودکار Create Ticket اضافه شدند.
+- Schema نهایی Permissionها هنوز ساخته نشده و باید طبق فرآیند Approval-based در مرحله بعد طراحی شود.
 
 ## v0.3 - 1405/07/15
 

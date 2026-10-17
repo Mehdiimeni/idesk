@@ -790,5 +790,7 @@ return [
     'dashboard_sent_tickets' => 'عدد التذاكر المرسلة',
     'dashboard_unique_sent_tickets' => 'التذاكر المرسلة الفريدة',
     'dashboard_weekly_referral_flow' => 'حركة الإحالات خلال آخر 7 أيام',
+    'auto_status_change' => 'تغيير الحالة تلقائياً',
+    'auto_status_after_days' => 'بعد %s يومًا',
 
 ];

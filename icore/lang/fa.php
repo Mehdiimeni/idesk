@@ -791,6 +791,8 @@ return [
     'dashboard_sent_tickets' => 'تعداد تیکت ارسالی',
     'dashboard_unique_sent_tickets' => 'تیکت یکتای ارسالی',
     'dashboard_weekly_referral_flow' => 'گردش ارجاع در ۷ روز اخیر',
+    'auto_status_change' => 'تغییر خودکار وضعیت',
+    'auto_status_after_days' => 'پس از %s روز',
 
 ];
 

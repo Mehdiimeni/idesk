@@ -790,6 +790,8 @@ return [
     'dashboard_sent_tickets' => 'Sent tickets',
     'dashboard_unique_sent_tickets' => 'Unique sent tickets',
     'dashboard_weekly_referral_flow' => 'Referral flow in the last 7 days',
+    'auto_status_change' => 'Automatic status change',
+    'auto_status_after_days' => 'after %s days',
 
 ];
 
