@@ -903,6 +903,418 @@ class TicketModel
     }
 
 
+    /**
+     * Return every iPanel admin that belongs to the current admin's RBAC subtree.
+     *
+     * Visibility hierarchy is driven by rbac.manager_id, not by role captions:
+     * - Expert/leaf role => only the current admin.
+     * - Manager role => current admin plus admins assigned to every descendant RBAC role.
+     *
+     * Other admins that share the exact same RBAC role are peers, not descendants, and are
+     * intentionally excluded. This preserves the rule: Expert sees only self; Manager sees
+     * self + subtree.
+     */
+    public function getAdminSubtreeAdminIds($admin_id)
+    {
+        $admin_id = (int) $admin_id;
+        if ($admin_id <= 0) {
+            return [];
+        }
+
+        $stmt = $this->conn->prepare("SELECT rbac_id FROM admins WHERE id = ? LIMIT 1");
+        if ($stmt === false) {
+            throw new \Exception('Failed to resolve admin RBAC: ' . $this->conn->error);
+        }
+
+        $stmt->bind_param('i', $admin_id);
+        $stmt->execute();
+        $row = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        $rbac_id = isset($row['rbac_id']) ? (int) $row['rbac_id'] : 0;
+        if ($rbac_id <= 0) {
+            return [$admin_id];
+        }
+
+        $sql = "
+            WITH RECURSIVE role_tree AS (
+                SELECT
+                    id,
+                    0 AS depth,
+                    CAST(CONCAT(',', id, ',') AS CHAR(2000)) AS role_path
+                FROM rbac
+                WHERE id = ?
+
+                UNION ALL
+
+                SELECT
+                    child.id,
+                    parent_role.depth + 1 AS depth,
+                    CONCAT(parent_role.role_path, child.id, ',') AS role_path
+                FROM rbac child
+                INNER JOIN role_tree parent_role
+                    ON child.manager_id = parent_role.id
+                WHERE parent_role.depth < 64
+                  AND child.id <> child.manager_id
+                  AND LOCATE(CONCAT(',', child.id, ','), parent_role.role_path) = 0
+            )
+            SELECT DISTINCT a.id
+            FROM admins a
+            INNER JOIN role_tree rt
+                ON rt.id = a.rbac_id
+            WHERE rt.depth > 0
+               OR a.id = ?
+            ORDER BY CASE WHEN a.id = ? THEN 0 ELSE 1 END, a.id
+        ";
+
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            throw new \Exception('Failed to resolve RBAC subtree: ' . $this->conn->error);
+        }
+
+        $stmt->bind_param('iii', $rbac_id, $admin_id, $admin_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $admin_ids = [];
+        while ($item = $result->fetch_assoc()) {
+            $id = (int) ($item['id'] ?? 0);
+            if ($id > 0) {
+                $admin_ids[] = $id;
+            }
+        }
+        $result->free();
+        $stmt->close();
+
+        if (!in_array($admin_id, $admin_ids, true)) {
+            array_unshift($admin_ids, $admin_id);
+        }
+
+        return array_values(array_unique($admin_ids));
+    }
+
+    /**
+     * Resolve tickets whose *current* latest forward receiver is one of the supplied
+     * iPanel admins. The query works from the base forwards table so receiver_type='a'
+     * is enforced and a users.id/admins.id collision cannot leak another user's ticket.
+     *
+     * Admin-created tickets that have never had a forward row are also treated as owned
+     * by their creator. Once a forward exists, the latest forward is authoritative.
+     */
+    private function getCurrentTicketIdsForAdminIds($admin_ids)
+    {
+        $admin_ids = array_values(array_unique(array_filter(array_map('intval', (array) $admin_ids))));
+        if (empty($admin_ids)) {
+            return [];
+        }
+
+        $id_list = implode(',', $admin_ids);
+        $sql = "
+            SELECT DISTINCT scoped.ticket_id
+            FROM (
+                SELECT f.section_element_id AS ticket_id
+                FROM forwards f
+                INNER JOIN (
+                    SELECT section_element_id, MAX(id) AS max_forward_id
+                    FROM forwards
+                    WHERE section_part_name = 'tickets'
+                    GROUP BY section_element_id
+                ) latest
+                    ON latest.max_forward_id = f.id
+                   AND latest.section_element_id = f.section_element_id
+                WHERE f.section_part_name = 'tickets'
+                  AND f.receiver_type = 'a'
+                  AND f.receiver_person_id IN ({$id_list})
+
+                UNION
+
+                SELECT t.id AS ticket_id
+                FROM tickets t
+                WHERE t.admin_id IN ({$id_list})
+                  AND NOT EXISTS (
+                      SELECT 1
+                      FROM forwards fx
+                      WHERE fx.section_part_name = 'tickets'
+                        AND fx.section_element_id = t.id
+                  )
+            ) scoped
+        ";
+
+        $result = $this->conn->query($sql);
+        if ($result === false) {
+            throw new \Exception('Failed to resolve current ticket ownership: ' . $this->conn->error);
+        }
+
+        $ticket_ids = [];
+        while ($row = $result->fetch_assoc()) {
+            $ticket_id = (int) ($row['ticket_id'] ?? 0);
+            if ($ticket_id > 0) {
+                $ticket_ids[] = $ticket_id;
+            }
+        }
+        $result->free();
+
+        return array_values(array_unique($ticket_ids));
+    }
+
+    /**
+     * Shared backend query for Manager/Expert scoped ticket lists.
+     * Company/unit/type/status/mark/search filters intentionally remain identical to the
+     * existing ticket grid behavior; RBAC scope is applied first and cannot be widened by
+     * cookies, DataTables search, URL parameters or UI manipulation.
+     */
+    private function queryScopedCurrentTickets(
+        $admin_ids,
+        $condition_name = '',
+        $searchWhere = null,
+        $limit = null,
+        $orderBy = null,
+        $mark_id = null,
+        $except_conditions = [],
+        $count_only = false
+    ) {
+        $ticket_ids = $this->getCurrentTicketIdsForAdminIds($admin_ids);
+        if (empty($ticket_ids)) {
+            return $count_only ? 0 : [];
+        }
+
+        $whereClauses = [];
+        $params = [];
+        $types = '';
+
+        $whereClauses[] = 't.ticket_id IN (' . implode(',', array_map('intval', $ticket_ids)) . ')';
+
+        $markConditions = [];
+        if (!empty($mark_id)) {
+            $markConditions = $this->getAllMarking($mark_id);
+        }
+        if (!empty($markConditions)) {
+            $markConditions = array_values(array_unique(array_filter(array_map('intval', $markConditions))));
+            if (!empty($markConditions)) {
+                $whereClauses[] = 't.ticket_id IN (' . implode(',', $markConditions) . ')';
+            }
+        }
+
+        $companyConditions = array_values(array_unique(array_filter(array_map(
+            'intval',
+            (array) $this->getCookieConditions('company', 'company_id')
+        ))));
+        if (!empty($companyConditions)) {
+            $whereClauses[] = 't.company_id IN (' . implode(',', $companyConditions) . ')';
+        }
+
+        $unitConditions = array_values(array_unique(array_filter(array_map(
+            'intval',
+            (array) $this->getCookieConditions('unit', 'unit_id')
+        ))));
+        if (!empty($unitConditions)) {
+            $whereClauses[] = 't.unit_id IN (' . implode(',', $unitConditions) . ')';
+        }
+
+        $typeConditions = array_values(array_unique(array_filter(array_map(
+            'intval',
+            (array) $this->getCookieConditions('type', 'type_id')
+        ))));
+        if (!empty($typeConditions)) {
+            $whereClauses[] = 't.type_id IN (' . implode(',', $typeConditions) . ')';
+        }
+
+        $statusConditions = $this->getConditionNamesByIds(
+            $this->getCookieConditions('condition', 'status')
+        );
+        if (!empty($statusConditions)) {
+            $placeholders = implode(',', array_fill(0, count($statusConditions), '?'));
+            $whereClauses[] = "t.ticket_status IN ({$placeholders})";
+            foreach ($statusConditions as $statusCondition) {
+                $params[] = (string) $statusCondition;
+                $types .= 's';
+            }
+        }
+
+        if (!empty($condition_name)) {
+            $whereClauses[] = 't.ticket_status = ?';
+            $params[] = (string) $condition_name;
+            $types .= 's';
+        }
+
+        $except_conditions = array_values(array_unique(array_filter(array_map('strval', (array) $except_conditions))));
+        if (!empty($except_conditions)) {
+            $placeholders = implode(',', array_fill(0, count($except_conditions), '?'));
+            $whereClauses[] = "t.ticket_status NOT IN ({$placeholders})";
+            foreach ($except_conditions as $exceptCondition) {
+                $params[] = $exceptCondition;
+                $types .= 's';
+            }
+        }
+
+        if (!empty($searchWhere)) {
+            $whereClauses[] = '(' . $searchWhere . ')';
+        }
+
+        $sql = $count_only
+            ? 'SELECT COUNT(DISTINCT t.ticket_id) AS cnt FROM ' . $this->ticketGridView . ' t'
+            : 'SELECT DISTINCT t.* FROM ' . $this->ticketGridView . ' t';
+
+        $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
+
+        if (!$count_only) {
+            if (!empty($orderBy)) {
+                $sql .= $orderBy;
+            }
+            if (!empty($limit)) {
+                $sql .= $limit;
+            }
+        }
+
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            throw new \Exception('Failed to prepare scoped ticket query: ' . $this->conn->error);
+        }
+
+        if ($types !== '') {
+            $stmt->bind_param($types, ...$params);
+        }
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($count_only) {
+            $row = $result->fetch_assoc();
+            $count = (int) ($row['cnt'] ?? 0);
+            $result->free();
+            $stmt->close();
+            return $count;
+        }
+
+        $rows = $result->fetch_all(MYSQLI_ASSOC);
+        $result->free();
+        $stmt->close();
+        return $rows;
+    }
+
+    public function getScopedCurrentTickets(
+        $admin_ids,
+        $condition_name = '',
+        $searchWhere = null,
+        $limit = null,
+        $orderBy = null,
+        $mark_id = null,
+        $except_conditions = []
+    ) {
+        return $this->queryScopedCurrentTickets(
+            $admin_ids,
+            $condition_name,
+            $searchWhere,
+            $limit,
+            $orderBy,
+            $mark_id,
+            $except_conditions,
+            false
+        );
+    }
+
+    public function getScopedCurrentTicketsCount(
+        $admin_ids,
+        $condition_name = '',
+        $mark_id = null,
+        $except_conditions = []
+    ) {
+        return $this->queryScopedCurrentTickets(
+            $admin_ids,
+            $condition_name,
+            null,
+            null,
+            null,
+            $mark_id,
+            $except_conditions,
+            true
+        );
+    }
+
+    public function getScopedCurrentTicketsSearchCount(
+        $admin_ids,
+        $condition_name = '',
+        $searchWhere = null,
+        $mark_id = null,
+        $except_conditions = []
+    ) {
+        return $this->queryScopedCurrentTickets(
+            $admin_ids,
+            $condition_name,
+            $searchWhere,
+            null,
+            null,
+            $mark_id,
+            $except_conditions,
+            true
+        );
+    }
+
+    /**
+     * Direct ticket-detail authorization for iPanel.
+     *
+     * Send-All / full-RBAC roles can access every ticket. Other roles can access tickets
+     * that are currently or historically related to their own RBAC subtree. Historical
+     * relation is kept so a Manager/Expert can still open a ticket from their own Sent /
+     * Workflow history after it has been forwarded outside the subtree.
+     */
+    public function checkTicketAccessByAdminScope($ticket_id, $admin_id, $can_view_all = false)
+    {
+        $ticket_id = (int) $ticket_id;
+        $admin_id = (int) $admin_id;
+
+        if ($ticket_id <= 0 || $admin_id <= 0) {
+            return 0;
+        }
+
+        $ticket = $this->getTicketById($ticket_id);
+        if ($ticket === false || empty($ticket)) {
+            return 0;
+        }
+
+        if ($can_view_all) {
+            return $ticket;
+        }
+
+        $admin_ids = $this->getAdminSubtreeAdminIds($admin_id);
+        if (empty($admin_ids)) {
+            return 0;
+        }
+        $id_list = implode(',', array_map('intval', $admin_ids));
+
+        $sql = "
+            SELECT 1
+            FROM tickets t
+            WHERE t.id = ?
+              AND (
+                    t.admin_id IN ({$id_list})
+                    OR EXISTS (
+                        SELECT 1
+                        FROM forwards f
+                        WHERE f.section_part_name = 'tickets'
+                          AND f.section_element_id = t.id
+                          AND (
+                                (f.receiver_type = 'a' AND f.receiver_person_id IN ({$id_list}))
+                                OR
+                                (f.sender_type = 'a' AND f.sender_person_id IN ({$id_list}))
+                          )
+                    )
+              )
+            LIMIT 1
+        ";
+
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            throw new \Exception('Failed to prepare ticket visibility check: ' . $this->conn->error);
+        }
+        $stmt->bind_param('i', $ticket_id);
+        $stmt->execute();
+        $allowed = $stmt->get_result()->num_rows > 0;
+        $stmt->close();
+
+        return $allowed ? $ticket : 0;
+    }
+
     public function getAllAdminNoActionTickets($forward_receiver_id, $condition_name = '', $searchWhere = null, $limit = null, $orderBy = null, $mark_id = null)
     {
         $tickets = [];

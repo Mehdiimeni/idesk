@@ -61,15 +61,78 @@ if (isset($_GET['fid']) && $_GET['fid'] !== '') {
 
 
 
-// user access
-$is_entry = $rbacClass->checkPermissionOperationByName('pointer_operation') ? 1 : 0;
-if ($ticketsModel->checkTicketAccess($ticket_id, $_SESSION['admin_id']) || $is_entry) {
-    $ticketDetail = $ticketsModel->getTicketById($ticket_id);
-    $ticketAllStatusHistory = $ticketsModel->getStatusHistory($ticket_id, 'tickets');
-} else {
+// Ticket detail access + assignment scope.
+// pointer_operation only controls the legacy entry/status behavior; it is NOT a global ticket visibility bypass.
+$adminId = (int) ($_SESSION['admin_id'] ?? 0);
+$isEntry = $rbacClass->checkPermissionOperationByName('pointer_operation') ? 1 : 0;
+$is_entry = $isEntry; // Legacy compatibility: the rest of this controller still uses $is_entry.
+$canAssignOthers = (bool) $rbacClass->checkPermissionOperationByName('assign_other_operation');
+$canSendAllTickets = (bool) $rbacClass->checkPermissionOperationByName('ticket_send_all_operation');
+
+if ($adminId <= 0 || $ticket_id <= 0) {
     echo "<script>window.location.replace('./');</script>";
     exit();
+}
 
+$ticketDetail = $ticketsModel->checkTicketAccessByAdminScope(
+    $ticket_id,
+    $adminId,
+    $canSendAllTickets
+);
+
+if (!$ticketDetail) {
+    echo "<script>window.location.replace('./');</script>";
+    exit();
+}
+
+$ticketAllStatusHistory = $ticketsModel->getStatusHistory($ticket_id, 'tickets');
+
+/*
+ * Assignment recipient scope (Phase 7):
+ * - Sender without ticket_send_all_operation: own RBAC subtree + admins who themselves have Send-All.
+ * - Sender with ticket_send_all_operation (or all_rbac): every active admin except self.
+ * - assign_other_operation authorizes the action itself; it is NOT a receiver eligibility flag.
+ *
+ * The same ID set is reused below for POST validation, so the rule cannot be bypassed by a forged request.
+ */
+$assignmentAdminOptions = [];
+$allowedAssignmentAdminIds = [];
+
+if ($canAssignOthers) {
+    $subtreeAdminIds = $ticketsModel->getAdminSubtreeAdminIds($adminId);
+    $subtreeAdminSet = array_fill_keys(array_map('intval', $subtreeAdminIds), true);
+    $allActiveAdmins = $adminModel->getAdmins();
+
+    if ($allActiveAdmins) {
+        while ($assignmentAdmin = $allActiveAdmins->fetch_assoc()) {
+            $candidateId = (int) ($assignmentAdmin['id'] ?? 0);
+            $candidateStatus = (string) ($assignmentAdmin['status'] ?? '');
+
+            if ($candidateId <= 0 || $candidateId === $adminId || strcasecmp($candidateStatus, 'Active') !== 0) {
+                continue;
+            }
+
+            $isAllowedReceiver = $canSendAllTickets
+                || isset($subtreeAdminSet[$candidateId])
+                || (bool) $rbacClass->checkPermissionOperationByNameAndId('ticket_send_all_operation', $candidateId);
+
+            if (!$isAllowedReceiver) {
+                continue;
+            }
+
+            $assignmentAdminOptions[] = [
+                'id' => $candidateId,
+                'name' => (string) ($assignmentAdmin['name'] ?? ''),
+            ];
+            $allowedAssignmentAdminIds[] = $candidateId;
+        }
+    }
+
+    usort($assignmentAdminOptions, static function ($a, $b) {
+        return strnatcasecmp((string) ($a['name'] ?? ''), (string) ($b['name'] ?? ''));
+    });
+
+    $allowedAssignmentAdminIds = array_values(array_unique(array_map('intval', $allowedAssignmentAdminIds)));
 }
 
 
@@ -183,33 +246,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // forward
     if (isset($_POST['forward'])) {
+        // Backend authorization: hiding the modal is not sufficient.
+        if (!$canAssignOthers) {
+            http_response_code(403);
+            exit('Forbidden');
+        }
 
         $table_set = 'forwards';
 
-        $arrreceiver_person_id_a = $_POST['receiver_person_id_a'] ?? null;
+        $arrreceiver_person_id_a = $_POST['receiver_person_id_a'] ?? [];
         $forwards_description = $_POST['forwards_description'] ?? '';
         $sender_signature = !empty($_POST['sender_signature']) ? 1 : 0;
 
-        $sender_person_id = $_SESSION['admin_id'];
-        $sender_rbac_id = $_SESSION['rbac_id'];
+        $sender_person_id = $adminId;
+        $sender_rbac_id = (int) ($_SESSION['rbac_id'] ?? 0);
         $sender_type = 'a';
 
-        $section_element_id_encrypt = $_POST['section_element_id'];
+        $section_element_id_encrypt = $_POST['section_element_id'] ?? '';
         $section_element_id = (int) $encryptorClass->decrypt($section_element_id_encrypt);
 
-        $section_part_name = $_POST['section_part_name'];
+        $section_part_name = (string) ($_POST['section_part_name'] ?? '');
         $intReferred = $_POST['referred'] ?? null;
         $strConditionName = $_POST['condition_name'] ?? null;
 
         $delivery_time = $_POST['delivery_time'] ?? null;
         $person_hour = $_POST['person_hour'] ?? null;
 
+        // A forged POST must not be able to forward another ticket or another section type.
+        if ($section_element_id !== $ticket_id || $section_part_name !== 'tickets') {
+            http_response_code(400);
+            exit('Invalid ticket target');
+        }
+
+        if (!is_array($arrreceiver_person_id_a)) {
+            $arrreceiver_person_id_a = [$arrreceiver_person_id_a];
+        }
+
+        $arrreceiver_person_id_a = array_values(array_unique(array_filter(array_map(
+            'intval',
+            $arrreceiver_person_id_a
+        ), static function ($id) {
+            return $id > 0;
+        })));
+
+        // Enforce exactly the same recipient scope used by the UI.
+        foreach ($arrreceiver_person_id_a as $receiver_person_id_a) {
+            if (!in_array($receiver_person_id_a, $allowedAssignmentAdminIds, true)) {
+                http_response_code(403);
+                exit('Receiver is outside the allowed assignment scope');
+            }
+        }
+
         $emailReceivers = [];
 
-        if (is_array($arrreceiver_person_id_a) && !empty($arrreceiver_person_id_a)) {
-
+        if (!empty($arrreceiver_person_id_a)) {
             foreach ($arrreceiver_person_id_a as $receiver_person_id_a) {
-
                 $commonData = [
                     'receiver_person_id' => $receiver_person_id_a,
                     'receiver_type' => 'a',

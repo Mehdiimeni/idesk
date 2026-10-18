@@ -1,11 +1,11 @@
 # برنامه توسعه مرحله‌ای IWEB برای ساختار شرکت، نقش‌ها و کنترل ارسال تیکت به INTEK
 
-**نسخه:** 0.4  
-**تاریخ:** 1405/07/25  
-**وضعیت:** Phase 1 - چهار جدول Additive ساخته شده / قواعد Phase 2 و Phase 3 به‌روزرسانی شده / بدون تغییر در جداول Legacy  
+**نسخه:** 1.0  
+**تاریخ:** 1405/07/27  
+**وضعیت:** Phase 1 - چهار جدول Additive ساخته شده / قواعد Phase 2 و Phase 3 به‌روزرسانی شده / بازطراحی مدیریتی IPanel مرحله‌ای در حال اجرا (Activity + Company + Unit + Type + Users) / بدون تغییر مخرب در جداول Legacy  
 **پروژه مبنا:** `icore.zip` + `back261017.sql`
 
-> **هشدار مهم:** این سند در نسخه فعلی فقط برنامه طراحی و اجرای مرحله‌ای است. در این مرحله هیچ SQL، Migration یا تغییر کدی روی Production نباید اجرا شود.
+> **هشدار مهم:** اجرای Migration این مرحله ابتدا باید روی محیط Test انجام و نتیجه بررسی شود؛ اجرای Production فقط پس از تأیید خروجی Migration و Smoke Test مجاز است.
 
 ## 0.1 مبنای فنی قطعی پروژه
 
@@ -47,6 +47,142 @@
 - `iweb_customer_portal_ticket_publish_map`
 
 این Prefix برای تمام جداول جدید این پروژه باید حفظ شود.
+
+---
+
+## 0.3 قواعد قطعی بازطراحی مدیریتی، دسترسی و حذف امن
+
+این بخش از نسخه 0.5 برای تمام صفحات مدیریتی **IPanel** و صفحات مدیریتی سمت شرکت در **IWeb** الزام‌آور است.
+
+### 0.3.1 Permission برای هر Action
+
+هر Action که باعث یکی از موارد زیر شود باید در **Backend** دارای Permission صریح باشد:
+
+- Insert / Create
+- Update / Edit
+- Delete
+- Active / Inactive
+- Assign / Unassign
+- Forward / Send
+- Grant / Revoke
+- Publish / Cancel
+- هر تغییر دیگری که داده یا Business State را تغییر دهد
+
+قواعد:
+
+1. مخفی‌کردن دکمه در UI به‌تنهایی Authorization محسوب نمی‌شود.
+2. Permission باید در Endpoint / Controller مجدداً بررسی شود.
+3. Scope سازمانی مانند Company / Unit / Section باید در Backend اعتبارسنجی شود.
+4. Action بدون Permission حتی با POST مستقیم باید رد شود.
+5. در IPanel برای CRUD عمومی، Permissionهای موجود `add_operation`, `edit_operation`, `delete_operation` فقط زمانی معتبرند که Backend علاوه بر آنها دسترسی همان Subpart را نیز کنترل کند.
+6. برای Business Actionهای خاص باید Permission اختصاصی تعریف شود.
+
+### 0.3.2 منع حذف رکورد دارای زیرمجموعه یا وابستگی
+
+هر رکورد مدیریتی که زیرمجموعه یا وابستگی فعال/Business Dependency دارد، از داخل Application **قابل حذف نیست؛ حتی اگر Actor مجوز Delete داشته باشد**.
+
+نمونه‌ها:
+
+- Activity متصل به Company یا RBAC Role
+- Company دارای Unit/User/Manager/Role/Ticket وابسته
+- Unit دارای User/Admin/RBAC یا سایر وابستگی‌های عملیاتی
+- Role/RBAC که به User/Admin یا Permission/Workflow متصل است
+- هر ساختار دیگری که حذف آن باعث Orphan، اختلال Business یا Regression شود
+
+قاعده نهایی:
+
+`Delete Permission != Permission To Break Dependencies`
+
+اگر حذف چنین رکوردی واقعاً لازم باشد، فقط **مدیر سامانه / INTEK** پس از بررسی Impact و Backup می‌تواند تصمیم به حذف مستقیم از Database بگیرد. این مسیر عمداً از UI ارائه نمی‌شود.
+
+### 0.3.3 استفاده از ساختار موجود قبل از ساخت Database Object جدید
+
+در هر بخش ابتدا باید بررسی شود که آیا Table/View/Query موجود نیاز Business را پوشش می‌دهد یا خیر.
+
+ترتیب ترجیح:
+
+1. استفاده از Table و Relationهای موجود
+2. Query/Model Method جدید روی ساختار موجود
+3. فقط در صورت نیاز واقعی: View
+4. فقط در صورت نیاز واقعی: Stored Procedure
+5. فقط در صورت نیاز واقعی: Event
+6. فقط در صورت نیاز واقعی: Table جدید
+7. Index جدید فقط طبق قواعد Baseline و با Approval جداگانه
+
+برای Legacy Tableها اصل عدم ایجاد Index جدید بدون تأیید صریح همچنان برقرار است.
+
+### 0.3.4 Dictionary و بسته‌های Patch
+
+تمام Captionهای جدید باید در سه زبان `fa/en/ar` از Dictionary خوانده شوند.
+
+از این نسخه به بعد:
+
+- فایل‌های کامل و Merge‌شده `icore/lang/fa.php`, `icore/lang/en.php`, `icore/lang/ar.php` داخل همان Patch قرار می‌گیرند.
+- Dictionary Fragment جداگانه برای Patch کد تحویل داده نمی‌شود.
+- فایل جدا فقط برای Scriptهای Database یا مستند مستقل مجاز است.
+- هیچ Patch نباید فایل Lang موجود را با نسخه ناقص جایگزین کند یا Keyهای قبلی را حذف کند.
+
+### 0.3.5 تفکیک Unit و Customer Portal Section
+
+ساختار Legacy و Customer Portal مستقل باقی می‌مانند:
+
+```text
+IPanel / Legacy
+Company
+  -> Unit
+      -> Unit Manager(s)
+      -> Unit Member(s)
+
+IWeb Customer Portal
+Company
+  -> Customer Portal Section
+      -> Manager
+      -> Expert
+```
+
+`Unit` و `Customer Portal Section` نباید با یکدیگر جایگزین یا از نظر معنایی یکی شوند.
+
+### 0.3.6 Scope ارسال تیکت برای مدیران IPanel
+
+Permission اختصاصی فعلی برای Scope عمومی ارسال:
+
+`ticket_send_all_operation`
+
+قواعد:
+
+- اگر Manager این Permission را نداشته باشد، گیرندگان مجاز او شامل افراد زیرشاخه خودش **به‌علاوه افرادی است که خودشان Scope «ارسال به همه» دارند**.
+- اگر Manager این Permission را داشته باشد، می‌تواند به تمام گیرندگان مجاز سیستم ارسال/Forward کند.
+- این Rule باید هم در لیست گیرندگان UI و هم در Backend Forward enforce شود.
+- نبود Permission حالت Default و محدود است.
+
+### 0.3.7 تصمیم Activity Management
+
+برای `ipanel/activity` در نسخه فعلی:
+
+- Table جدید لازم نیست.
+- از `activities`, `company_profiles`, `rbac` استفاده می‌شود.
+- Add فقط با `add_operation` + دسترسی Subpart Activity.
+- Edit فقط با `edit_operation` + دسترسی Subpart Activity.
+- Delete فقط با `delete_operation` + دسترسی Subpart Activity **و فقط در صورت صفر بودن تمام وابستگی‌ها**.
+- Activity دارای Company یا Role وابسته از UI هرگز حذف نمی‌شود.
+- Generic CRUD برای Table `activities` نباید بتواند Endpoint امن Activity را دور بزند.
+
+### 0.3.8 تصمیم Company Management
+
+برای `ipanel/company` در نسخه فعلی:
+
+- Table/View/SP/Event/Index جدید لازم نیست و از ساختار Legacy موجود استفاده می‌شود.
+- مرجع اصلی Company همان `company_profiles` باقی می‌ماند.
+- Activity شرکت از `company_profiles.activity_id -> activities.id` استفاده می‌کند.
+- Add فقط با `add_operation` + دسترسی Subpart Company.
+- Edit فقط با `edit_operation` + دسترسی Subpart Company.
+- Delete فقط با `delete_operation` + دسترسی Subpart Company و فقط وقتی **هیچ Table پایه دارای `company_id` رکورد وابسته به آن Company نداشته باشد**.
+- بررسی Delete در Backend به صورت Dependency Guard انجام می‌شود تا Tableهای Legacy و Tableهای Additive آینده نیز پوشش داده شوند.
+- Company دارای Unit/User/Admin/RBAC/Ticket یا هر Business Reference دیگر از UI هرگز حذف نمی‌شود؛ حذف استثنایی فقط تصمیم مدیر سامانه و اقدام مستقیم Database پس از Impact Review/Backup است.
+- Generic CRUD برای `company_profiles` نباید بتواند Endpoint امن Company را دور بزند.
+- تغییر Activity شرکت در صورتی که برای آن Company نقش‌های RBAC وجود داشته باشد مسدود است تا `rbac.activity_id` و ساختار دسترسی ناسازگار نشوند.
+- چهار Flag فعلی `company_development`, `delivery_development`, `company_support`, `delivery_support` حفظ می‌شوند؛ Schema جدیدی برای آنها ساخته نمی‌شود.
+- مقدار پیش‌فرض ایجاد Company برای این چهار Flag برابر `1` در نظر گرفته می‌شود تا با Default دیتابیس و داده‌های فعلی سازگار باشد.
 
 ---
 
@@ -459,8 +595,9 @@ Extension جدول `users` برای نقش جدید، بدون تغییر معن
 ### Rule
 
 - Admin: `section_id = NULL`
-- Manager: دقیقاً یک `section_id`
-- Expert: یک Section فعال در نسخه اول
+- Manager در حالت عملیاتی: دقیقاً یک `section_id` فعال. در Migration کاربران Legacy موقتاً `section_id = NULL` مجاز است.
+- Expert در حالت عملیاتی: یک Section فعال در نسخه اول. در Migration کاربران Legacy موقتاً `section_id = NULL` مجاز است.
+- Manager/Expert با `section_id = NULL` فقط در Pool انتقالی قرار دارند و هیچ Business Action مربوط به Workflow انجام نمی‌دهند.
 
 در صورت نیاز به چند Section برای Expert در آینده، این قسمت بعداً به Mapping Table تبدیل می‌شود؛ در MVP انجام نمی‌شود.
 
@@ -734,6 +871,9 @@ INTEK می‌تواند Permission ایجاد Expert را به Manager بدهد.
 - `manager_create_expert`
 - `manager_create_ticket_with_experts`
 - `manager_return_ticket_to_expert`
+- `customer_admin_assign_manager_to_section`
+- `manager_assign_unassigned_expert`
+- `customer_admin_reassign_expert`
 
 همه Permissionهای استثنایی فوق **Default Deny** هستند.
 
@@ -742,6 +882,40 @@ INTEK می‌تواند Permission ایجاد Expert را به Manager بدهد.
 `company_id` نباید از POST ادمین/مدیر پذیرفته شود.
 
 Company و Section باید در Backend از Session + Portal Profile استخراج و مجدداً اعتبارسنجی شوند.
+
+---
+
+
+
+## 11.5 تصمیم نهایی IPanel Users Management - v1.0
+
+در بازطراحی `ipanel/users`، مدیریت کاربران INTEK به صورت **Company-Centric** انجام می‌شود:
+
+- صفحه اصلی `ipanel/users` فهرست شرکت‌ها را نمایش می‌دهد.
+- هر شرکت صفحه مستقل خود را با `company_id` دارد.
+- چارت هر شرکت مستقل است و ساختار نمایشی آن به صورت `Company -> Admins + Sections -> Managers/Experts` است.
+- نقش‌های Portal فقط `ADMIN`, `MANAGER`, `EXPERT` هستند و معنای Legacy `users.role` تغییر نمی‌کند.
+- User جدیدی که از IPanel ساخته می‌شود با Legacy role=`member` ایجاد و نقش Portal او فقط در `iweb_customer_portal_user_profiles` ثبت می‌شود.
+- Company Admin باید `section_id = NULL` داشته باشد.
+- در حالت عادی Manager و Expert باید دقیقاً یک Section فعال از همان Company داشته باشند.
+- برای Migration کاربران Legacy، Manager/Expert می‌توانند موقتاً با `section_id = NULL` نگهداری شوند و در Pool «در انتظار تخصیص واحد» قرار گیرند.
+- Manager/Expert بدون Section هیچ Business Action مربوط به Workflow/Ticket/Assignment انجام نمی‌دهند تا Section واقعی تعیین شود.
+- Expertی که به Section تخصیص داده شده فقط در Section دارای حداقل یک Manager فعال مجاز است.
+- آخرین Manager فعال یک Section که Expert فعال دارد قابل Inactive شدن، تغییر Role یا انتقال به Section دیگر نیست تا مسیر Expert -> Manager شکسته نشود.
+- حذف فیزیکی User از IPanel انجام نمی‌شود؛ فقط Active/Inactive مجاز است.
+- Unit و RBAC در Create/Edit باید صراحتاً از موجودی همان Company انتخاب و در Backend دوباره اعتبارسنجی شوند. این تصمیم فقط برای ایجاد مستقیم توسط INTEK است و Gate مربوط به Mapping خودکار `unit_id/rbac_id` در Customer-side User Creation را حل‌شده تلقی نمی‌کند.
+- Add/Edit/Activate/Inactive هم در UI و هم در Backend نیازمند Subpart `users` و Operation متناظر هستند.
+- Generic CRUD/Status endpointهای Legacy برای جدول `users` قابل استفاده نیستند و عملیات فقط از Endpoint محافظت‌شده User Management انجام می‌شود.
+- Create/Edit/Activate/Inactive باید در `iweb_customer_portal_ticket_audit_logs` ثبت شود و شکست Audit باعث Rollback تراکنش Business می‌شود.
+- Scope `ticket_send_all_operation` فقط از RBAC موجود خوانده و در صفحه نمایش داده می‌شود؛ Enforcement واقعی مقصد Forward همچنان در فاز Backend Routing انجام می‌شود.
+- برای این بازطراحی Table/View/SP/Event/Index جدیدی ایجاد نمی‌شود.
+- نقش Migration کاربران قدیمی فقط از Caption دسترسی Legacy (`rbac.rbac_name`) استخراج می‌شود: Caption شامل «مدیر» => `MANAGER` و شامل «کارشناس» => `EXPERT`; از `unit_id` یا نام واحد Legacy برای حدس‌زدن Section جدید استفاده نمی‌شود.
+- تخصیص Manager موجود به Section، فقط `iweb_customer_portal_user_profiles.section_id` را تغییر می‌دهد و `users.unit_id` / `rbac_id` Legacy دست‌نخورده می‌ماند.
+- در MVP هر Section فقط یک Manager فعال دارد.
+- Expert بدون Section فقط به Section همان Company که Manager فعال دارد قابل تخصیص است.
+- انتقال Expert بین دو Section موجود یک Action جداگانه و کنترل‌شده است و با Assign اولیه یکی نیست.
+- Permissionهای منطقی آینده برای Customer-side Assignment: `customer_admin_assign_manager_to_section`, `manager_assign_unassigned_expert`, `customer_admin_reassign_expert`. این Permissionها Default Deny هستند و Schema آنها در این Patch ایجاد نمی‌شود.
+- در IPanel، Assign اولیه Migration به Subpart `users` + `edit_operation` وابسته است و Backend مجدداً Company/Role/Section را کنترل می‌کند.
 
 ---
 
@@ -1127,7 +1301,125 @@ Ticket منتشرشده باید از دید IPanel دقیقاً مانند Tick
 
 ---
 
+
+## 20.2 تصمیم قطعی IPanel Unit Management
+
+صفحه `ipanel/unit` در بازطراحی مدیریتی باید همچنان از جدول Legacy `units` استفاده کند و در این مرحله هیچ Table/View/SP/Event/Index جدیدی برای Unit ایجاد نمی‌شود.
+
+قواعد قطعی:
+
+- Add/Edit/Delete فقط در صورت داشتن Subpart دسترسی `unit` و Operation متناظر (`add_operation` / `edit_operation` / `delete_operation`) مجاز است و Backend باید مجدداً آن را بررسی کند.
+- `units` از Generic CRUD خارج و فقط از Endpoint اختصاصی محافظت‌شده مدیریت می‌شود.
+- یکتایی نام Unit در محدوده همان Company بررسی می‌شود: `(company_id, unit_name)`؛ یک نام مشابه می‌تواند در Company دیگر وجود داشته باشد.
+- `unit_type` اختیاری باقی می‌ماند و معنای Legacy آن تغییر نمی‌کند.
+- Unit دارای هر Dependency با `unit_id` در Base Tableها از داخل سامانه حذف نمی‌شود، حتی اگر کاربر `delete_operation` داشته باشد.
+- Dependencyهای فعلی مهم شامل `users`, `admins`, `rbac`, `daily_reports` هستند؛ Delete Backend باید به صورت پویا Base Tableهای دارای `unit_id` را نیز بررسی کند.
+- انتقال Unit دارای Dependency به Company دیگر ممنوع است، چون `users.unit_id -> units.company_id` مبنای Scope شرکت در Login و همچنین RBAC/Manager Context است و تغییر Company می‌تواند Scope بیزینس را ناخواسته عوض کند.
+- نام و `unit_type` یک Unit وابسته همچنان قابل ویرایش هستند، چون شناسه Unit ثابت می‌ماند؛ تغییر Company آن قفل می‌شود.
+- حذف استثنایی Unit وابسته فقط توسط مدیر سامانه، خارج از UI، بعد از Impact Review و Backup و با اصلاح وابستگی‌ها مجاز است.
+- Captionهای جدید Unit در سه فایل اصلی `icore/lang/fa.php`, `en.php`, `ar.php` داخل همان Patch Merge می‌شوند.
+
+---
+
+
+## 20.3 تصمیم قطعی IPanel Type Management
+
+صفحه `ipanel/type` همچنان از جدول Legacy `types` استفاده می‌کند و در این مرحله هیچ Table/View/SP/Event/Index جدیدی برای Type ایجاد نمی‌شود.
+
+قواعد قطعی:
+
+- Add/Edit/Delete فقط در صورت داشتن Subpart دسترسی `type` و Operation متناظر (`add_operation` / `edit_operation` / `delete_operation`) مجاز است و Backend باید مجدداً آن را بررسی کند.
+- `types` از Generic CRUD خارج و فقط از Endpoint اختصاصی محافظت‌شده مدیریت می‌شود.
+- یکتایی Type بر اساس ترکیب `(type_group, type_name)` بررسی می‌شود؛ یک `type_name` مشابه می‌تواند در Group دیگری وجود داشته باشد، مطابق داده‌های Legacy موجود.
+- Type دارای هر Dependency مستقیم با `type_id` در Base Tableهای دیتابیس از داخل سامانه حذف نمی‌شود، حتی اگر کاربر `delete_operation` داشته باشد.
+- Delete Backend باید Base Tableهای دارای `type_id` را به صورت پویا بررسی کند تا Dependencyهای فعلی و آینده پوشش داده شوند؛ `tickets.type_id` Dependency اصلی فعلی است.
+- `type_group` صرفاً Caption نیست و در Priority List و گزارش/فیلترهای جاری بیزینس استفاده می‌شود؛ تغییر Group برای Type دارای Dependency مستقیم ممنوع است، زیرا بلافاصله طبقه‌بندی تیکت‌های موجود را تغییر می‌دهد.
+- اگر یک Type آخرین Type یک Group باشد و `priority_lists` به همان `type_group` وابسته باشد، تغییر Group یا Delete آن از داخل سامانه ممنوع است تا Group فعال بیزینسی یتیم نشود.
+- نام و توضیحات Type وابسته همچنان قابل ویرایش هستند؛ شناسه Type ثابت می‌ماند. محدودیت ویژه فقط روی Delete و تغییر Group حساس اعمال می‌شود.
+- حذف استثنایی Type وابسته فقط توسط مدیر سامانه، خارج از UI، بعد از Impact Review و Backup و اصلاح وابستگی‌ها مجاز است.
+- Captionهای جدید Type در سه فایل اصلی `icore/lang/fa.php`, `en.php`, `ar.php` داخل همان Patch Merge می‌شوند.
+- Patch Type فایل `INSTALL.txt` ندارد؛ مستند تصمیم‌ها فقط داخل پوشه `docs` نگهداری می‌شود.
+
+---
+
 # 21. Change Log
+
+## v1.0 - 1405/07/27
+
+- Migration کاربران Legacy به مدل Portal بدون حدس‌زدن Section تصویب شد.
+- RBAC Caption شامل «مدیر» به `MANAGER` و Caption شامل «کارشناس» به `EXPERT` Map می‌شود؛ `section_id` در Migration اولیه `NULL` می‌ماند.
+- Pool مستقل «مدیران در انتظار تخصیص واحد» و «کارشناسان در انتظار تخصیص واحد» به صفحه Company Users اضافه شد.
+- کاربران Legacy فاقد Portal Profile جداگانه به عنوان «بدون نقش پرتال» نمایش داده می‌شوند.
+- Assign اولیه Manager/Expert به Section از IPanel با `users + edit_operation`, CSRF, Transaction و Audit انجام می‌شود.
+- Assign Manager فقط به Section فعال بدون Manager فعال مجاز است.
+- Assign Expert فقط به Section فعال همان Company که Manager فعال دارد مجاز است.
+- کاربران Manager/Expert بدون Section می‌توانند Active باشند ولی تا زمان تخصیص Section نباید Business Action مربوط به Workflow داشته باشند.
+- ایجاد User جدید Manager/Expert همچنان نیازمند Section فعال است؛ حالت بدون Section فقط برای Migration/Transition کاربران موجود است.
+- Permissionهای آینده Customer-side Assignment ثبت شدند: `customer_admin_assign_manager_to_section`, `manager_assign_unassigned_expert`, `customer_admin_reassign_expert`؛ همگی Default Deny و هنوز بدون Schema نهایی.
+- هیچ Table/View/SP/Event/Index جدیدی برای این مرحله اضافه نشد.
+
+## v0.9 - 1405/07/27
+
+- `ipanel/users` به مدیریت Company-Centric تبدیل شد و هر Company صفحه مستقل دارد.
+- چارت مستقل Company -> Admin -> Section -> Manager/Expert به UI اضافه شد.
+- سه سطح Portal Role یعنی ADMIN/MANAGER/EXPERT در IPanel Users Management تثبیت شد.
+- حذف فیزیکی User از IPanel ممنوع و Active/Inactive جایگزین آن شد.
+- Create/Edit/Status کاربران به Endpoint محافظت‌شده با Permission Backend، CSRF، Transaction و Audit منتقل شد.
+- Expert فعال بدون Manager فعال همان Section ممنوع شد و حذف/جابجایی آخرین Manager فعال Section دارای Expert نیز Block شد.
+- Generic CRUD/Status برای جدول users مسدود شد.
+- ساختار Legacy users.role، units و RBAC بدون تغییر معنا حفظ شد.
+
+
+
+
+## v0.8 - 1405/07/27
+
+- تصمیم Type Management ثبت شد و جدول Legacy `types` به عنوان مرجع حفظ شد.
+- برای Type هیچ Table/View/SP/Event/Index جدیدی اضافه نشد.
+- Add/Edit/Delete نوع تیکت به Subpart Type + Operation Permission در Backend وابسته شد.
+- Generic CRUD برای `types` مسدود شد تا Endpoint امن دور زده نشود.
+- یکتایی Type بر اساس `type_name + type_group` تعریف شد و تکرار نام مشابه در Group دیگر مجاز باقی ماند.
+- Delete Type در صورت وجود هر Dependency مستقیم `type_id` ممنوع شد.
+- تغییر `type_group` برای Type دارای Dependency مستقیم ممنوع شد تا طبقه‌بندی تیکت‌های موجود و منطق Priority List ناخواسته تغییر نکند.
+- آخرین Type یک Group دارای `priority_lists` نیز قابل انتقال یا حذف از UI نیست.
+- نام و Description Type وابسته قابل ویرایش باقی ماند.
+- فایل‌های `fa/en/ar` به صورت Merge‌شده داخل Patch Type قرار می‌گیرند و `INSTALL.txt` برای این Patch ساخته نمی‌شود.
+
+## v0.7 - 1405/07/27
+
+- تصمیم Unit Management ثبت شد و جدول Legacy `units` به عنوان مرجع حفظ شد.
+- برای Unit هیچ Table/View/SP/Event/Index جدیدی اضافه نشد.
+- Add/Edit/Delete واحد به Subpart Unit + Operation Permission در Backend وابسته شد.
+- Generic CRUD برای `units` مسدود شد تا Endpoint امن دور زده نشود.
+- نام Unit در سطح همان Company یکتا شد؛ نام مشابه در Company دیگر مجاز است.
+- Delete Unit در صورت وجود هر Dependency با ستون `unit_id` در Base Tableهای دیتابیس ممنوع شد.
+- انتقال Unit وابسته به Company دیگر ممنوع شد تا Scope کاربران/مدیران/RBAC و Company مشتق‌شده از `unit_id` ناخواسته تغییر نکند.
+- `unit_type` اختیاری و سازگار با Legacy باقی ماند.
+- فایل‌های `fa/en/ar` به صورت Merge‌شده داخل Patch Unit قرار می‌گیرند.
+
+## v0.6 - 1405/07/27
+
+- تصمیم Company Management ثبت شد و `company_profiles` به عنوان مرجع Legacy حفظ شد.
+- برای Company هیچ Table/View/SP/Event/Index جدیدی اضافه نشد.
+- Add/Edit/Delete شرکت به Subpart Company + Operation Permission در Backend وابسته شد.
+- Generic CRUD برای `company_profiles` باید مسدود باشد تا Endpoint امن دور زده نشود.
+- Delete Company در صورت وجود هر Dependency با ستون `company_id` در Base Tableهای دیتابیس ممنوع شد.
+- تغییر Activity شرکت دارای RBAC Role وابسته ممنوع شد تا ساختار Role ناسازگار نشود.
+- Flagهای Development/Support موجود حفظ و Default ایجاد Company با Default دیتابیس (`1`) هم‌راستا شد.
+- فایل‌های `fa/en/ar` به صورت Merge‌شده داخل Patch Company قرار می‌گیرند.
+
+## v0.5 - 1405/07/26
+
+- بازطراحی مدیریتی IPanel به صورت مرحله‌ای و از `ipanel/activity` آغاز شد.
+- قانون سراسری Permission برای تمام Actionهای Database/Business در Backend تصویب شد.
+- مخفی‌کردن Action در UI به‌تنهایی Authorization محسوب نمی‌شود.
+- حذف رکورد دارای زیرمجموعه یا Business Dependency حتی برای دارنده Delete Permission از داخل سامانه ممنوع شد.
+- حذف استثنایی رکورد وابسته فقط با تشخیص مدیر سامانه و اقدام مستقیم Database پس از Impact Review مجاز است.
+- اصل استفاده از Tableهای موجود قبل از ایجاد View/SP/Event/Table/Index جدید تثبیت شد.
+- Dictionaryهای `fa/en/ar` باید به صورت Merge‌شده داخل خود Patch باشند و Fragment جداگانه تحویل نشود.
+- ساختار Legacy `Company -> Unit -> Manager/Member` از Customer Portal `Company -> Section -> Manager/Expert` به صورت صریح تفکیک شد.
+- Permission `ticket_send_all_operation` و Rule ارسال مدیر به زیرشاخه خودش + گیرندگان دارای Scope عمومی ثبت شد.
+- تصمیم Activity Management ثبت شد: استفاده از جداول موجود و حذف فقط در نبود کامل وابستگی.
 
 ## v0.4 - 1405/07/25
 

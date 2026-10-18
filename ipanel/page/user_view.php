@@ -20,10 +20,14 @@ if (!$rbacClass->checkPermissionPartByName('user_view', 'access')) {
     exit();
 }
 
-$_SESSION['arrayComponents'] = array('operation', 'table', 'lang');
+/*
+ * user_view v4 owns its save flow and no longer uses legacy operation.js.
+ * Keeping only lang avoids the old unprotected add_operation.php mutation path.
+ */
+$_SESSION['arrayComponents'] = array('lang');
 
 $objFileCaller = FileCaller::getInstance();
-$_SESSION['pageTitle'] = [];
+$_SESSION['pageTitle'] = ['user_view'];
 
 function includeFiles($objFileCaller, $specificFile)
 {
@@ -36,10 +40,9 @@ function includeFiles($objFileCaller, $specificFile)
     $objFileCaller->includeFileWithController('.', 'global/', 'page_js');
 }
 
-if (isset($_GET['id']) && !empty($_GET['id'])) {
-    $_SESSION['pageTitle'][] = 'user_view';
+if ((isset($_GET['rbac_id']) && (int)$_GET['rbac_id'] > 0) ||
+    (isset($_GET['id']) && (int)$_GET['id'] > 0)) {
     includeFiles($objFileCaller, 'user_view_details');
 } else {
-    $_SESSION['pageTitle'][] = 'user_view';
     includeFiles($objFileCaller, 'user_view');
 }

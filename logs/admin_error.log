@@ -43,3 +43,33 @@
 [10-Oct-2026 09:40:40 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_activity_report" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 120
 [10-Oct-2026 09:40:40 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_received_tickets" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 128
 [10-Oct-2026 09:40:40 Europe/Berlin] PHP Warning:  Undefined array key "dashboard_sent_tickets" in E:\xampp\htdocs\idesk\ipanel\template\first\first.php on line 133
+[18-Oct-2026 06:52:31 Europe/Berlin] PHP Warning:  Undefined array key "view_access_management" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 359
+[18-Oct-2026 06:52:31 Europe/Berlin] PHP Warning:  Undefined array key "view_access_management_note" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 360
+[18-Oct-2026 06:52:31 Europe/Berlin] PHP Warning:  Undefined array key "view_access_back_to_list" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 367
+[18-Oct-2026 06:52:31 Europe/Berlin] PHP Warning:  Undefined array key "view_access_total_permissions" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 404
+[18-Oct-2026 06:52:31 Europe/Berlin] PHP Warning:  Undefined array key "view_access_selected_permissions" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 411
+[18-Oct-2026 06:52:31 Europe/Berlin] PHP Warning:  Undefined array key "view_access_inactive_permissions" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 418
+[18-Oct-2026 06:52:31 Europe/Berlin] PHP Warning:  Undefined array key "view_access_last_update" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 434
+[18-Oct-2026 06:52:31 Europe/Berlin] PHP Warning:  Undefined array key "view_access_search_placeholder" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 445
+[18-Oct-2026 06:52:31 Europe/Berlin] PHP Warning:  Undefined array key "view_access_select_all" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 452
+[18-Oct-2026 06:52:31 Europe/Berlin] PHP Warning:  Undefined array key "view_access_clear_all" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 455
+[18-Oct-2026 06:52:31 Europe/Berlin] PHP Warning:  Undefined array key "view_access_show_selected" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 459
+[18-Oct-2026 06:52:31 Europe/Berlin] PHP Warning:  Undefined array key "view_access_show_all" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 460
+[18-Oct-2026 06:52:31 Europe/Berlin] PHP Warning:  Undefined array key "view_access_show_selected" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 461
+[18-Oct-2026 06:52:31 Europe/Berlin] PHP Warning:  Undefined array key "view_access_group_status" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 479
+[18-Oct-2026 06:52:31 Europe/Berlin] PHP Warning:  Undefined array key "view_access_group_display" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 479
+[18-Oct-2026 06:52:31 Europe/Berlin] PHP Warning:  Undefined array key "view_access_group_communication" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 479
+[18-Oct-2026 06:52:31 Europe/Berlin] PHP Warning:  Undefined array key "view_access_group_files_finance" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 479
+[18-Oct-2026 06:52:31 Europe/Berlin] PHP Warning:  Undefined array key "view_access_group_workflow" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 479
+[18-Oct-2026 06:52:31 Europe/Berlin] PHP Warning:  Undefined array key "view_access_group_system" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 479
+[18-Oct-2026 06:52:31 Europe/Berlin] PHP Warning:  Undefined array key "view_access_no_results" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 517
+[18-Oct-2026 06:52:31 Europe/Berlin] PHP Warning:  Undefined array key "view_access_save_note" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 531
+[18-Oct-2026 07:43:41 Europe/Berlin] PHP Warning:  Undefined array key "ticket_send_all_operation" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 490
+[18-Oct-2026 07:43:45 Europe/Berlin] PHP Warning:  Undefined array key "ticket_send_all_operation" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 490
+[18-Oct-2026 07:44:36 Europe/Berlin] PHP Warning:  Undefined array key "ticket_send_all_operation" in E:\xampp\htdocs\idesk\ipanel\template\structure\operations.php on line 75
+[18-Oct-2026 07:44:44 Europe/Berlin] PHP Warning:  Undefined array key "ticket_send_all_operation" in E:\xampp\htdocs\idesk\ipanel\template\structure\operations.php on line 75
+[18-Oct-2026 07:46:22 Europe/Berlin] PHP Warning:  Undefined array key "ticket_send_all_operation" in E:\xampp\htdocs\idesk\ipanel\template\structure\operations.php on line 75
+[18-Oct-2026 10:12:58 Europe/Berlin] PHP Warning:  Undefined array key "ticket_send_all_operation" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 490
+[18-Oct-2026 10:24:01 Europe/Berlin] PHP Warning:  Undefined array key "ticket_send_all_operation" in E:\xampp\htdocs\idesk\ipanel\template\structure\user_view_details.php on line 490
+[18-Oct-2026 10:49:11 Europe/Berlin] PHP Warning:  Undefined variable $is_entry in E:\xampp\htdocs\idesk\ipanel\controller\ticket\ticket_details.php on line 670
+[18-Oct-2026 10:49:26 Europe/Berlin] PHP Warning:  Undefined variable $is_entry in E:\xampp\htdocs\idesk\ipanel\controller\ticket\ticket_details.php on line 670

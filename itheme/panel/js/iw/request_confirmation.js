@@ -1,26 +1,37 @@
-$(document).ready(function() {
-    
-    $('.confirmation-button').on('click', function() {
-        var form = $(this).closest('tr').find('.confirmationForm'); // پیدا کردن فرم مربوطه
-        var id = form.find('input[name="id"]').val(); // دریافت مقدار ID
+$(function () {
+    $(document)
+        .off('click.dashboardRequestConfirmation', '.confirmation-button')
+        .on('click.dashboardRequestConfirmation', '.confirmation-button', function () {
+            var button = $(this);
+            var form = button.closest('.confirmationForm');
 
+            if (!form.length) {
+                return;
+            }
+
+            var id = form.find('input[name="id"]').val();
+            if (!id) {
+                return;
+            }
+
+            var originalHtml = button.html();
+            button.prop('disabled', true).html(
+                '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>' +
+                '<span>...</span>'
+            );
 
             $.ajax({
                 url: '../icore/json/confirmation_request.php',
                 type: 'POST',
-                data: { id: id }, 
-                success: function(response) {
-                    console.log('confirmation successfully!');
-                    setTimeout(function() {
-                        location.reload(); 
-                    }, 2002);
-                },
-                error: function(xhr, status, error) {
-                    console.log('An error occurred: ' + error);
-                    console.log(xhr.responseText);
-                }
-            });
-      
-    });
+                data: { id: id }
+            })
+                .done(function () {
+                    window.location.reload();
+                })
+                .fail(function (xhr, status, error) {
+                    console.error('Request confirmation failed:', status, error, xhr.responseText);
+                    button.prop('disabled', false).html(originalHtml);
+                    alert('تأیید درخواست انجام نشد. لطفاً دوباره تلاش کنید.');
+                });
+        });
 });
-

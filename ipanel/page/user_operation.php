@@ -1,13 +1,9 @@
 <?php
-
 use ipanel\model\AdminModel;
-//page / access / user_operation
 
 $config = Configuration::getInstance();
 $database = Database::getInstance($config);
 $db = $database->getConnection();
-
-
 $admin = new AdminModel($db);
 
 if (!$admin->loggedIn()) {
@@ -20,11 +16,9 @@ if (!$rbacClass->checkPermissionPartByName('user_operation', 'access')) {
     exit;
 }
 
-
-
-
 $objFileCaller = FileCaller::getInstance();
-$_SESSION['pageTitle'] = [];
+$_SESSION['pageTitle'] = ['user_operation'];
+$_SESSION['arrayComponents'] = array('table', 'lang');
 
 function includeFiles($objFileCaller, $specificFile)
 {
@@ -37,17 +31,6 @@ function includeFiles($objFileCaller, $specificFile)
     $objFileCaller->includeFileWithController('.', 'global/', 'page_js');
 }
 
-if (isset($_GET['id']) && !empty($_GET['id'])) {
-    $_SESSION['arrayComponents'] = array('tree', 'main', 'lang');
-    $_SESSION['pageTitle'][] = 'user_operation';
-    includeFiles($objFileCaller, 'user_operation_details');
-} elseif (isset($_GET['add']) && !empty($_GET['add'])) {
-    $_SESSION['arrayComponents'] = array('tree', 'lang');
-    $_SESSION['pageTitle'][] = 'user_operation';
-    includeFiles($objFileCaller, 'user_operation_add');
-} else {
-    $_SESSION['arrayComponents'] = array('table', 'lang');
-    $_SESSION['pageTitle'][] = 'user_operation';
-    includeFiles($objFileCaller, 'user_operation');
-}
-
+// v2 uses one protected editor on the main route. Legacy ?add / ?id URLs
+// still land here so menu/RBAC routes remain backward compatible.
+includeFiles($objFileCaller, 'user_operation');

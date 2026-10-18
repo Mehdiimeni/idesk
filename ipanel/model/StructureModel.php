@@ -42,6 +42,42 @@ class StructureModel
 		return $result;
 	}
 
+	/**
+	 * Activity management list with dependency counts.
+	 *
+	 * Uses only existing legacy tables and does not change getActivities(),
+	 * so existing callers keep their current behavior.
+	 */
+	public function getActivitiesWithUsage()
+	{
+		$sqlQuery = "
+			SELECT
+				a.id,
+				a.activity_name,
+				a.activity_description,
+				a.creation_date,
+				a.last_updated_date,
+				COUNT(DISTINCT cp.id) AS company_count,
+				COUNT(DISTINCT r.id) AS role_count
+			FROM {$this->activitiesTable} a
+			LEFT JOIN {$this->companyTable} cp ON cp.activity_id = a.id
+			LEFT JOIN {$this->rbacTable} r ON r.activity_id = a.id
+			GROUP BY
+				a.id,
+				a.activity_name,
+				a.activity_description,
+				a.creation_date,
+				a.last_updated_date
+			ORDER BY a.activity_name ASC, a.id ASC
+		";
+
+		$stmt = $this->conn->prepare($sqlQuery);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$stmt->close();
+		return $result;
+	}
+
 
 	public function getActivityById($id)
 	{
@@ -669,6 +705,60 @@ class StructureModel
 		return $result;
 	}
 
+	/**
+	 * Company management list with lightweight structure/usage counters.
+	 * Existing tables are reused; no additional database object is required.
+	 */
+	public function getCompaniesWithUsage()
+	{
+		$sqlQuery = "
+			SELECT
+				cp.*,
+				a.activity_name,
+				COALESCE(u.unit_count, 0) AS unit_count,
+				COALESCE(r.role_count, 0) AS role_count,
+				COALESCE(m.user_count, 0) AS user_count,
+				COALESCE(m.admin_count, 0) AS admin_count,
+				COALESCE(t.ticket_count, 0) AS ticket_count
+			FROM {$this->companyTable} cp
+			LEFT JOIN {$this->activitiesTable} a
+				ON a.id = cp.activity_id
+			LEFT JOIN (
+				SELECT company_id, COUNT(*) AS unit_count
+				FROM {$this->unitTable}
+				WHERE company_id IS NOT NULL
+				GROUP BY company_id
+			) u ON u.company_id = cp.id
+			LEFT JOIN (
+				SELECT company_id, COUNT(*) AS role_count
+				FROM {$this->rbacTable}
+				GROUP BY company_id
+			) r ON r.company_id = cp.id
+			LEFT JOIN (
+				SELECT
+					un.company_id,
+					COUNT(DISTINCT us.id) AS user_count,
+					COUNT(DISTINCT ad.id) AS admin_count
+				FROM {$this->unitTable} un
+				LEFT JOIN users us ON us.unit_id = un.id
+				LEFT JOIN admins ad ON ad.unit_id = un.id
+				WHERE un.company_id IS NOT NULL
+				GROUP BY un.company_id
+			) m ON m.company_id = cp.id
+			LEFT JOIN (
+				SELECT company_id, COUNT(*) AS ticket_count
+				FROM tickets
+				WHERE company_id IS NOT NULL
+				GROUP BY company_id
+			) t ON t.company_id = cp.id
+			ORDER BY cp.company_name ASC, cp.id ASC
+		";
+
+		$stmt = $this->conn->prepare($sqlQuery);
+		$stmt->execute();
+		return $stmt->get_result();
+	}
+
 	public function getCompaniesByActivity($id)
 	{
 		$sqlQuery = "SELECT *
@@ -703,6 +793,51 @@ class StructureModel
 		$stmt->execute();
 		$result = $stmt->get_result();
 		return $result;
+	}
+
+	/**
+	 * Unit management list with existing business dependencies.
+	 * No schema/view/index change is required; legacy getUnits() remains unchanged.
+	 */
+	public function getUnitsWithUsage()
+	{
+		$sqlQuery = "
+			SELECT
+				u.*,
+				cp.company_name,
+				COALESCE(us.user_count, 0) AS user_count,
+				COALESCE(ad.admin_count, 0) AS admin_count,
+				COALESCE(r.role_count, 0) AS role_count,
+				COALESCE(dr.daily_report_count, 0) AS daily_report_count
+			FROM {$this->unitTable} u
+			LEFT JOIN {$this->companyTable} cp ON cp.id = u.company_id
+			LEFT JOIN (
+				SELECT unit_id, COUNT(*) AS user_count
+				FROM users
+				GROUP BY unit_id
+			) us ON us.unit_id = u.id
+			LEFT JOIN (
+				SELECT unit_id, COUNT(*) AS admin_count
+				FROM admins
+				GROUP BY unit_id
+			) ad ON ad.unit_id = u.id
+			LEFT JOIN (
+				SELECT unit_id, COUNT(*) AS role_count
+				FROM {$this->rbacTable}
+				GROUP BY unit_id
+			) r ON r.unit_id = u.id
+			LEFT JOIN (
+				SELECT unit_id, COUNT(*) AS daily_report_count
+				FROM daily_reports
+				WHERE unit_id IS NOT NULL
+				GROUP BY unit_id
+			) dr ON dr.unit_id = u.id
+			ORDER BY cp.company_name ASC, u.unit_name ASC, u.id ASC
+		";
+
+		$stmt = $this->conn->prepare($sqlQuery);
+		$stmt->execute();
+		return $stmt->get_result();
 	}
 
 	public function getUnitById($id)
@@ -784,6 +919,48 @@ class StructureModel
 		$stmt = $this->conn->prepare($sqlQuery);
 		$stmt->execute();
 		$result = $stmt->get_result();
+		return $result;
+	}
+
+
+	/**
+	 * Type management list with ticket and group usage.
+	 *
+	 * Existing types, tickets and priority_lists are reused. Legacy getTypes()
+	 * remains unchanged for all current callers.
+	 */
+	public function getTypesWithUsage()
+	{
+		$sqlQuery = "
+			SELECT
+				t.*,
+				COALESCE(tx.ticket_count, 0) AS ticket_count,
+				COALESCE(tg.group_type_count, 0) AS group_type_count,
+				COALESCE(pl.priority_list_count, 0) AS priority_list_count
+			FROM {$this->typeTable} t
+			LEFT JOIN (
+				SELECT type_id, COUNT(*) AS ticket_count
+				FROM tickets
+				WHERE type_id IS NOT NULL
+				GROUP BY type_id
+			) tx ON tx.type_id = t.id
+			LEFT JOIN (
+				SELECT type_group, COUNT(*) AS group_type_count
+				FROM {$this->typeTable}
+				GROUP BY type_group
+			) tg ON tg.type_group = t.type_group
+			LEFT JOIN (
+				SELECT type_group, COUNT(*) AS priority_list_count
+				FROM priority_lists
+				GROUP BY type_group
+			) pl ON pl.type_group = t.type_group
+			ORDER BY t.type_group ASC, t.type_name ASC, t.id ASC
+		";
+
+		$stmt = $this->conn->prepare($sqlQuery);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$stmt->close();
 		return $result;
 	}
 

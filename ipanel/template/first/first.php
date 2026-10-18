@@ -1,434 +1,6 @@
 <?php
 ///template/first/first.php
 ?>
-<div class="content-page dashboard-page">
-    <div class="content">
-        <div class="container-fluid">
-
-            <div class="dashboard-hero mb-4">
-                <div>
-                    <h3 class="dashboard-title">
-                        <i class="ri-dashboard-line"></i>
-                        <?php echo _lang['my_dashboard']; ?>
-                    </h3>
-                    <div class="dashboard-subtitle">
-                        <?php echo _lang['project_name_owner']; ?>
-                    </div>
-                </div>
-
-                <div class="dashboard-user">
-                    <div class="dashboard-user-info">
-                        <strong><?php echo $profileName; ?></strong>
-                        <span>
-                            <?php echo $adminRbacName; ?>
-                            /
-                            <?php echo $adminCompanyName; ?>
-                        </span>
-                    </div>
-
-                    <div class="dashboard-actions">
-                        <a href="./myaccount" class="btn btn-light btn-sm">
-                            <i class="mdi mdi-account-edit me-1"></i>
-                            <?php echo _lang['my_account']; ?>
-                        </a>
-
-                        <a href="./chat_center" class="btn btn-warning btn-sm">
-                            <i class="mdi mdi-chat-outline me-1"></i>
-                            <?php echo _lang['chat_center']; ?>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="dashboard-summary-grid mb-4">
-                <a href="./tickets?referred=0"
-                   class="dashboard-summary-card dashboard-summary-card-primary text-decoration-none">
-                    <div class="summary-card-top">
-                        <div class="stat-icon primary">
-                            <i class="ri-inbox-archive-fill"></i>
-                        </div>
-                        <span class="summary-open-icon"><i class="ri-arrow-left-up-line"></i></span>
-                    </div>
-
-                    <div class="summary-card-body">
-                        <div class="stat-label"><?php echo _lang['dashboard_my_inbox']; ?></div>
-                        <div class="stat-number text-primary"><?php echo number_format($intNoActionTicketCount); ?></div>
-                        <div class="summary-caption"><?php echo _lang['dashboard_current_inbox_caption']; ?></div>
-
-                        <div class="summary-mini-stats dashboard-inbox-breakdown">
-                            <span>
-                                <?php echo _lang['high']; ?>
-                                <strong><?php echo number_format($dashboardInboxBreakdown['high']); ?></strong>
-                            </span>
-                            <span>
-                                <?php echo _lang['medium']; ?>
-                                <strong><?php echo number_format($dashboardInboxBreakdown['medium']); ?></strong>
-                            </span>
-                            <span>
-                                <?php echo _lang['low']; ?>
-                                <strong><?php echo number_format($dashboardInboxBreakdown['low']); ?></strong>
-                            </span>
-                            <span>
-                                <?php echo _lang['dashboard_overdue']; ?>
-                                <strong><?php echo number_format($dashboardInboxBreakdown['overdue']); ?></strong>
-                            </span>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="./tickets?referred=1"
-                   class="dashboard-summary-card dashboard-summary-card-success text-decoration-none">
-                    <div class="summary-card-top">
-                        <div class="stat-icon success">
-                            <i class="ri-inbox-unarchive-fill"></i>
-                        </div>
-                        <span class="summary-open-icon"><i class="ri-arrow-left-up-line"></i></span>
-                    </div>
-
-                    <div class="summary-card-body">
-                        <div class="stat-label"><?php echo _lang['dashboard_forwarded_tickets']; ?></div>
-                        <div class="stat-number text-success"><?php echo number_format($intForwardTicketCount); ?></div>
-                        <div class="summary-caption"><?php echo _lang['dashboard_forwarded_by_me_caption']; ?></div>
-                    </div>
-                </a>
-
-                <div class="dashboard-summary-card dashboard-activity-card dashboard-period-card dashboard-period-week">
-                    <div class="activity-card-header">
-                        <div>
-                            <span class="activity-eyebrow"><?php echo _lang['dashboard_activity_report']; ?></span>
-                            <strong><?php echo _lang['dashboard_last_7_days']; ?></strong>
-                        </div>
-                        <div class="activity-icon weekly"><i class="ri-calendar-check-line"></i></div>
-                    </div>
-
-                    <div class="activity-values">
-                        <div class="activity-value">
-                            <span><?php echo _lang['dashboard_received_tickets']; ?></span>
-                            <strong><?php echo number_format($dashboardActivityStats['received_7d']); ?></strong>
-                        </div>
-                        <div class="activity-divider"></div>
-                        <div class="activity-value">
-                            <span><?php echo _lang['dashboard_sent_tickets']; ?></span>
-                            <strong><?php echo number_format($dashboardActivityStats['sent_7d']); ?></strong>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="dashboard-summary-card dashboard-activity-card dashboard-period-card dashboard-period-month">
-                    <div class="activity-card-header">
-                        <div>
-                            <span class="activity-eyebrow"><?php echo _lang['dashboard_activity_report']; ?></span>
-                            <strong><?php echo _lang['dashboard_last_30_days']; ?></strong>
-                        </div>
-                        <div class="activity-icon monthly"><i class="ri-bar-chart-box-line"></i></div>
-                    </div>
-
-                    <div class="activity-values">
-                        <div class="activity-value">
-                            <span><?php echo _lang['dashboard_received_tickets']; ?></span>
-                            <strong><?php echo number_format($dashboardActivityStats['received_30d']); ?></strong>
-                        </div>
-                        <div class="activity-divider"></div>
-                        <div class="activity-value">
-                            <span><?php echo _lang['dashboard_sent_tickets']; ?></span>
-                            <strong><?php echo number_format($dashboardActivityStats['sent_30d']); ?></strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="dashboard-lower-grid mb-4">
-<?php if($allKanbanTag->num_rows > 0){ ?>
-
-                <div class="dashboard-panel dashboard-grid-panel">
-                    <div class="dashboard-panel-header">
-                        <div>
-                            <h4>
-                                <i class="ri-kanban-view"></i>
-                                <?php echo (_lang['kanban_board']); ?>
-                            </h4>
-                        </div>
-                    </div>
-
-                    <div class="kanban-list" data-simplebar style="max-height: 340px;">
-                        <?php while ($kanban_tag = $allKanbanTag->fetch_assoc()) { ?>
-                            <?php
-                            $AllKabanByTagId = $ticketModel->getAllKabanByTagId($kanban_tag['id']);
-                            while ($kaban_details = $AllKabanByTagId->fetch_assoc()) {
-
-                                $condition = $structureModel->getConditionsByName($kaban_details['status']);
-
-                                $dateConverter = new DateConverter($kaban_details['last_updated_date'], $config->getNowLanguage('a'));
-                                $convertedDate = $dateConverter->convertToShamsi();
-
-                                $showPriority = '';
-                                $priority = $kaban_details['priority'];
-
-                                if ($priority == 'low') {
-                                    $showPriority = '<span class="priority-badge priority-low">' . _lang[$priority] . '</span>';
-                                } elseif ($priority == 'medium') {
-                                    $showPriority = '<span class="priority-badge priority-medium">' . _lang[$priority] . '</span>';
-                                } elseif ($priority == 'high') {
-                                    $showPriority = '<span class="priority-badge priority-high">' . _lang[$priority] . '</span>';
-                                }
-
-                                if ($kaban_details['part_name'] == 'tickets') {
-                                    $urlSet = "./tickets?ticket_id=";
-                                } elseif ($kaban_details['part_name'] == 'projects') {
-                                    $urlSet = "./projects?id=";
-                                } else {
-                                    $urlSet = "";
-                                }
-                                ?>
-
-                                <div class="kanban-item">
-                                    <div class="kanban-meta">
-                                        <span class="status-badge alert-<?php echo $condition['condition_color']; ?>">
-                                            <?php echo _lang[$condition['condition_name']]; ?>
-                                        </span>
-
-                                        <?php
-                                        $lastFinanceStatus = $ticketModel->getLastFinanceStatus($kaban_details['ticket_id'], 'tickets');
-                                        if (count($lastFinanceStatus) > 0) {
-                                            $condition = $structureModel->getConditionsByName($lastFinanceStatus[0]["status_name"]);
-                                            ?>
-                                            <span class="status-badge alert-<?php echo $condition['condition_color']; ?>">
-                                                <?php echo _lang[$condition['condition_name']]; ?>
-                                            </span>
-                                        <?php } ?>
-
-                                        <span class="type-badge">
-                                            <?php echo $kaban_details['type_group']; ?>
-                                        </span>
-
-                                        <?php echo $showPriority; ?>
-
-                                        <span class="kanban-date">
-                                            <?php echo $convertedDate; ?>
-                                        </span>
-                                    </div>
-
-                                    <a href="<?php echo $urlSet . $encryptorClass->encrypt($kaban_details['part_id']); ?>"
-                                        class="kanban-title">
-                                        <span class="kanban-tag">
-                                            <?php echo ($kanban_tag["board_tag"]); ?>
-                                        </span>
-
-                                        <span>
-                                            <?php echo '( ' . $kaban_details['ticket_number'] . ' ) ' . $textToolsClass->truncateText($kaban_details['ticket_title'], 250); ?>
-                                        </span>
-                                    </a>
-
-                                    <div class="kanban-description">
-                                        <?php echo $textToolsClass->truncateText($kaban_details['description'], length: 350); ?>
-                                    </div>
-                                </div>
-
-                            <?php } ?>
-                        <?php } ?>
-                    </div>
-                </div>
-            
-<?php } ?>
-<?php if ($allTodo->num_rows > 0) { ?>
-                <div class="dashboard-panel dashboard-grid-panel">
-                    <div class="dashboard-panel-header">
-                        <div>
-                            <h4>
-                                <i class="ri-task-line"></i>
-                                <?php echo (_lang['need_todo']); ?>
-                            </h4>
-                        </div>
-                    </div>
-
-                    <div class="todo-list" data-simplebar style="max-height: 300px;">
-                        <?php while ($todo_details = $allTodo->fetch_assoc()) { 
-                            
-                           
-                                                $encrypted_report_id =
-                                                    $encryptorClass->encrypt($todo_details['id']);
-                                                
-                            ?>
-                            <div class="todo-item">
-                                <div class="todo-title">
-                                    <i class="mdi mdi-arrow-bottom-left-bold-box"></i>
-                                    <a href="./daily_report?id=<?php echo $encrypted_report_id; ?>">
-                                        <?php echo (getTextLimit($todo_details['subject'])); ?>
-                                    </a>
-                                </div>
-
-                                <div class="todo-progress">
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar"
-                                            style="width: <?php echo $todo_details['progress_percentage']; ?>%;"
-                                            aria-valuenow="<?php echo $todo_details['progress_percentage']; ?>"
-                                            aria-valuemin="0" aria-valuemax="100">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <?php echo getPriorityBadge($todo_details['priority']); ?>
-                                </div>
-                            </div>
-                        <?php } ?>
-                    </div>
-                </div>
-          
-<?php } ?>
-            <?php  if ($permissionProjects && count($allProjects) > 0) { ?>
-                <div class="dashboard-panel dashboard-grid-panel">
-                    <div class="dashboard-panel-header">
-                        <div>
-                            <h4>
-                                <i class="ri-folder-chart-line"></i>
-                                <?php echo (_lang['projects']); ?>
-                            </h4>
-                        </div>
-                    </div>
-
-                    <div class="todo-list" data-simplebar style="max-height: 300px;">
-                        <?php foreach ($allProjects as $projectDetails) {
-                            if (!$projectsModel->checkMemberInProject($projectDetails['id']) && !$rbacClass->checkPermissionOperationByName('observer_project_operation'))
-                                continue;
-                            ?>
-                            <div class="todo-item">
-                                <div class="todo-title">
-                                    <i class="mdi mdi-arrow-bottom-left-bold-box"></i>
-                                    <a href="./projects?id=<?php echo $encryptorClass->encrypt($projectDetails['id']); ?>">
-                                        <?php echo (getTextLimit($projectDetails['name'])); ?>
-                                    </a>
-                                </div>
-
-                                <div class="todo-progress">
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar"
-                                            style="width: <?php echo $projectDetails['progress_percentage']; ?>%;"
-                                            aria-valuenow="<?php echo $projectDetails['progress_percentage']; ?>"
-                                            aria-valuemin="0" aria-valuemax="100">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <?php echo getPriorityBadge($projectDetails['priority']); ?>
-                                </div>
-                            </div>
-                        <?php } ?>
-                    </div>
-                </div>
-            <?php } ?>
-            </div>
-
-                        <?php if (($personHourDeliveryTimePermissionOperation || $personHourDeliveryTimePermissionRequest) and $allRequests->num_rows > 0): ?>
-                            <div class="dashboard-panel dashboard-requests-panel mb-4">
-                                <div class="dashboard-panel-header">
-                                    <div>
-                                        <h4>
-                                            <i class="mdi mdi-email-outline"></i>
-                                            <?php echo _lang['requests']; ?>
-                                        </h4>
-                                    </div>
-                                </div>
-                        
-                                <div class="table-responsive" data-simplebar style="max-height: 330px; overflow-x:hidden">
-                                    <table id="dashboard-requests-table" class="table dashboard-table align-middle mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th width="20%">
-                                                    <?php echo _lang['ticket_number']; ?>
-                                                </th>
-                                                <th width="25%">
-                                                    <?php echo _lang['request']; ?>
-                                                </th>
-                                                <th width="35%">
-                                                    <?php echo _lang['response']; ?>
-                                                </th>
-                                                <th width="20%" class="text-center">
-                                                    <?php echo _lang['action']; ?>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                        
-                                        <tbody>
-                                            <?php if ($personHourDeliveryTimePermissionOperation): ?>
-                                                <?php while ($requests = $allRequests->fetch_assoc()): ?>
-                                                    <tr>
-                                                        <td>
-                                                            <a href="./tickets?ticket_id=<?php echo $encryptorClassClass->encrypt($requests['section_element_id']); ?>"
-                                                                class="ticket-number">
-                                                                <?php echo $requests['ticket_number']; ?>
-                                                            </a>
-                                                        </td>
-                        
-                                                        <td>
-                                                            <?php echo _lang[$requests['request']]; ?>
-                                                        </td>
-                        
-                                                        <td>
-                                                            <form class="updateForm" data-id="<?php echo $requests['id']; ?>">
-                                                                <input type="hidden" name="id" value="<?php echo $requests['id']; ?>">
-                        
-                                                                <?php if ($requests['request'] == 'person_hour'): ?>
-                                                                    <input type="text" class="form-control form-control-sm dashboard-input text-center"
-                                                                        name="person_hour_response" data-toggle="input-mask" data-mask-format="00"
-                                                                        placeholder="HH" style="width: 90px;">
-                                                                <?php elseif ($requests['request'] == 'delivery_time'): ?>
-                                                                    <input type="text" class="form-control form-control-sm dashboard-input text-center"
-                                                                        name="delivery_time_response" data-toggle="input-mask" data-mask-format="00/00/0000"
-                                                                        placeholder="DD/MM/YYYY" style="width: 150px;">
-                                                                <?php endif; ?>
-                                                            </form>
-                                                        </td>
-                        
-                                                        <td class="text-center">
-                                                            <button type="button" class="btn btn-primary btn-sm rounded-pill px-3 send-button">
-                                                                <i class="mdi mdi-send me-1"></i>
-                                                                <?php echo _lang['send']; ?>
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                <?php endwhile; ?>
-                                            <?php endif; ?>
-                        
-                                            <?php if ($personHourDeliveryTimePermissionRequest): ?>
-                                                <?php while ($response = $allResponse->fetch_assoc()): ?>
-                                                    <tr>
-                                                        <td>
-                                                            <a href="./tickets?ticket_id=<?php echo $encryptorClassClass->encrypt($response['section_element_id']); ?>"
-                                                                class="ticket-number">
-                                                                <?php echo $response['ticket_number']; ?>
-                                                            </a>
-                                                        </td>
-                        
-                                                        <td>
-                                                            <?php echo _lang[$response['request']]; ?>
-                                                        </td>
-                        
-                                                        <td>
-                                                            <span class="confirm-badge">
-                                                                <?php echo $response['response']; ?>
-                                                            </span>
-                                                        </td>
-                        
-                                                        <td class="text-center">
-                                                            <button type="button" class="btn btn-success btn-sm rounded-pill px-3 confirmation-button">
-                                                                <i class="mdi mdi-check-circle-outline me-1"></i>
-                                                                <?php echo _lang['confirmation']; ?>
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                <?php endwhile; ?>
-                                            <?php endif; ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-
-        </div>
-    </div>
-</div>
 
 <style>
     .dashboard-page {
@@ -718,6 +290,9 @@
     .dashboard-grid-panel .kanban-list,
     .dashboard-grid-panel .todo-list {
         max-height: 360px !important;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-gutter: stable;
     }
 
     .dashboard-stat-card {
@@ -876,52 +451,159 @@
         border-radius: 999px;
     }
 
+    .dashboard-native-scroll {
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        overscroll-behavior: contain;
+        scrollbar-gutter: stable;
+    }
+
+    .dashboard-native-scroll::-webkit-scrollbar {
+        width: 7px;
+    }
+
+    .dashboard-native-scroll::-webkit-scrollbar-thumb {
+        background: rgba(100, 116, 139, .28);
+        border-radius: 999px;
+    }
+
+    .dashboard-native-scroll::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
     .dashboard-requests-panel {
         overflow: hidden;
+        padding: 18px 18px 20px;
     }
 
-    .dashboard-requests-panel .table-responsive {
-        max-height: 360px !important;
-        overflow-x: auto !important;
+    .dashboard-requests-header {
+        margin-bottom: 16px;
     }
 
-    .dashboard-table {
-        border-collapse: separate;
-        border-spacing: 0 8px;
-        color: var(--bs-body-color);
-    }
-
-    .dashboard-table thead th {
-        background: transparent;
-        border: 0;
-        color: var(--bs-secondary-color);
+    .dashboard-request-count {
+        min-width: 32px;
+        height: 32px;
+        padding: 0 10px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(75, 108, 183, .12);
+        color: #5f8cff;
+        border: 1px solid rgba(95, 140, 255, .22);
         font-size: 12px;
         font-weight: 800;
-        text-transform: uppercase;
-        padding: 8px 12px;
     }
 
-    .dashboard-table tbody tr {
+    .dashboard-requests-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        max-height: 420px;
+        padding: 2px 2px 2px 8px;
+    }
+
+    .dashboard-request-card {
+        min-width: 0;
+        margin: 0;
+        padding: 14px;
+        border-radius: 16px;
         background: var(--bs-tertiary-bg);
-        box-shadow: inset 0 0 0 1px var(--bs-border-color);
+        border: 1px solid var(--bs-border-color);
+        box-shadow: 0 3px 10px rgba(15, 23, 42, .035);
+        transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
     }
 
-    .dashboard-table tbody tr:hover {
-        background: rgba(75, 108, 183, 0.12);
+    .dashboard-request-card:hover {
+        transform: translateY(-1px);
+        border-color: rgba(95, 140, 255, .26);
+        box-shadow: 0 8px 20px rgba(15, 23, 42, .07);
     }
 
-    .dashboard-table tbody td {
-        border: 0;
-        padding: 14px 12px;
+    .dashboard-request-card-confirm {
+        border-inline-start: 3px solid rgba(47, 209, 138, .75);
+    }
+
+    .dashboard-request-card-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+
+    .dashboard-request-type {
+        min-width: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--bs-secondary-color);
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .dashboard-request-type i {
+        font-size: 15px;
+        color: #5f8cff;
+    }
+
+    .dashboard-request-card-body {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+        gap: 12px;
+    }
+
+    .dashboard-request-field {
+        min-width: 0;
+    }
+
+    .dashboard-request-field-label {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--bs-secondary-color);
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .dashboard-request-card .dashboard-input {
+        width: 100% !important;
+        max-width: 220px;
+        min-width: 0;
+        direction: ltr;
+        text-align: center;
+    }
+
+    .dashboard-request-response {
+        min-height: 36px;
+        max-width: 100%;
+        padding: 7px 11px;
+        display: inline-flex;
+        align-items: center;
+        border-radius: 10px;
+        background: var(--bs-body-bg);
+        border: 1px solid var(--bs-border-color);
         color: var(--bs-body-color);
+        font-size: 13px;
+        font-weight: 700;
+        word-break: break-word;
     }
 
-    .dashboard-table tbody td:first-child {
-        border-radius: 12px 0 0 12px;
+    .dashboard-request-action {
+        min-width: 94px;
+        height: 36px;
+        border-radius: 10px !important;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+        box-shadow: none !important;
     }
 
-    .dashboard-table tbody td:last-child {
-        border-radius: 0 12px 12px 0;
+    .dashboard-request-action:disabled {
+        cursor: wait;
+        opacity: .7;
     }
 
     .ticket-number,
@@ -991,6 +673,10 @@
         .dashboard-summary-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
+
+        .dashboard-requests-grid {
+            grid-template-columns: 1fr;
+        }
     }
 
     @media (max-width: 575.98px) {
@@ -1021,5 +707,446 @@
         .todo-item {
             grid-template-columns: 1fr;
         }
+
+        .dashboard-request-card-body {
+            grid-template-columns: 1fr;
+        }
+
+        .dashboard-request-action,
+        .dashboard-request-card .dashboard-input {
+            width: 100% !important;
+            max-width: none;
+        }
     }
 </style>
+<div class="content-page dashboard-page">
+    <div class="content">
+        <div class="container-fluid">
+
+            <div class="dashboard-hero mb-4">
+                <div>
+                    <h3 class="dashboard-title">
+                        <i class="ri-dashboard-line"></i>
+                        <?php echo _lang['my_dashboard']; ?>
+                    </h3>
+                    <div class="dashboard-subtitle">
+                        <?php echo _lang['project_name_owner']; ?>
+                    </div>
+                </div>
+
+                <div class="dashboard-user">
+                    <div class="dashboard-user-info">
+                        <strong><?php echo $profileName; ?></strong>
+                        <span>
+                            <?php echo $adminRbacName; ?>
+                            /
+                            <?php echo $adminCompanyName; ?>
+                        </span>
+                    </div>
+
+                    <div class="dashboard-actions">
+                        <a href="./myaccount" class="btn btn-light btn-sm">
+                            <i class="mdi mdi-account-edit me-1"></i>
+                            <?php echo _lang['my_account']; ?>
+                        </a>
+
+                        <a href="./chat_center" class="btn btn-warning btn-sm">
+                            <i class="mdi mdi-chat-outline me-1"></i>
+                            <?php echo _lang['chat_center']; ?>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-summary-grid mb-4">
+                <a href="./tickets?referred=0"
+                   class="dashboard-summary-card dashboard-summary-card-primary text-decoration-none">
+                    <div class="summary-card-top">
+                        <div class="stat-icon primary">
+                            <i class="ri-inbox-archive-fill"></i>
+                        </div>
+                        <span class="summary-open-icon"><i class="ri-arrow-left-up-line"></i></span>
+                    </div>
+
+                    <div class="summary-card-body">
+                        <div class="stat-label"><?php echo _lang['dashboard_my_inbox']; ?></div>
+                        <div class="stat-number text-primary"><?php echo number_format($intNoActionTicketCount); ?></div>
+                        <div class="summary-caption"><?php echo _lang['dashboard_current_inbox_caption']; ?></div>
+
+                        <div class="summary-mini-stats dashboard-inbox-breakdown">
+                            <span>
+                                <?php echo _lang['high']; ?>
+                                <strong><?php echo number_format($dashboardInboxBreakdown['high']); ?></strong>
+                            </span>
+                            <span>
+                                <?php echo _lang['medium']; ?>
+                                <strong><?php echo number_format($dashboardInboxBreakdown['medium']); ?></strong>
+                            </span>
+                            <span>
+                                <?php echo _lang['low']; ?>
+                                <strong><?php echo number_format($dashboardInboxBreakdown['low']); ?></strong>
+                            </span>
+                            <span>
+                                <?php echo _lang['dashboard_overdue']; ?>
+                                <strong><?php echo number_format($dashboardInboxBreakdown['overdue']); ?></strong>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="./tickets?referred=1"
+                   class="dashboard-summary-card dashboard-summary-card-success text-decoration-none">
+                    <div class="summary-card-top">
+                        <div class="stat-icon success">
+                            <i class="ri-inbox-unarchive-fill"></i>
+                        </div>
+                        <span class="summary-open-icon"><i class="ri-arrow-left-up-line"></i></span>
+                    </div>
+
+                    <div class="summary-card-body">
+                        <div class="stat-label"><?php echo _lang['dashboard_forwarded_tickets']; ?></div>
+                        <div class="stat-number text-success"><?php echo number_format($intForwardTicketCount); ?></div>
+                        <div class="summary-caption"><?php echo _lang['dashboard_forwarded_by_me_caption']; ?></div>
+                    </div>
+                </a>
+
+                <div class="dashboard-summary-card dashboard-activity-card dashboard-period-card dashboard-period-week">
+                    <div class="activity-card-header">
+                        <div>
+                            <span class="activity-eyebrow"><?php echo _lang['dashboard_activity_report']; ?></span>
+                            <strong><?php echo _lang['dashboard_last_7_days']; ?></strong>
+                        </div>
+                        <div class="activity-icon weekly"><i class="ri-calendar-check-line"></i></div>
+                    </div>
+
+                    <div class="activity-values">
+                        <div class="activity-value">
+                            <span><?php echo _lang['dashboard_received_tickets']; ?></span>
+                            <strong><?php echo number_format($dashboardActivityStats['received_7d']); ?></strong>
+                        </div>
+                        <div class="activity-divider"></div>
+                        <div class="activity-value">
+                            <span><?php echo _lang['dashboard_sent_tickets']; ?></span>
+                            <strong><?php echo number_format($dashboardActivityStats['sent_7d']); ?></strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-summary-card dashboard-activity-card dashboard-period-card dashboard-period-month">
+                    <div class="activity-card-header">
+                        <div>
+                            <span class="activity-eyebrow"><?php echo _lang['dashboard_activity_report']; ?></span>
+                            <strong><?php echo _lang['dashboard_last_30_days']; ?></strong>
+                        </div>
+                        <div class="activity-icon monthly"><i class="ri-bar-chart-box-line"></i></div>
+                    </div>
+
+                    <div class="activity-values">
+                        <div class="activity-value">
+                            <span><?php echo _lang['dashboard_received_tickets']; ?></span>
+                            <strong><?php echo number_format($dashboardActivityStats['received_30d']); ?></strong>
+                        </div>
+                        <div class="activity-divider"></div>
+                        <div class="activity-value">
+                            <span><?php echo _lang['dashboard_sent_tickets']; ?></span>
+                            <strong><?php echo number_format($dashboardActivityStats['sent_30d']); ?></strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-lower-grid mb-4">
+<?php if($allKanbanTag->num_rows > 0){ ?>
+
+                <div class="dashboard-panel dashboard-grid-panel">
+                    <div class="dashboard-panel-header">
+                        <div>
+                            <h4>
+                                <i class="ri-kanban-view"></i>
+                                <?php echo (_lang['kanban_board']); ?>
+                            </h4>
+                        </div>
+                    </div>
+
+                    <div class="kanban-list dashboard-native-scroll" style="max-height: 340px;">
+                        <?php while ($kanban_tag = $allKanbanTag->fetch_assoc()) { ?>
+                            <?php
+                            $AllKabanByTagId = $ticketModel->getAllKabanByTagId($kanban_tag['id']);
+                            while ($kaban_details = $AllKabanByTagId->fetch_assoc()) {
+
+                                $condition = $structureModel->getConditionsByName($kaban_details['status']);
+
+                                $dateConverter = new DateConverter($kaban_details['last_updated_date'], $config->getNowLanguage('a'));
+                                $convertedDate = $dateConverter->convertToShamsi();
+
+                                $showPriority = '';
+                                $priority = $kaban_details['priority'];
+
+                                if ($priority == 'low') {
+                                    $showPriority = '<span class="priority-badge priority-low">' . _lang[$priority] . '</span>';
+                                } elseif ($priority == 'medium') {
+                                    $showPriority = '<span class="priority-badge priority-medium">' . _lang[$priority] . '</span>';
+                                } elseif ($priority == 'high') {
+                                    $showPriority = '<span class="priority-badge priority-high">' . _lang[$priority] . '</span>';
+                                }
+
+                                if ($kaban_details['part_name'] == 'tickets') {
+                                    $urlSet = "./tickets?ticket_id=";
+                                } elseif ($kaban_details['part_name'] == 'projects') {
+                                    $urlSet = "./projects?id=";
+                                } else {
+                                    $urlSet = "";
+                                }
+                                ?>
+
+                                <div class="kanban-item">
+                                    <div class="kanban-meta">
+                                        <span class="status-badge alert-<?php echo $condition['condition_color']; ?>">
+                                            <?php echo _lang[$condition['condition_name']]; ?>
+                                        </span>
+
+                                        <?php
+                                        $lastFinanceStatus = $ticketModel->getLastFinanceStatus($kaban_details['ticket_id'], 'tickets');
+                                        if (count($lastFinanceStatus) > 0) {
+                                            $condition = $structureModel->getConditionsByName($lastFinanceStatus[0]["status_name"]);
+                                            ?>
+                                            <span class="status-badge alert-<?php echo $condition['condition_color']; ?>">
+                                                <?php echo _lang[$condition['condition_name']]; ?>
+                                            </span>
+                                        <?php } ?>
+
+                                        <span class="type-badge">
+                                            <?php echo $kaban_details['type_group']; ?>
+                                        </span>
+
+                                        <?php echo $showPriority; ?>
+
+                                        <span class="kanban-date">
+                                            <?php echo $convertedDate; ?>
+                                        </span>
+                                    </div>
+
+                                    <a href="<?php echo $urlSet . $encryptorClass->encrypt($kaban_details['part_id']); ?>"
+                                        class="kanban-title">
+                                        <span class="kanban-tag">
+                                            <?php echo ($kanban_tag["board_tag"]); ?>
+                                        </span>
+
+                                        <span>
+                                            <?php echo '( ' . $kaban_details['ticket_number'] . ' ) ' . $textToolsClass->truncateText($kaban_details['ticket_title'], 250); ?>
+                                        </span>
+                                    </a>
+
+                                    <div class="kanban-description">
+                                        <?php echo $textToolsClass->truncateText($kaban_details['description'], length: 350); ?>
+                                    </div>
+                                </div>
+
+                            <?php } ?>
+                        <?php } ?>
+                    </div>
+                </div>
+            
+<?php } ?>
+<?php if ($allTodo->num_rows > 0) { ?>
+                <div class="dashboard-panel dashboard-grid-panel">
+                    <div class="dashboard-panel-header">
+                        <div>
+                            <h4>
+                                <i class="ri-task-line"></i>
+                                <?php echo (_lang['need_todo']); ?>
+                            </h4>
+                        </div>
+                    </div>
+
+                    <div class="todo-list dashboard-native-scroll" style="max-height: 300px;">
+                        <?php while ($todo_details = $allTodo->fetch_assoc()) { 
+                            
+                           
+                                                $encrypted_report_id =
+                                                    $encryptorClass->encrypt($todo_details['id']);
+                                                
+                            ?>
+                            <div class="todo-item">
+                                <div class="todo-title">
+                                    <i class="mdi mdi-arrow-bottom-left-bold-box"></i>
+                                    <a href="./daily_report?id=<?php echo $encrypted_report_id; ?>">
+                                        <?php echo (getTextLimit($todo_details['subject'])); ?>
+                                    </a>
+                                </div>
+
+                                <div class="todo-progress">
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar"
+                                            style="width: <?php echo $todo_details['progress_percentage']; ?>%;"
+                                            aria-valuenow="<?php echo $todo_details['progress_percentage']; ?>"
+                                            aria-valuemin="0" aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <?php echo getPriorityBadge($todo_details['priority']); ?>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+          
+<?php } ?>
+            <?php  if ($permissionProjects && count($allProjects) > 0) { ?>
+                <div class="dashboard-panel dashboard-grid-panel">
+                    <div class="dashboard-panel-header">
+                        <div>
+                            <h4>
+                                <i class="ri-folder-chart-line"></i>
+                                <?php echo (_lang['projects']); ?>
+                            </h4>
+                        </div>
+                    </div>
+
+                    <div class="todo-list dashboard-native-scroll" style="max-height: 300px;">
+                        <?php foreach ($allProjects as $projectDetails) {
+                            if (!$projectsModel->checkMemberInProject($projectDetails['id']) && !$rbacClass->checkPermissionOperationByName('observer_project_operation'))
+                                continue;
+                            ?>
+                            <div class="todo-item">
+                                <div class="todo-title">
+                                    <i class="mdi mdi-arrow-bottom-left-bold-box"></i>
+                                    <a href="./projects?id=<?php echo $encryptorClass->encrypt($projectDetails['id']); ?>">
+                                        <?php echo (getTextLimit($projectDetails['name'])); ?>
+                                    </a>
+                                </div>
+
+                                <div class="todo-progress">
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar"
+                                            style="width: <?php echo $projectDetails['progress_percentage']; ?>%;"
+                                            aria-valuenow="<?php echo $projectDetails['progress_percentage']; ?>"
+                                            aria-valuemin="0" aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <?php echo getPriorityBadge($projectDetails['priority']); ?>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+            <?php } ?>
+            </div>
+
+            <?php
+            $dashboardRequestCount = 0;
+            if ($personHourDeliveryTimePermissionOperation) {
+                $dashboardRequestCount += (int) $allRequests->num_rows;
+            }
+            if ($personHourDeliveryTimePermissionRequest) {
+                $dashboardRequestCount += (int) $allResponse->num_rows;
+            }
+            ?>
+
+            <?php if (($personHourDeliveryTimePermissionOperation || $personHourDeliveryTimePermissionRequest) && $dashboardRequestCount > 0): ?>
+                <div class="dashboard-panel dashboard-requests-panel mb-4">
+                    <div class="dashboard-panel-header dashboard-requests-header">
+                        <div>
+                            <h4>
+                                <i class="mdi mdi-email-outline"></i>
+                                <?php echo _lang['requests']; ?>
+                            </h4>
+                        </div>
+                        <span class="dashboard-request-count"><?php echo number_format($dashboardRequestCount); ?></span>
+                    </div>
+
+                    <div class="dashboard-requests-grid dashboard-native-scroll">
+                        <?php if ($personHourDeliveryTimePermissionOperation): ?>
+                            <?php while ($requests = $allRequests->fetch_assoc()): ?>
+                                <form class="dashboard-request-card updateForm" data-id="<?php echo (int) $requests['id']; ?>">
+                                    <input type="hidden" name="id" value="<?php echo (int) $requests['id']; ?>">
+
+                                    <div class="dashboard-request-card-head">
+                                        <a href="./tickets?ticket_id=<?php echo $encryptorClassClass->encrypt($requests['section_element_id']); ?>"
+                                           class="ticket-number">
+                                            <?php echo htmlspecialchars((string) $requests['ticket_number'], ENT_QUOTES, 'UTF-8'); ?>
+                                        </a>
+                                        <span class="dashboard-request-type">
+                                            <i class="ri-question-answer-line"></i>
+                                            <?php echo _lang[$requests['request']]; ?>
+                                        </span>
+                                    </div>
+
+                                    <div class="dashboard-request-card-body">
+                                        <div class="dashboard-request-field">
+                                            <span class="dashboard-request-field-label"><?php echo _lang['response']; ?></span>
+
+                                            <?php if ($requests['request'] == 'person_hour'): ?>
+                                                <input type="text"
+                                                       class="form-control form-control-sm dashboard-input text-center"
+                                                       name="person_hour_response"
+                                                       inputmode="numeric"
+                                                       maxlength="2"
+                                                       data-toggle="input-mask"
+                                                       data-mask-format="00"
+                                                       placeholder="HH">
+                                            <?php elseif ($requests['request'] == 'delivery_time'): ?>
+                                                <input type="text"
+                                                       class="form-control form-control-sm dashboard-input text-center"
+                                                       name="delivery_time_response"
+                                                       inputmode="numeric"
+                                                       data-toggle="input-mask"
+                                                       data-mask-format="00/00/0000"
+                                                       placeholder="DD/MM/YYYY">
+                                            <?php endif; ?>
+                                        </div>
+
+                                        <button type="button" class="btn btn-primary btn-sm dashboard-request-action send-button">
+                                            <i class="mdi mdi-send me-1"></i>
+                                            <span><?php echo _lang['send']; ?></span>
+                                        </button>
+                                    </div>
+                                </form>
+                            <?php endwhile; ?>
+                        <?php endif; ?>
+
+                        <?php if ($personHourDeliveryTimePermissionRequest): ?>
+                            <?php while ($response = $allResponse->fetch_assoc()): ?>
+                                <form class="dashboard-request-card dashboard-request-card-confirm confirmationForm"
+                                      data-id="<?php echo (int) $response['id']; ?>">
+                                    <input type="hidden" name="id" value="<?php echo (int) $response['id']; ?>">
+
+                                    <div class="dashboard-request-card-head">
+                                        <a href="./tickets?ticket_id=<?php echo $encryptorClassClass->encrypt($response['section_element_id']); ?>"
+                                           class="ticket-number">
+                                            <?php echo htmlspecialchars((string) $response['ticket_number'], ENT_QUOTES, 'UTF-8'); ?>
+                                        </a>
+                                        <span class="dashboard-request-type">
+                                            <i class="ri-checkbox-circle-line"></i>
+                                            <?php echo _lang[$response['request']]; ?>
+                                        </span>
+                                    </div>
+
+                                    <div class="dashboard-request-card-body">
+                                        <div class="dashboard-request-field">
+                                            <span class="dashboard-request-field-label"><?php echo _lang['response']; ?></span>
+                                            <span class="dashboard-request-response">
+                                                <?php echo htmlspecialchars((string) $response['response'], ENT_QUOTES, 'UTF-8'); ?>
+                                            </span>
+                                        </div>
+
+                                        <button type="button" class="btn btn-success btn-sm dashboard-request-action confirmation-button">
+                                            <i class="mdi mdi-check-circle-outline me-1"></i>
+                                            <span><?php echo _lang['confirmation']; ?></span>
+                                        </button>
+                                    </div>
+                                </form>
+                            <?php endwhile; ?>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+        </div>
+    </div>
+</div>

@@ -23,6 +23,13 @@ try {
 
     $table_set = $arrData['table_set'];
 
+    // activities, company_profiles, units, types, users, admins, rbac permissions_stracture and permissions_operation are managed by protected page-specific endpoints.
+    if (in_array(strtolower(trim((string) $table_set)), ['activities', 'company_profiles', 'units', 'types', 'users', 'admins', 'rbac', 'permissions_stracture', 'permissions_operation'], true)) {
+        http_response_code(403);
+        echo json_encode(['status' => 'error', 'message' => _lang['invalid_request']]);
+        exit;
+    }
+
     $unique_fields = (array) unserialize(base64_decode($arrData['unique_fields']));
 
     $insertFields = [];

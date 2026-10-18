@@ -45,7 +45,7 @@ class RBAC
 
     private function checkPermissionStructure($rbac_id, $permission)
     {
-        $structure = $this->getPermissionData('permissions_structure', 'structure', $rbac_id);
+        $structure = $this->getPermissionData('permissions_stracture', 'stracture', $rbac_id);
         return $this->checkPermissionInData($structure, $permission);
     }
 
@@ -356,8 +356,16 @@ class RBAC
 
     function checkIdInArrayExists($array, $id)
     {
+        if (!is_array($array)) {
+            return false;
+        }
+
+        $id = (string) $id;
         foreach ($array as $item) {
-            if (isset($item['id']) && $item['id'] === $id) {
+            if (is_array($item) && isset($item['id']) && (string) $item['id'] === $id) {
+                return true;
+            }
+            if (is_scalar($item) && (string) $item === $id) {
                 return true;
             }
         }
@@ -693,14 +701,23 @@ class RBAC
             return null;
         }
 
-        $cacheKey = md5($serializedData);
+        $cacheKey = 'typed|' . md5($serializedData);
 
         if (!array_key_exists($cacheKey, $this->decodedPermissionCache)) {
             $decodedData = @unserialize($serializedData, ['allowed_classes' => false]);
+            $normalized = [];
 
-            $this->decodedPermissionCache[$cacheKey] = is_array($decodedData)
-                ? array_fill_keys(array_map('strval', $decodedData), true)
-                : null;
+            if (is_array($decodedData)) {
+                foreach ($decodedData as $item) {
+                    if (is_array($item) && isset($item['id'])) {
+                        $normalized[(string) $item['id']] = true;
+                    } elseif (is_scalar($item)) {
+                        $normalized[(string) $item] = true;
+                    }
+                }
+            }
+
+            $this->decodedPermissionCache[$cacheKey] = $normalized;
         }
 
         $permissionData = $this->decodedPermissionCache[$cacheKey];
@@ -723,6 +740,7 @@ class RBAC
 
         $allowedSources = [
             'permissions_structure' => ['structure'],
+            'permissions_stracture' => ['stracture'],
             'permissions_operation' => ['operation', 'parts']
         ];
 
@@ -730,7 +748,7 @@ class RBAC
             return null;
         }
 
-        $sqlQuery = "SELECT $field FROM $table WHERE rbac_id = ? LIMIT 1";
+        $sqlQuery = "SELECT $field FROM $table WHERE rbac_id = ? ORDER BY id ASC LIMIT 1";
         $stmt = $this->conn->prepare($sqlQuery);
 
         if ($stmt === false) {

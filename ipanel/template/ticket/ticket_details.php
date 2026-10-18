@@ -1128,7 +1128,7 @@ $statusDescriptionFormatter = static function ($description) use ($statusDescrip
                 </div> <!-- end col -->
 
                 <div class="col-lg-6 col-xxl-4">
-                    <?php if ($rbacClass->checkPermissionOperationByName('assign_other_operation') or $rbacClass->checkPermissionOperationByName('schedule_operation')) { ?>
+                    <?php if ($canAssignOthers or $rbacClass->checkPermissionOperationByName('schedule_operation')) { ?>
 
                         <div class="card shadow-sm border mb-3">
                             <div class="card-header bg-light">
@@ -1141,7 +1141,7 @@ $statusDescriptionFormatter = static function ($description) use ($statusDescrip
                             <div class="card-body">
                                 <div class="d-flex flex-wrap gap-2">
 
-                                    <?php if ($rbacClass->checkPermissionOperationByName('assign_other_operation')) { ?>
+                                    <?php if ($canAssignOthers) { ?>
                                         <?php if ($setManhourTimeInsert) { ?>
                                             <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#AssignTo">
                                                 <button type="button" tabindex="0" class="btn btn-info btn-sm"
@@ -1549,16 +1549,11 @@ $statusDescriptionFormatter = static function ($description) use ($statusDescrip
                                                     <?php echo (_lang['select']); ?>
                                                 </option>
 
-                                                <?php
-                                                $rbacAdminsInfo = $rbacClass->getAdminsByOperationName('assign_other_operation');
-                                                if ($rbacAdminsInfo) {
-                                                    while ($rbacAdminsInfoDetail = $rbacAdminsInfo->fetch_assoc()) {
-                                                        ?>
-                                                        <option value="<?php echo $rbacAdminsInfoDetail['id']; ?>">
-                                                            <?php echo $rbacAdminsInfoDetail['name']; ?>
-                                                        </option>
-                                                    <?php }
-                                                } ?>
+                                                <?php foreach ($assignmentAdminOptions as $assignmentAdminOption) { ?>
+                                                    <option value="<?php echo (int) $assignmentAdminOption['id']; ?>">
+                                                        <?php echo htmlspecialchars($assignmentAdminOption['name'], ENT_QUOTES, 'UTF-8'); ?>
+                                                    </option>
+                                                <?php } ?>
                                             </select>
                                         </div>
 

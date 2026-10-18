@@ -1,340 +1,77 @@
 <?php
-///template/structure/user_operation.php
+$userOperationEsc = static function ($value) {
+    return htmlspecialchars((string)($value ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+};
+$userOperationLang = static function ($key) { return _lang[$key] ?? $key; };
+$userOperationScopeMeta = [
+    'ipanel'=>['label'=>'operation_access_scope_ipanel','class'=>'primary','icon'=>'ri-shield-user-line'],
+    'iweb'=>['label'=>'operation_access_scope_iweb','class'=>'success','icon'=>'ri-global-line'],
+    'shared'=>['label'=>'operation_access_scope_shared','class'=>'info','icon'=>'ri-links-line'],
+    'unassigned'=>['label'=>'operation_access_scope_unassigned','class'=>'secondary','icon'=>'ri-question-line'],
+];
 ?>
+<style>
+.operation-access-page{--oa-border:#e6eaf1;--oa-muted:#748196;--oa-primary:#3159d8;--oa-text:#27364b}
+.operation-access-page .oa-hero{border:1px solid var(--oa-border);background:linear-gradient(135deg,#fff,#eef4ff);border-radius:20px;padding:22px 24px;box-shadow:0 10px 30px rgba(31,45,79,.055)}
+.operation-access-page .oa-icon{width:48px;height:48px;border-radius:14px;background:rgba(49,89,216,.1);color:var(--oa-primary);display:inline-flex;align-items:center;justify-content:center;font-size:23px}
+.operation-access-page .oa-subtitle,.operation-access-page .oa-meta{color:var(--oa-muted);font-size:12px;line-height:1.7}.operation-access-page .oa-subtitle{font-size:14px}
+.operation-access-page .access-nav-card,.operation-access-page .oa-stat,.operation-access-page .oa-toolbar,.operation-access-page .oa-table-card{border:1px solid var(--oa-border);background:#fff;border-radius:16px;box-shadow:0 6px 22px rgba(31,45,79,.035)}
+.operation-access-page .access-nav-card{padding:8px;display:flex;gap:6px;flex-wrap:wrap}.operation-access-page .access-nav-card a{text-decoration:none;color:#596579;border-radius:11px;padding:10px 14px;font-weight:600}.operation-access-page .access-nav-card a.active{background:rgba(49,89,216,.09);color:var(--oa-primary)}
+.operation-access-page .oa-stat{padding:16px;height:100%}.operation-access-page .oa-stat-value{font-size:23px;font-weight:800;color:var(--oa-text)}.operation-access-page .oa-stat-label{font-size:12px;color:var(--oa-muted)}
+.operation-access-page .oa-note{border:1px solid #dce5f6;background:#f7faff;border-radius:14px;padding:13px 15px;color:#53637b;line-height:1.8}.operation-access-page .oa-toolbar{padding:13px}
+.operation-access-page .oa-search{position:relative}.operation-access-page .oa-search i{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#96a1b1}.operation-access-page .oa-search input{padding-right:42px;border-radius:11px}
+.operation-access-page .oa-table-card{overflow:hidden}.operation-access-page table{margin:0}.operation-access-page thead th{background:#f7f9fc;color:#5d6a7d;font-size:12px;padding:13px 12px}.operation-access-page tbody td{vertical-align:middle;padding:13px 12px;border-color:#edf0f5}
+.operation-access-page .oa-role{font-weight:750;color:#26364d}.operation-access-page .oa-action{width:34px;height:34px;border:1px solid #e3e8f0;background:#fff;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;font-size:17px}
+.operation-access-page .oa-system-block{border:1px solid #e3e8f1;border-radius:16px;padding:14px;background:#fbfcfe;margin-bottom:14px}.operation-access-page .oa-section{border:1px solid #e5eaf2;border-radius:15px;background:#fff;overflow:hidden;margin-bottom:12px}.operation-access-page .oa-section-head{padding:12px 14px;background:#f8fafc;border-bottom:1px solid #e8ecf2}.operation-access-page .oa-part{padding:12px 14px;border-bottom:1px solid #eff2f6}.operation-access-page .oa-subparts{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;padding-inline-start:26px}.operation-access-page .oa-subpart{border:1px solid #e2e7ef;border-radius:9px;padding:6px 9px;background:#fbfcfe;font-size:12px}
+</style>
 
-<div class="content-page">
-    <div class="content">
+<div class="content-page operation-access-page"><div class="content"><div class="container-fluid py-3">
+<div class="oa-hero mb-3"><div class="d-flex gap-3 align-items-start"><span class="oa-icon"><i class="ri-layout-grid-line"></i></span><div><h4 class="mb-1"><?php echo $userOperationLang('operation_access_management'); ?></h4><div class="oa-subtitle"><?php echo $userOperationLang('operation_access_management_note'); ?></div></div></div></div>
 
-        <!-- Start Content-->
-        <div class="container-fluid">
-
-            <!-- start page title -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="page-title-box">
-                        <h4 class="page-title">
-                            <?php echo (_lang['user_operation']); ?>
-                        </h4>
-                    </div>
-                </div>
-            </div>
-            <!-- end page title -->
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <?php if ($rbacClass->checkPermissionOperationByName('add_operation')) { ?>
-                                <div class="row mb-2">
-                                    <div class="col-sm-5">
-
-                                        <a href="./user_operation?add=r" class="btn btn-danger mb-2">
-                                            <i class="mdi mdi-plus-circle me-2"></i>
-                                            <?php echo (_lang['add']); ?>
-                                        </a>
-                                    </div>
-
-                                </div>
-                            <?php } ?>
-
-                            <div class="table-responsive">
-                                <table class="table table-centered w-100 dt-responsive nowrap"
-                                    id="alternative-page-datatable">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                <?php echo ("#"); ?>
-                                            </th>
-                                            <th>
-                                                <?php echo (_lang['role']); ?>
-                                            </th>
-
-                                            <th>
-                                                <?php echo (_lang['last_updated_date']); ?>
-                                            </th>
-                                            <th style="width: 125px;">
-                                                <?php echo (_lang['actions']); ?>
-                                            </th>
-                                        </tr>
-                                    </thead>
-
-
-
-                                    <tbody>
-                                        <?php
-
-                                        while ($userOperationDetails = $userOperationResult->fetch_assoc()) {
-
-                                            ?>
-                                            <tr>
-                                                <td>
-                                                    <?php echo $userOperationDetails['id']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $userOperationDetails['rbac_name']; ?>
-                                                </td>
-
-                                                <td>
-                                                    <?php $dateConverter = new DateConverter($userOperationDetails['last_updated_date'], $config->getNowLanguage('a'));
-                                                    echo $dateConverter->convertToShamsi(); ?>
-                                                </td>
-                                                <td>
-
-
-                                                    <?php if ($rbacClass->checkPermissionOperationByName('delete_operation')) { ?>
-                                                        <a href="javascript:void(0);" class="action-icon delete-item"
-                                                            data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                                            data-table="permissions_operation"
-                                                            data-id="<?php echo $userOperationDetails['id']; ?>">
-                                                            <i class="mdi mdi-delete"></i>
-                                                        </a>
-                                                    <?php } ?>
-                                                    <?php if ($userOperationDetails['status'] === 'Active') { ?>
-                                                        <?php if ($rbacClass->checkPermissionOperationByName('inactive_operation')) { ?>
-                                                            <a href="javascript:void(0);" class="action-icon inactive-item"
-                                                                data-bs-toggle="modal" data-bs-target="#inactiveModal"
-                                                                data-table="permissions_operation"
-                                                                data-id="<?php echo $userOperationDetails['id']; ?>">
-                                                                <i class="mdi mdi-smart-card"></i>
-                                                            </a>
-                                                        <?php } ?>
-                                                    <?php } else { ?>
-                                                        <?php if ($rbacClass->checkPermissionOperationByName('active_operation')) { ?>
-                                                            <a href="javascript:void(0);" class="action-icon active-item"
-                                                                data-bs-toggle="modal" data-bs-target="#activeModal"
-                                                                data-table="permissions_operation"
-                                                                data-id="<?php echo $userOperationDetails['id']; ?>">
-                                                                <i class="mdi mdi-smart-card-off"></i>
-                                                            </a>
-                                                        <?php } ?>
-                                                    <?php } ?>
-
-                                                    <?php if ($rbacClass->checkPermissionOperationByName('edit_operation')) { ?>
-                                                        <a href="./user_operation?id=<?php echo $userOperationDetails['id']; ?>"
-                                                            class="action-icon">
-                                                            <i class="mdi mdi-square-edit-outline"></i>
-                                                        </a>
-                                                    <?php } ?>
-
-                                                </td>
-                                            </tr>
-                                        <?php } ?>
-                                    </tbody>
-                                </table>
-
-                                <div class="modal fade" id="deleteModal" tabindex="-1" userOperation="dialog"
-                                    aria-labelledby="deleteModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" userOperation="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="deleteModalLabel">
-                                                    <?php echo (_lang['delete_item']); ?>
-                                                </h5>
-                                                <button type="button" class="close" data-bs-dismiss="modal"
-                                                    aria-label="<?php echo (_lang['close']); ?>">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>
-                                                    <?php echo (_lang['delete_confirm']); ?>
-                                                </p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                    <?php echo (_lang['close']); ?>
-                                                </button>
-                                                <button type="button" class="btn btn-danger confirm-delete">
-                                                    <?php echo (_lang['delete']); ?>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="modal fade" id="activeModal" tabindex="-1" role="dialog"
-                                    aria-labelledby="activeModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="activeModalLabel">
-                                                    <?php echo (_lang['active_item']); ?>
-                                                </h5>
-                                                <button type="button" class="close" data-bs-dismiss="modal"
-                                                    aria-label="<?php echo (_lang['close']); ?>">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>
-                                                    <?php echo (_lang['active_confirm']); ?>
-                                                </p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                    <?php echo (_lang['close']); ?>
-                                                </button>
-                                                <button type="button" class="btn btn-danger confirm-active">
-                                                    <?php echo (_lang['active']); ?>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="modal fade" id="inactiveModal" tabindex="-1" role="dialog"
-                                    aria-labelledby="inactiveModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="inactiveModalLabel">
-                                                    <?php echo (_lang['inactive_item']); ?>
-                                                </h5>
-                                                <button type="button" class="close" data-bs-dismiss="modal"
-                                                    aria-label="<?php echo (_lang['close']); ?>">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>
-                                                    <?php echo (_lang['inactive_confirm']); ?>
-                                                </p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                    <?php echo (_lang['close']); ?>
-                                                </button>
-                                                <button type="button" class="btn btn-danger confirm-inactive">
-                                                    <?php echo (_lang['inactive']); ?>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div class="modal fade" id="addModal" tabindex="-1" userOperation="dialog"
-                                    aria-labelledby="addModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" userOperation="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="addModalLabel">
-                                                    <?php echo (_lang['add']); ?>
-                                                </h5>
-                                                <button type="button" class="close" data-bs-dismiss="modal"
-                                                    aria-label="<?php echo (_lang['close']); ?>">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <!-- Form for adding userOperation -->
-                                                <form id="addForm" name="addForm" class="form-control">
-
-                                                    <input type="hidden" class="form-control addField" name="table_set"
-                                                        id="table_set" value="permissions_operation">
-                                                    <input class="form-control addField" type="hidden"
-                                                        name="unique_fields" id="unique_fields"
-                                                        value="<?php echo $unique_fields; ?>">
-                                                    <div class="mb-3">
-                                                        <label for="rbac_id" class="form-label">
-                                                            <?php echo (_lang['role']); ?>
-                                                        </label>
-                                                        <select class="form-control addField" name="rbac_id"
-                                                            id="rbac_id">
-                                                            <?php
-                                                            while ($rbacDetails = $rbacResult->fetch_assoc()) { ?>
-                                                                <option value="<?php echo ($rbacDetails['id']); ?>">
-                                                                    <?php echo ($rbacDetails['rbac_name']); ?> /
-                                                                    <?php echo ($rbacDetails['company_name']); ?>
-                                                                </option>
-                                                            <?php } ?>
-                                                        </select>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label for="parts" class="form-label">
-                                                            <?php echo (_lang['parts']); ?>
-                                                        </label>
-
-                                                        <select multiple="" class="form-control addField" id="optgroup"
-                                                            name="parts" style="position: absolute; left: -9999px;">
-
-                                                            <?php
-                                                            while ($groupDetails = $groupResult->fetch_assoc()) { ?>
-                                                                <optgroup
-                                                                    label="<?php echo ($groupDetails['users_groups_name'] . " ( " . _lang['users'] . " )"); ?>">
-
-                                                                    <?php
-                                                                    $partResult = $structureModel->getPartByGroups($groupDetails['id']);
-                                                                    while ($partDetails = $partResult->fetch_assoc()) { ?>
-
-                                                                        <option value="u<?php echo ($partDetails['id']); ?>">
-                                                                            <?php echo ($partDetails['users_parts_name']); ?>
-                                                                        </option>
-                                                                    <?php } ?>
-
-                                                                </optgroup>
-                                                            <?php } ?>
-
-                                                            <?php
-                                                            while ($adminGroupDetails = $adminGroupResult->fetch_assoc()) { ?>
-                                                                <optgroup
-                                                                    label="<?php echo ($adminGroupDetails['admins_groups_name'] . " ( " . _lang['admins'] . " )"); ?>">
-
-                                                                    <?php
-                                                                    $adminPartResult = $structureModel->getAdminPartByGroups($adminGroupDetails['id']);
-                                                                    while ($adminPartDetails = $adminPartResult->fetch_assoc()) { ?>
-
-                                                                        <option
-                                                                            value="a<?php echo ($adminPartDetails['id']); ?>">
-                                                                            <?php echo ($adminPartDetails['admins_parts_name']); ?>
-                                                                        </option>
-                                                                    <?php } ?>
-
-                                                                </optgroup>
-                                                            <?php } ?>
-
-                                                        </select>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label for="operation" class="form-label">
-                                                            <?php echo (_lang['operation']); ?>
-                                                        </label>
-
-                                                        <select id="operation" name="operation"
-                                                            class="addField select2 form-control select2-multiple"
-                                                            data-toggle="select2" multiple="multiple">
-                                                            <?php
-                                                            while ($operationDetails = $operationResult->fetch_assoc()) { ?>
-
-                                                                <option value="<?php echo ($operationDetails['id']); ?>"
-                                                                    id="customCheck<?php echo ($operationDetails['id']); ?>">
-                                                                    <?php echo ($operationDetails['operation_name']); ?>
-                                                                </option>
-
-                                                            <?php } ?>
-                                                        </select>
-
-                                                    </div>
-
-                                                    <button type="button" class="btn btn-primary" id="addDataBtn">
-                                                        <?php echo (_lang['add']); ?>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div> <!-- end card-body-->
-                    </div> <!-- end card-->
-                </div> <!-- end col -->
-            </div>
-            <!-- end row -->
-
-        </div> <!-- container -->
-
-    </div> <!-- content -->
-
-
+<div class="access-nav-card mb-3">
+<a href="./user_access"><i class="ri-shield-user-line me-1"></i><?php echo _lang['user_access']; ?></a>
+<a href="./user_stracture"><i class="ri-node-tree me-1"></i><?php echo _lang['user_stracture']; ?></a>
+<a href="./user_operation" class="active"><i class="ri-layout-grid-line me-1"></i><?php echo _lang['user_operation']; ?></a>
+<a href="./user_view"><i class="ri-settings-3-line me-1"></i><?php echo _lang['user_view']; ?></a>
 </div>
+
+<div id="userOperationFeedback" class="alert d-none mb-3"></div>
+<div class="row g-3 mb-3">
+<div class="col-6 col-lg-3"><div class="oa-stat"><div class="oa-stat-value"><?php echo (int)$summary['roles']; ?></div><div class="oa-stat-label"><?php echo $userOperationLang('operation_access_total_roles'); ?></div></div></div>
+<div class="col-6 col-lg-3"><div class="oa-stat"><div class="oa-stat-value"><?php echo (int)$summary['configured']; ?></div><div class="oa-stat-label"><?php echo $userOperationLang('operation_access_configured_roles'); ?></div></div></div>
+<div class="col-6 col-lg-3"><div class="oa-stat"><div class="oa-stat-value"><?php echo (int)$summary['ipanel']; ?></div><div class="oa-stat-label"><?php echo $userOperationLang('operation_access_ipanel_roles'); ?></div></div></div>
+<div class="col-6 col-lg-3"><div class="oa-stat"><div class="oa-stat-value"><?php echo (int)$summary['iweb']; ?></div><div class="oa-stat-label"><?php echo $userOperationLang('operation_access_iweb_roles'); ?></div></div></div>
+</div>
+<div class="oa-note mb-3"><i class="ri-information-line me-1"></i><?php echo $userOperationLang('operation_access_shared_record_note'); ?></div>
+
+<div class="oa-toolbar mb-3"><div class="row g-2 align-items-center"><div class="col-md-7"><div class="oa-search"><i class="ri-search-line"></i><input id="userOperationSearch" class="form-control" placeholder="<?php echo $userOperationEsc($userOperationLang('operation_access_search')); ?>"></div></div><div class="col-md-5 text-md-end">
+<?php foreach(['all','ipanel','iweb','shared','unassigned'] as $scope){$key=$scope==='all'?'operation_access_filter_all':'operation_access_scope_'.$scope;$cls=$userOperationSystemFilter===$scope?'btn-primary':'btn-light';?><a class="btn btn-sm <?php echo $cls; ?>" href="./user_operation?system=<?php echo $scope; ?>"><?php echo $userOperationLang($key); ?></a><?php } ?>
+</div></div></div>
+
+<div class="oa-table-card"><div class="table-responsive"><table class="table" id="userOperationTable"><thead><tr><th>#</th><th><?php echo _lang['role']; ?></th><th><?php echo $userOperationLang('operation_access_origin'); ?></th><th><?php echo $userOperationLang('operation_access_system_scope'); ?></th><th><?php echo $userOperationLang('operation_access_parts'); ?></th><th><?php echo $userOperationLang('operation_access_operation_count'); ?></th><th><?php echo _lang['actions']; ?></th></tr></thead><tbody>
+<?php foreach($roles as $role){$meta=$userOperationScopeMeta[$role['system_scope']]??$userOperationScopeMeta['unassigned'];$canConfigure=$role['permission_row_count']>0?$canEditUserOperation:$canAddUserOperation;$search=strtolower(($role['rbac_name']??'').' '.($role['company_name']??'').' '.($role['unit_name']??'').' '.($role['activity_name']??''));?>
+<tr data-search="<?php echo $userOperationEsc($search); ?>"><td><?php echo (int)$role['id']; ?></td><td><div class="oa-role"><?php echo $userOperationEsc($role['rbac_name']); ?></div><?php if($role['has_duplicate_rows']){?><div class="oa-meta text-warning"><?php echo $userOperationLang('operation_access_duplicate_legacy'); ?></div><?php } ?></td><td><div class="fw-semibold"><?php echo $userOperationEsc($role['company_name']?:'—'); ?></div><div class="oa-meta"><?php echo $userOperationEsc($role['unit_name']?:'—'); ?><?php if($role['activity_name'])echo ' · '.$userOperationEsc($role['activity_name']); ?></div></td><td><span class="badge bg-<?php echo $meta['class']; ?>-subtle text-<?php echo $meta['class']; ?>"><i class="<?php echo $meta['icon']; ?> me-1"></i><?php echo $userOperationLang($meta['label']); ?></span></td><td><?php if($role['permission_configured']){?><span class="badge bg-success-subtle text-success"><?php echo $userOperationLang('operation_access_configured'); ?></span><div class="oa-meta mt-1"><?php echo (int)$role['admin_part_count']; ?> <?php echo $userOperationLang('operation_access_scope_ipanel'); ?> · <?php echo (int)$role['user_part_count']; ?> <?php echo $userOperationLang('operation_access_scope_iweb'); ?></div><?php }else{?><span class="badge bg-light text-muted"><?php echo $userOperationLang('operation_access_not_configured'); ?></span><?php } ?></td><td><span class="badge bg-light text-dark"><?php echo (int)$role['operation_count']; ?></span><div class="oa-meta"><?php echo $userOperationLang('operation_access_managed_in_user_view'); ?></div></td><td class="text-nowrap"><?php if($canConfigure){?><button class="oa-action text-primary user-operation-edit" data-id="<?php echo (int)$role['id']; ?>"><i class="ri-equalizer-line"></i></button><?php } ?><?php if($role['permission_configured']&&$canDeleteUserOperation){?><button class="oa-action text-danger user-operation-clear" data-id="<?php echo (int)$role['id']; ?>" data-name="<?php echo $userOperationEsc($role['rbac_name']); ?>"><i class="ri-close-circle-line"></i></button><?php } ?></td></tr>
+<?php } ?>
+</tbody></table></div></div>
+
+<div class="modal fade" id="userOperationModal" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title"><?php echo $userOperationLang('operation_access_configure'); ?></h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="userOperationRoleId"><div class="row g-3 mb-3"><div class="col-md-4"><label class="form-label"><?php echo _lang['role']; ?></label><div class="form-control bg-light" id="userOperationRoleName"></div></div><div class="col-md-4"><label class="form-label"><?php echo $userOperationLang('operation_access_role_company'); ?></label><div class="form-control bg-light" id="userOperationCompany"></div></div><div class="col-md-4"><label class="form-label"><?php echo $userOperationLang('operation_access_role_unit'); ?></label><div class="form-control bg-light" id="userOperationUnit"></div></div></div><div class="oa-note mb-3" id="userOperationScopeNote"></div><div class="d-flex gap-2 mb-3"><div class="oa-search flex-grow-1"><i class="ri-search-line"></i><input id="userOperationPartSearch" class="form-control" placeholder="<?php echo $userOperationEsc($userOperationLang('operation_access_part_search')); ?>"></div><button class="btn btn-light" id="userOperationSelectAll"><?php echo $userOperationLang('operation_access_select_all'); ?></button><button class="btn btn-light" id="userOperationClearSelection"><?php echo $userOperationLang('operation_access_clear_selection'); ?></button></div><div id="userOperationParts"></div><div class="oa-meta"><span id="userOperationSelectedCount">0</span> <?php echo $userOperationLang('operation_access_selected_count_suffix'); ?></div></div><div class="modal-footer"><button class="btn btn-light" data-bs-dismiss="modal"><?php echo _lang['close']; ?></button><button class="btn btn-primary" id="userOperationSave"><?php echo _lang['save_changes']; ?></button></div></div></div></div>
+
+<div class="modal fade" id="userOperationClearModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h5 class="modal-title text-danger"><?php echo $userOperationLang('operation_access_clear'); ?></h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><p><?php echo $userOperationLang('operation_access_clear_confirm'); ?></p><div class="fw-semibold" id="userOperationClearName"></div><div class="oa-note mt-3"><?php echo $userOperationLang('operation_access_clear_note'); ?></div></div><div class="modal-footer"><button class="btn btn-light" data-bs-dismiss="modal"><?php echo _lang['close']; ?></button><button class="btn btn-danger" id="userOperationClearConfirm"><?php echo $userOperationLang('operation_access_clear'); ?></button></div></div></div></div>
+
+</div></div></div>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+const endpoint='../icore/json/user_operation_manage.php',csrf=<?php echo json_encode($userOperationCsrf); ?>,roles=<?php echo json_encode($userOperationRoleData,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES); ?>,catalogs={admin:<?php echo json_encode($adminCatalog,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES); ?>,user:<?php echo json_encode($userCatalog,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES); ?>};
+const lang=<?php echo json_encode(_lang,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES); ?>,systemLabels={ipanel:<?php echo json_encode($userOperationLang('operation_access_scope_ipanel')); ?>,iweb:<?php echo json_encode($userOperationLang('operation_access_scope_iweb')); ?>},scopeNotes={ipanel:<?php echo json_encode($userOperationLang('operation_access_scope_note_ipanel')); ?>,iweb:<?php echo json_encode($userOperationLang('operation_access_scope_note_iweb')); ?>,shared:<?php echo json_encode($userOperationLang('operation_access_scope_note_shared')); ?>,unassigned:<?php echo json_encode($userOperationLang('operation_access_scope_note_unassigned')); ?>};
+const modal=new bootstrap.Modal(document.getElementById('userOperationModal')),clearModal=new bootstrap.Modal(document.getElementById('userOperationClearModal'));let active=null,clearId=0;
+function name(n){return lang[n]||n} function count(){document.getElementById('userOperationSelectedCount').textContent=document.querySelectorAll('#userOperationParts .oa-check:checked').length}
+function build(type,title,groups,selected){const b=document.createElement('div');b.className='oa-system-block';b.innerHTML='<h6>'+title+'</h6>';const set=new Set(selected||[]);groups.forEach(g=>{const s=document.createElement('div');s.className='oa-section';s.dataset.search=(g.name||'').toLowerCase();const h=document.createElement('div');h.className='oa-section-head';h.innerHTML='<label class="form-check m-0 fw-semibold"><input class="form-check-input oa-check oa-group" type="checkbox" value="'+g.id+'" data-category="group"><span class="ms-1">'+name(g.name)+'</span></label>';s.appendChild(h);g.parts.forEach(p=>{const x=document.createElement('div');x.className='oa-part';x.dataset.search=((p.name||'')+' '+(g.name||'')).toLowerCase();x.innerHTML='<label class="form-check m-0"><input class="form-check-input oa-check oa-part-check" type="checkbox" value="'+p.id+'" data-category="part"><span class="ms-1 fw-semibold">'+name(p.name)+'</span></label>';if(p.subparts&&p.subparts.length){const ss=document.createElement('div');ss.className='oa-subparts';p.subparts.forEach(sp=>{const l=document.createElement('label');l.className='oa-subpart form-check m-0';l.innerHTML='<input class="form-check-input oa-check oa-sub" type="checkbox" value="'+sp.id+'" data-category="subpart"><span class="ms-1">'+name(sp.name)+'</span>';ss.appendChild(l)});x.appendChild(ss)}s.appendChild(x)});b.appendChild(s)});b.querySelectorAll('.oa-check').forEach(c=>c.checked=set.has(c.value));return b}
+function bind(){document.querySelectorAll('.oa-group').forEach(c=>c.onchange=()=>{c.closest('.oa-section').querySelectorAll('.oa-check').forEach(x=>x.checked=c.checked);count()});document.querySelectorAll('.oa-part-check').forEach(c=>c.onchange=()=>{c.closest('.oa-part').querySelectorAll('.oa-sub').forEach(x=>x.checked=c.checked);if(c.checked)c.closest('.oa-section').querySelector('.oa-group').checked=true;count()});document.querySelectorAll('.oa-sub').forEach(c=>c.onchange=()=>{if(c.checked){c.closest('.oa-part').querySelector('.oa-part-check').checked=true;c.closest('.oa-section').querySelector('.oa-group').checked=true}count()})}
+function open(id){active=roles[id];if(!active)return;document.getElementById('userOperationRoleName').textContent=active.name;document.getElementById('userOperationCompany').textContent=active.company||'—';document.getElementById('userOperationUnit').textContent=active.unit||'—';document.getElementById('userOperationScopeNote').textContent=scopeNotes[active.scope]||scopeNotes.unassigned;const w=document.getElementById('userOperationParts');w.innerHTML='';if(active.can_admin_parts)w.appendChild(build('admin',systemLabels.ipanel,catalogs.admin,active.selected_part_ids));if(active.can_user_parts)w.appendChild(build('user',systemLabels.iweb,catalogs.user,active.selected_part_ids));bind();count();modal.show()}
+async function req(p){const b=new URLSearchParams();Object.keys(p).forEach(k=>b.append(k,p[k]??''));b.append('csrf',csrf);const r=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:b.toString(),credentials:'same-origin'});const d=await r.json();if(!r.ok||d.status!=='success')throw new Error(d.message||'Error');return d}
+function feedback(m,ok){const e=document.getElementById('userOperationFeedback');e.className='alert '+(ok?'alert-success':'alert-danger');e.textContent=m}
+document.querySelectorAll('.user-operation-edit').forEach(b=>b.onclick=()=>open(Number(b.dataset.id)));document.getElementById('userOperationSelectAll').onclick=()=>{document.querySelectorAll('#userOperationParts .oa-check').forEach(x=>x.checked=true);count()};document.getElementById('userOperationClearSelection').onclick=()=>{document.querySelectorAll('#userOperationParts .oa-check').forEach(x=>x.checked=false);count()};document.getElementById('userOperationSave').onclick=async function(){if(!active)return;const parts=[];document.querySelectorAll('#userOperationParts .oa-check:checked').forEach(c=>parts.push({id:c.value,category:c.dataset.category}));this.disabled=true;try{const d=await req({action:'save',rbac_id:active.id,parts_json:JSON.stringify(parts)});modal.hide();feedback(d.message,true);setTimeout(()=>location.reload(),400)}catch(e){feedback(e.message,false)}finally{this.disabled=false}};
+document.querySelectorAll('.user-operation-clear').forEach(b=>b.onclick=()=>{clearId=Number(b.dataset.id);document.getElementById('userOperationClearName').textContent=b.dataset.name;clearModal.show()});document.getElementById('userOperationClearConfirm').onclick=async function(){this.disabled=true;try{const d=await req({action:'clear',rbac_id:clearId});clearModal.hide();feedback(d.message,true);setTimeout(()=>location.reload(),400)}catch(e){feedback(e.message,false)}finally{this.disabled=false}};
+document.getElementById('userOperationSearch').oninput=function(){const q=this.value.toLowerCase();document.querySelectorAll('#userOperationTable tbody tr').forEach(r=>r.classList.toggle('d-none',q&&!r.dataset.search.includes(q)))};document.getElementById('userOperationPartSearch').oninput=function(){const q=this.value.toLowerCase();document.querySelectorAll('#userOperationParts .oa-section').forEach(s=>s.classList.toggle('d-none',q&&!s.textContent.toLowerCase().includes(q)))};
+});
+</script>

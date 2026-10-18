@@ -1,81 +1,51 @@
 <?php
 ///template/structure/user_view_details.php
+$userViewEsc=static function($v){return htmlspecialchars((string)($v??''),ENT_QUOTES|ENT_SUBSTITUTE,'UTF-8');};
+$userViewLang=static function($k){return _lang[$k]??$k;};
+$groupMeta=[
+ 'ticket'=>['label'=>'view_access_group_ticket','icon'=>'ri-ticket-2-line'],
+ 'status'=>['label'=>'view_access_group_status','icon'=>'ri-pulse-line'],
+ 'communication'=>['label'=>'view_access_group_communication','icon'=>'ri-discuss-line'],
+ 'files_finance'=>['label'=>'view_access_group_files_finance','icon'=>'ri-attachment-2'],
+ 'planning'=>['label'=>'view_access_group_planning','icon'=>'ri-calendar-check-line'],
+ 'critical'=>['label'=>'view_access_group_critical','icon'=>'ri-alert-line'],
+ 'system'=>['label'=>'view_access_group_system','icon'=>'ri-settings-3-line'],
+];
+$scopeKey='view_access_scope_'.$systemScope;
 ?>
-<div class="content-page">
-    <div class="content">
-
-        <!-- Start Content-->
-        <div class="container-fluid">
-
-            <!-- start page title -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="page-title-box">
-
-                        <h4 class="page-title">
-                            <?php echo _lang['user_view']; ?>
-                        </h4>
-                    </div>
-                </div>
-            </div>
-            <!-- end page title -->
-            <form>
-
-                <div class="row">
-                    <?php
-                    $operationsResult = $structureModel->getOperations();
-                    
-                    $arrayOperationSet = @unserialize($permission_data['operation']);
-
-                    while ($operationsDetails = $operationsResult->fetch_assoc()) {
-                        $selected = '';
-                        if (is_array($arrayOperationSet) && count($arrayOperationSet) > 0 && in_array($operationsDetails['id'], $arrayOperationSet)) {
-                            $selected = 'checked';
-                        }
-                    ?>
-                        <div class="col-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="form-check form-switch">
-                                        <input <?php echo $selected; ?> type="checkbox" name="operation[]" class="form-check-input operation-checkbox" id="<?php echo $operationsDetails['id']; ?>" value="<?php echo $operationsDetails['id']; ?>">
-                                        <label class="form-check-label" for="<?php echo $operationsDetails['id']; ?>"><?php echo _lang[$operationsDetails['operation_name']]; ?></label>
-                                        <span> ( <?php echo $operationsDetails['operation_description']; ?> ) </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <?php } ?>
-
-
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <label for="rbac_id" class="form-label">
-                                        <?php echo _lang['role']; ?>
-                                    </label>
-                                    <select class="form-control" name="rbac_id" id="rbac_id">
-
-                                        <option selected value="<?php echo ($rbac_data['id']); ?>">
-                                            <?php echo ($rbac_data['rbac_name']); ?> /
-                                            <?php echo ($rbac_data['company_name']); ?>
-                                        </option>
-
-                                    </select>
-                                </div>
-                                <?php if ($rbacClass->checkPermissionOperationByName('edit_operation')) { ?>
-                                <button type="button" id="submit-operation-btn" class="btn btn-primary mb-2">
-                                    <?php echo _lang['submit']; ?>
-                                </button>
-                                <?php } ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </form>
-
-        </div>
-        <!-- end row-->
-    </div> <!-- container -->
-</div> <!-- content -->
+<style>
+.access-view-v4{--av-border:#e6ebf2;--av-muted:#718096;--av-primary:#3159d8}.av-hero{border:1px solid var(--av-border);background:linear-gradient(135deg,#fff 0%,#f7f9ff 58%,#eef4ff 100%);border-radius:20px;padding:22px;box-shadow:0 10px 30px rgba(31,45,79,.055);position:relative;overflow:hidden}.av-hero:after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(49,89,216,.06);left:-85px;top:-105px}.av-icon{width:48px;height:48px;border-radius:14px;background:rgba(49,89,216,.1);color:var(--av-primary);display:inline-flex;align-items:center;justify-content:center;font-size:23px}.av-sub{color:var(--av-muted);line-height:1.8;margin:4px 0 0}.av-back{border:1px solid #dfe5ee;background:#fff;color:#566277;padding:9px 13px;border-radius:11px;text-decoration:none;font-weight:650;position:relative;z-index:2}.av-nav{border:1px solid var(--av-border);background:#fff;border-radius:16px;padding:8px;display:flex;gap:6px;flex-wrap:wrap}.av-nav a{text-decoration:none;color:#596579;border-radius:11px;padding:10px 14px;font-weight:600;display:inline-flex;gap:7px;align-items:center}.av-nav a.active{background:rgba(49,89,216,.09);color:var(--av-primary)}.av-role,.av-stat,.av-toolbar,.av-group,.av-save,.av-scenario{border:1px solid var(--av-border);background:#fff;border-radius:17px;box-shadow:0 7px 22px rgba(31,45,79,.035)}.av-role{padding:17px}.av-role label{font-size:11px;color:var(--av-muted);display:block;margin-bottom:3px}.av-role strong{color:#2b394e}.av-stat{padding:15px;height:100%}.av-stat i{width:38px;height:38px;border-radius:11px;background:#f1f5ff;color:#3159d8;display:inline-flex;align-items:center;justify-content:center;font-size:18px}.av-stat strong{display:block;font-size:22px;margin-top:8px}.av-stat span{font-size:11px;color:var(--av-muted)}.av-alert{border-radius:14px;padding:13px 15px;line-height:1.8}.av-alert-info{border:1px solid #dbe8fb;background:#f7fbff;color:#506987}.av-alert-warning{border:1px solid #f1dfb9;background:#fffaf0;color:#7a5b22}.av-alert-danger{border:1px solid #f0cccc;background:#fff7f7;color:#873c3c}.av-toolbar{padding:13px}.av-search{position:relative}.av-search i{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#98a4b5}.av-search input{padding-right:41px;border-radius:11px}.av-toolbar .btn{border-radius:10px}.av-scenario{padding:17px}.av-scenario-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:13px}.av-scenario-option{display:block;border:1px solid #e5eaf2;border-radius:14px;padding:14px;background:#fff;cursor:pointer;min-height:110px}.av-scenario-option.is-selected{border-color:#bdcaf5;background:#f7f9ff}.av-scenario-option input{margin-top:3px}.av-scenario-title{font-weight:750;color:#314055}.av-scenario-note{font-size:12px;color:#718096;line-height:1.7;margin-top:5px}.av-group{overflow:hidden}.av-group-head{background:#fbfcfe;border-bottom:1px solid var(--av-border);padding:14px 16px;display:flex;align-items:center;justify-content:space-between}.av-group-title{font-weight:750;color:#334155;display:flex;align-items:center;gap:8px}.av-group-title i{width:33px;height:33px;border-radius:10px;background:#eef3ff;color:#3159d8;display:inline-flex;align-items:center;justify-content:center}.av-group-count{background:#eef2f7;color:#64748b;padding:4px 9px;border-radius:20px;font-size:11px;font-weight:700}.av-group-body{padding:13px}.av-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.av-item{border:1px solid #e8edf3;border-radius:13px;padding:12px;background:#fff;min-height:105px;transition:.15s}.av-item.is-selected{border-color:#bdcaf5;background:#f8faff}.av-item.is-critical{border-color:#f0d7aa;background:#fffdf7}.av-item-name{font-weight:700;color:#334155}.av-item-code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;color:#8a96a8;margin-top:2px;word-break:break-all}.av-item-desc{font-size:11px;color:#758195;line-height:1.65;margin-top:6px}.av-critical-badge{display:inline-flex;padding:2px 7px;border-radius:20px;background:#fff0d7;color:#a26814;font-size:9px;font-weight:800;margin-inline-start:5px}.av-empty{display:none;border:1px dashed #d7deea;background:#fbfcfe;color:#7b8798;padding:34px 18px;border-radius:16px;text-align:center}.av-save{padding:16px;position:sticky;bottom:10px;z-index:9;box-shadow:0 12px 35px rgba(31,45,79,.1)}.av-feedback{display:none}.av-readonly{opacity:.78}.form-switch .form-check-input{cursor:pointer;width:2.35em;height:1.2em}.av-meta-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:20px;background:#f2f5f9;color:#627087;font-size:11px;font-weight:700}@media(max-width:991px){.av-grid{grid-template-columns:1fr}.av-scenario-options{grid-template-columns:1fr}.av-save{position:static}}@media(max-width:767px){.av-hero{padding:18px}}
+</style>
+<div class="content-page access-view-v4"><div class="content"><div class="container-fluid">
+<div class="av-hero mt-3 mb-3"><div class="row align-items-center g-3 position-relative" style="z-index:1"><div class="col-xl-8"><div class="d-flex gap-3 align-items-start"><div class="av-icon"><i class="ri-key-2-line"></i></div><div><h3 class="mb-1"><?php echo $userViewLang('view_access_management'); ?></h3><p class="av-sub"><?php echo $userViewLang('view_access_management_note'); ?></p></div></div></div><div class="col-xl-4 text-xl-end"><a class="av-back" href="./user_view"><i class="ri-arrow-go-back-line me-1"></i><?php echo $userViewLang('view_access_back_to_list'); ?></a></div></div></div>
+<div class="av-nav mb-3"><a href="./user_access"><i class="ri-user-settings-line"></i><?php echo _lang['role']; ?></a><a href="./user_stracture"><i class="ri-node-tree"></i><?php echo _lang['user_stracture']; ?></a><a href="./user_operation"><i class="ri-layout-grid-line"></i><?php echo _lang['user_operation']; ?></a><a class="active" href="./user_view"><i class="ri-key-2-line"></i><?php echo _lang['user_view']; ?></a></div>
+<div id="userViewFeedback" class="alert av-feedback mb-3"></div>
+<div class="av-role mb-3"><div class="row g-3"><div class="col-md-4"><label><?php echo _lang['role']; ?></label><strong><?php echo $userViewEsc($rbac_data['rbac_name']); ?></strong><div class="small text-muted"><?php echo $userViewLang('view_access_rbac_id'); ?> #<?php echo (int)$rbac_data['id']; ?></div></div><div class="col-md-2"><label><?php echo _lang['company']; ?></label><strong><?php echo $userViewEsc($rbac_data['company_name'] ?: '—'); ?></strong></div><div class="col-md-2"><label><?php echo _lang['unit']; ?></label><strong><?php echo $userViewEsc($rbac_data['unit_name'] ?: '—'); ?></strong></div><div class="col-md-2"><label><?php echo _lang['activity']; ?></label><strong><?php echo $userViewEsc($rbac_data['activity_name'] ?: '—'); ?></strong></div><div class="col-md-2"><label><?php echo $userViewLang('view_access_system_scope'); ?></label><span class="av-meta-badge"><?php echo $userViewLang($scopeKey); ?></span></div></div></div>
+<?php if($systemScope==='iweb'||$systemScope==='shared'): ?><div class="av-alert av-alert-info mb-3"><i class="ri-information-line me-1"></i><?php echo $userViewLang('view_access_customer_portal_separation'); ?></div><?php endif; ?>
+<?php if($isFullAccess): ?><div class="av-alert av-alert-warning mb-3"><i class="ri-vip-crown-2-line me-1"></i><?php echo $userViewLang('view_access_full_access_note'); ?></div><?php endif; ?>
+<?php if(count($permissionRows)>1): ?><div class="av-alert av-alert-warning mb-3"><i class="ri-file-warning-line me-1"></i><?php echo sprintf($userViewLang('view_access_duplicate_rows_note'),count($permissionRows)); ?> <?php if($duplicateRowsDiffer) echo $userViewLang('view_access_duplicate_rows_differ'); ?></div><?php endif; ?>
+<div class="av-alert av-alert-danger mb-3"><i class="ri-alert-line me-1"></i><?php echo $userViewLang('view_access_critical_note'); ?></div>
+<div class="row g-3 mb-3"><div class="col-6 col-xl-3"><div class="av-stat"><i class="ri-grid-line"></i><strong id="avTotal"><?php echo number_format($totalOperationCount); ?></strong><span><?php echo $userViewLang('view_access_total_permissions'); ?></span></div></div><div class="col-6 col-xl-3"><div class="av-stat"><i class="ri-checkbox-circle-line"></i><strong id="avSelected"><?php echo number_format($selectedOperationCount); ?></strong><span><?php echo $userViewLang('view_access_selected_permissions'); ?></span></div></div><div class="col-6 col-xl-3"><div class="av-stat"><i class="ri-checkbox-blank-circle-line"></i><strong id="avInactive"><?php echo number_format($inactiveOperationCount); ?></strong><span><?php echo $userViewLang('view_access_inactive_permissions'); ?></span></div></div><div class="col-6 col-xl-3"><div class="av-stat"><i class="ri-time-line"></i><strong style="font-size:15px;line-height:1.7"><?php if($lastUpdated){$dc=new DateConverter($lastUpdated,$config->getNowLanguage('a'));echo $userViewEsc($dc->convertToShamsi());}else echo '—'; ?></strong><span><?php echo $userViewLang('view_access_last_update'); ?></span></div></div></div>
+<?php if($ticketSendAllOperation): ?>
+<div class="av-scenario mb-3 <?php echo $isFullAccess?'av-readonly':''; ?>"><div class="d-flex justify-content-between gap-2 flex-wrap"><div><h5 class="mb-1"><i class="ri-route-line me-1 text-primary"></i><?php echo $userViewLang('view_access_group_scenario'); ?></h5><div class="small text-muted"><?php echo $userViewLang('view_access_scenario_note'); ?></div></div><span class="av-meta-badge"><?php echo $userViewLang('view_access_explicit_choice'); ?></span></div><input type="checkbox" class="operation-checkbox d-none" id="ticket-send-all-operation" value="<?php echo (int)$ticketSendAllOperation['id']; ?>" <?php echo $ticketSendAllSelected?'checked':''; ?> <?php echo (!$canSave||$isFullAccess)?'disabled':''; ?>><div class="av-scenario-options"><label class="av-scenario-option <?php echo !$ticketSendAllSelected?'is-selected':''; ?>" data-scenario="subtree"><div class="d-flex gap-2"><input type="radio" name="ticket_send_scope_ui" value="subtree" <?php echo !$ticketSendAllSelected?'checked':''; ?> <?php echo (!$canSave||$isFullAccess)?'disabled':''; ?>><div><div class="av-scenario-title"><i class="ri-node-tree"></i> <?php echo $userViewLang('view_access_scenario_subtree'); ?></div><div class="av-scenario-note"><?php echo $userViewLang('view_access_scenario_subtree_note'); ?></div></div></div></label><label class="av-scenario-option <?php echo $ticketSendAllSelected?'is-selected':''; ?>" data-scenario="all"><div class="d-flex gap-2"><input type="radio" name="ticket_send_scope_ui" value="all" <?php echo $ticketSendAllSelected?'checked':''; ?> <?php echo (!$canSave||$isFullAccess)?'disabled':''; ?>><div><div class="av-scenario-title"><i class="ri-global-line"></i> <?php echo $userViewLang('view_access_scenario_all'); ?></div><div class="av-scenario-note"><?php echo $userViewLang('view_access_scenario_all_note'); ?></div></div></div></label></div><div class="small text-muted mt-2"><i class="ri-shield-check-line me-1"></i><?php echo $userViewLang('view_access_scenario_backend_note'); ?></div></div>
+<?php else: ?><div class="av-alert av-alert-warning mb-3"><i class="ri-information-line me-1"></i><?php echo $userViewLang('view_access_send_scope_operation_missing'); ?></div><?php endif; ?>
+<div class="av-toolbar mb-3"><div class="row g-2 align-items-center"><div class="col-lg-5"><div class="av-search"><i class="ri-search-line"></i><input id="avSearch" class="form-control" placeholder="<?php echo $userViewEsc($userViewLang('view_access_search_placeholder')); ?>"></div></div><div class="col-lg-7"><div class="d-flex flex-wrap gap-2 justify-content-lg-end"><button class="btn btn-light border" type="button" id="avSelectSafe" <?php echo !$canSave?'disabled':''; ?>><i class="ri-checkbox-multiple-line me-1"></i><?php echo $userViewLang('view_access_select_safe_all'); ?></button><button class="btn btn-light border" type="button" id="avClearVisible" <?php echo !$canSave?'disabled':''; ?>><i class="ri-checkbox-blank-line me-1"></i><?php echo $userViewLang('view_access_clear_visible'); ?></button><button class="btn btn-outline-primary" type="button" id="avSelectedOnly"><i class="ri-filter-3-line me-1"></i><span data-selected="<?php echo $userViewEsc($userViewLang('view_access_show_selected')); ?>" data-all="<?php echo $userViewEsc($userViewLang('view_access_show_all')); ?>"><?php echo $userViewLang('view_access_show_selected'); ?></span></button></div></div></div><div class="small text-muted mt-2"><i class="ri-alert-line me-1"></i><?php echo $userViewLang('view_access_select_safe_note'); ?></div></div>
+<div id="avGroups">
+<?php foreach($operationGroups as $g=>$ops): if(!$ops)continue;$m=$groupMeta[$g]; ?><div class="av-group mb-3" data-group><div class="av-group-head"><div class="av-group-title"><i class="<?php echo $m['icon']; ?>"></i><?php echo $userViewLang($m['label']); ?></div><span class="av-group-count" data-count><?php echo count($ops); ?></span></div><div class="av-group-body"><div class="av-grid"><?php foreach($ops as $op):$name=(string)$op['operation_name'];$caption=$userViewLang($name);$descKey='view_access_desc_'.$name;$desc=isset(_lang[$descKey])?_lang[$descKey]:sprintf($userViewLang('view_access_operation_desc_fallback'),$caption);$search=strtolower($caption.' '.$name.' '.$desc); ?><div class="av-item <?php echo $op['is_selected']?'is-selected':''; ?> <?php echo $op['is_critical']?'is-critical':''; ?>" data-item data-critical="<?php echo $op['is_critical']?'1':'0'; ?>" data-search="<?php echo $userViewEsc($search); ?>"><div class="form-check form-switch mb-0"><input class="form-check-input operation-checkbox" type="checkbox" value="<?php echo (int)$op['id']; ?>" id="op-<?php echo (int)$op['id']; ?>" <?php echo $op['is_selected']?'checked':''; ?> <?php echo (!$canSave||$isFullAccess)?'disabled':''; ?>><label class="form-check-label d-block pe-2" for="op-<?php echo (int)$op['id']; ?>"><span class="av-item-name"><?php echo $userViewEsc($caption); ?><?php if($op['is_critical']): ?><span class="av-critical-badge"><?php echo $userViewLang('view_access_critical_badge'); ?></span><?php endif; ?></span><div class="av-item-code"><?php echo $userViewEsc($name); ?></div><div class="av-item-desc"><?php echo $userViewEsc($desc); ?></div></label></div></div><?php endforeach; ?></div></div></div><?php endforeach; ?>
+</div><div class="av-empty" id="avEmpty"><i class="ri-search-eye-line"></i><?php echo $userViewLang('view_access_no_results'); ?></div>
+<div class="av-save mt-3 mb-4"><div class="row g-3 align-items-center"><div class="col-lg-7"><div class="small text-muted"><i class="ri-information-line me-1"></i><?php echo $userViewLang('view_access_save_note_v4'); ?></div><div class="mt-2"><span class="av-meta-badge"><i class="ri-check-double-line"></i><span id="avSelectedInline"><?php echo number_format($selectedOperationCount); ?></span> / <?php echo number_format($totalOperationCount); ?></span><?php if(!$canSave&&!$isFullAccess): ?><span class="av-meta-badge ms-1"><i class="ri-eye-line"></i><?php echo $userViewLang('view_access_read_only'); ?></span><?php endif; ?></div></div><div class="col-lg-5 text-lg-end"><a class="btn btn-light border" href="./user_view"><?php echo _lang['close']; ?></a><?php if($canClear): ?><button type="button" class="btn btn-outline-danger ms-1" id="avRevoke"><i class="ri-close-circle-line me-1"></i><?php echo $userViewLang('view_access_revoke_all'); ?></button><?php endif; ?><?php if($canSave): ?><button type="button" class="btn btn-primary ms-1 px-4" id="avSave"><i class="ri-save-3-line me-1"></i><?php echo _lang['save_changes']; ?></button><?php endif; ?></div></div></div>
+</div></div></div>
+<script>
+document.addEventListener('DOMContentLoaded',function(){'use strict';
+const endpoint='../icore/json/user_view_manage.php',csrf=<?php echo json_encode($userViewCsrf); ?>,roleId=<?php echo (int)$rbac_data['id']; ?>,rowExists=<?php echo $permissionRowExists?'true':'false'; ?>,canClear=<?php echo $canClear?'true':'false'; ?>,lang=<?php echo json_encode(_lang,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES); ?>;
+const root=document.querySelector('.access-view-v4'),items=[...root.querySelectorAll('[data-item]')],groups=[...root.querySelectorAll('[data-group]')],checks=[...root.querySelectorAll('.operation-checkbox')],search=document.getElementById('avSearch'),empty=document.getElementById('avEmpty'),selectedEl=document.getElementById('avSelected'),inactiveEl=document.getElementById('avInactive'),inlineEl=document.getElementById('avSelectedInline');let selectedOnly=false;
+function L(k){return lang[k]||k}function selected(){return checks.filter(c=>c.checked).map(c=>Number(c.value)).filter(Boolean)}function update(){items.forEach(i=>{const c=i.querySelector('.operation-checkbox');i.classList.toggle('is-selected',!!(c&&c.checked))});const n=selected().length;if(selectedEl)selectedEl.textContent=n.toLocaleString();if(inactiveEl)inactiveEl.textContent=(checks.length-n).toLocaleString();if(inlineEl)inlineEl.textContent=n.toLocaleString()}
+function filter(){const q=(search?.value||'').toLocaleLowerCase().trim();let total=0;items.forEach(i=>{const c=i.querySelector('.operation-checkbox'),v=(!q||(i.dataset.search||'').includes(q))&&(!selectedOnly||(c&&c.checked));i.style.display=v?'':'none';if(v)total++});groups.forEach(g=>{const visible=[...g.querySelectorAll('[data-item]')].filter(i=>i.style.display!=='none');g.style.display=visible.length?'':'none';const c=g.querySelector('[data-count]');if(c)c.textContent=visible.length.toLocaleString()});if(empty)empty.style.display=total?'none':'block'}
+checks.forEach(c=>c.addEventListener('change',()=>{update();if(selectedOnly)filter()}));if(search)search.addEventListener('input',filter);
+document.getElementById('avSelectSafe')?.addEventListener('click',()=>{items.forEach(i=>{if(i.style.display==='none'||i.dataset.critical==='1')return;const c=i.querySelector('.operation-checkbox');if(c&&!c.disabled)c.checked=true});update();filter()});document.getElementById('avClearVisible')?.addEventListener('click',()=>{items.forEach(i=>{if(i.style.display==='none')return;const c=i.querySelector('.operation-checkbox');if(c&&!c.disabled)c.checked=false});update();filter()});document.getElementById('avSelectedOnly')?.addEventListener('click',function(){selectedOnly=!selectedOnly;this.classList.toggle('btn-primary',selectedOnly);this.classList.toggle('btn-outline-primary',!selectedOnly);const s=this.querySelector('span');if(s)s.textContent=selectedOnly?s.dataset.all:s.dataset.selected;filter()});
+const sendBox=document.getElementById('ticket-send-all-operation'),radios=[...root.querySelectorAll('input[name="ticket_send_scope_ui"]')],opts=[...root.querySelectorAll('[data-scenario]')];function syncScope(){if(!sendBox)return;let v='subtree';radios.forEach(r=>{if(r.checked)v=r.value});if(!sendBox.disabled)sendBox.checked=v==='all';opts.forEach(o=>o.classList.toggle('is-selected',o.dataset.scenario===v));update()}radios.forEach(r=>r.addEventListener('change',syncScope));syncScope();
+async function req(action,ops){const b=new URLSearchParams();b.append('action',action);b.append('rbac_id',roleId);b.append('csrf',csrf);if(ops!==undefined)b.append('operations_json',JSON.stringify(ops));const r=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:b.toString(),credentials:'same-origin'});const d=await r.json();if(!r.ok||d.status!=='success')throw new Error(d.message||L('view_access_unexpected_error'));return d}function feedback(msg,ok){const e=document.getElementById('userViewFeedback');e.style.display='block';e.className='alert av-feedback mb-3 '+(ok?'alert-success':'alert-danger');e.textContent=msg;window.scrollTo({top:0,behavior:'smooth'})}
+document.getElementById('avSave')?.addEventListener('click',async function(){const ops=selected();if(rowExists&&ops.length===0){if(!canClear){feedback(L('view_access_clear_requires_delete'),false);return}if(!confirm(L('view_access_revoke_confirm')))return}this.disabled=true;try{const d=await req(ops.length===0?'clear':'save',ops);feedback(d.message,true);setTimeout(()=>location.href='./user_view?rbac_id='+roleId,500)}catch(e){feedback(e.message,false)}finally{this.disabled=false}});
+document.getElementById('avRevoke')?.addEventListener('click',async function(){if(!confirm(L('view_access_revoke_confirm')))return;this.disabled=true;try{const d=await req('clear',[]);feedback(d.message,true);setTimeout(()=>location.href='./user_view?rbac_id='+roleId,500)}catch(e){feedback(e.message,false)}finally{this.disabled=false}});
+update();filter();});
+</script>

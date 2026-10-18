@@ -1,102 +1,35 @@
 <?php
 ///template/structure/user_view.php
+$userViewEsc = static function ($value) { return htmlspecialchars((string)($value ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); };
+$userViewLang = static function ($key) { return _lang[$key] ?? $key; };
+$scopeMeta = [
+    'ipanel'=>['class'=>'primary','icon'=>'ri-shield-user-line','key'=>'view_access_scope_ipanel'],
+    'iweb'=>['class'=>'success','icon'=>'ri-global-line','key'=>'view_access_scope_iweb'],
+    'shared'=>['class'=>'info','icon'=>'ri-links-line','key'=>'view_access_scope_shared'],
+    'unassigned'=>['class'=>'secondary','icon'=>'ri-question-line','key'=>'view_access_scope_unassigned'],
+];
 ?>
-
-<div class="content-page">
-    <div class="content">
-
-        <!-- Start Content-->
-        <div class="container-fluid">
-
-            <!-- start page title -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="page-title-box">
-                        <h4 class="page-title">
-                            <?php echo (_lang['user_view']); ?>
-                        </h4>
-                    </div>
-                </div>
-            </div>
-            <!-- end page title -->
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-
-                            <div class="table-responsive">
-                                <table class="table table-centered w-100 dt-responsive nowrap" id="alternative-page-datatable">
-                                    <thead>
-                                        <tr>
-                                        <th>
-                                                <?php echo ("#"); ?>
-                                            </th>
-                                            <th>
-                                                <?php echo (_lang['role']); ?>
-                                            </th>
-
-                                            <th>
-                                                <?php echo (_lang['last_updated_date']); ?>
-                                            </th>
-
-                                            <th>
-                                                <?php echo (_lang['settings']); ?>
-                                            </th>
-                                            <th style="width: 125px;">
-                                                <?php echo (_lang['actions']); ?>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-
-                                        while ($userViewDetails = $userViewResult->fetch_assoc()) {
-
-                                        ?>
-                                            <tr>
-                                            <td>
-                                                    <?php echo $userViewDetails['id']; ?>
-                                                </td>
-
-                                                <td>
-                                                    <?php echo $userViewDetails['rbac_name']; ?>
-                                                </td>
-
-                                                <td>
-                                                    <?php $dateConverter = new DateConverter($userViewDetails['last_updated_date'], $config->getNowLanguage('a'));
-                                                    echo $dateConverter->convertToShamsi(); ?>
-                                                </td>
-
-                                                <td>
-                                                    <?php if ($userViewDetails['operation'] != '') echo ('<i class="mdi mdi-check-circle"></i>'); ?>
-                                                </td>
-                                                <td>
-
-
-                                                    <?php if ($rbacClass->checkPermissionOperationByName('edit_operation')) { ?>
-                                                        <a href="./user_view?id=<?php echo $userViewDetails['id']; ?>" class="action-icon">
-                                                            <i class="mdi mdi-square-edit-outline"></i>
-                                                        </a>
-                                                    <?php } ?>
-
-                                                </td>
-                                            </tr>
-                                        <?php } ?>
-                                    </tbody>
-                                </table>
-
-
-                            </div>
-                        </div> <!-- end card-body-->
-                    </div> <!-- end card-->
-                </div> <!-- end col -->
-            </div>
-            <!-- end row -->
-
-        </div> <!-- container -->
-
-    </div> <!-- content -->
-
-
+<style>
+.user-view-page{--uv-border:#e6ebf2;--uv-muted:#738096;--uv-primary:#3159d8;--uv-soft:#f7f9fc}.uv-hero{border:1px solid var(--uv-border);background:linear-gradient(135deg,#fff 0%,#f7f9ff 58%,#eef4ff 100%);border-radius:20px;padding:23px;box-shadow:0 10px 30px rgba(31,45,79,.055);position:relative;overflow:hidden}.uv-hero:after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(49,89,216,.06);left:-85px;top:-105px}.uv-icon{width:48px;height:48px;border-radius:14px;background:rgba(49,89,216,.1);color:var(--uv-primary);display:inline-flex;align-items:center;justify-content:center;font-size:23px;flex:0 0 auto}.uv-sub{color:var(--uv-muted);line-height:1.8;margin:4px 0 0}.uv-nav{border:1px solid var(--uv-border);background:#fff;border-radius:16px;padding:8px;display:flex;gap:6px;flex-wrap:wrap}.uv-nav a{text-decoration:none;color:#596579;border-radius:11px;padding:10px 14px;font-weight:600;display:inline-flex;gap:7px;align-items:center}.uv-nav a.active{background:rgba(49,89,216,.09);color:var(--uv-primary)}.uv-stat{border:1px solid var(--uv-border);background:#fff;border-radius:16px;padding:16px;height:100%;box-shadow:0 7px 22px rgba(31,45,79,.035)}.uv-stat i{width:39px;height:39px;display:inline-flex;align-items:center;justify-content:center;border-radius:11px;background:#f1f5ff;color:var(--uv-primary);font-size:19px}.uv-stat strong{display:block;margin-top:9px;font-size:23px;color:#27364b}.uv-stat span{font-size:12px;color:var(--uv-muted)}.uv-note{border:1px solid #dfe6f3;background:#fbfcff;border-radius:15px;padding:13px 15px;color:#5f6d83;line-height:1.8}.uv-toolbar,.uv-table-card{border:1px solid var(--uv-border);background:#fff;border-radius:17px;box-shadow:0 7px 22px rgba(31,45,79,.035)}.uv-toolbar{padding:13px}.uv-search{position:relative}.uv-search i{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#98a4b5}.uv-search input{padding-right:41px;border-radius:11px;min-height:43px}.uv-filter{display:flex;gap:6px;flex-wrap:wrap}.uv-filter a{border:1px solid #dfe5ee;border-radius:10px;padding:8px 11px;color:#657187;text-decoration:none;font-size:12px;font-weight:650}.uv-filter a.active{background:#eef3ff;color:#3159d8;border-color:#cfdaf7}.uv-table-card{overflow:hidden}.uv-table-card table{margin-bottom:0}.uv-table-card thead th{background:#f7f9fc;color:#586579;border-bottom-color:#e6ebf2;font-size:12px;white-space:nowrap}.uv-table-card td{vertical-align:middle;border-color:#edf0f4}.uv-role{font-weight:750;color:#2d3b50}.uv-code{font-size:11px;color:#8a96a8}.uv-origin{line-height:1.65}.uv-origin small{display:block;color:#8390a3}.uv-badge{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:20px;font-size:11px;font-weight:700}.uv-scope-ipanel{background:#eef3ff;color:#3159d8}.uv-scope-iweb{background:#edf9f1;color:#2e7d4f}.uv-scope-shared{background:#edf8fb;color:#19758b}.uv-scope-unassigned{background:#f1f3f6;color:#667085}.uv-send-all{background:#fff1f0;color:#b9443a}.uv-send-subtree{background:#f1f6ff;color:#3d62aa}.uv-full{background:#fff5df;color:#96651b}.uv-configured{background:#edf9f1;color:#2e7d4f}.uv-empty{background:#f3f4f7;color:#6d7788}.uv-action{width:34px;height:34px;border:1px solid #dfe5ee;background:#fff;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;color:#53627a;text-decoration:none}.uv-action:hover{color:#3159d8;border-color:#cbd7f7}.uv-warning-dot{width:8px;height:8px;border-radius:50%;background:#e7a53e;display:inline-block}.uv-no-results{display:none;padding:35px;text-align:center;color:#7a879a}.uv-no-results i{display:block;font-size:30px;margin-bottom:7px}@media(max-width:767px){.uv-hero{padding:18px}}
+</style>
+<div class="content-page user-view-page"><div class="content"><div class="container-fluid">
+<div class="uv-hero mt-3 mb-3"><div class="d-flex align-items-start gap-3 position-relative" style="z-index:1"><div class="uv-icon"><i class="ri-key-2-line"></i></div><div><h3 class="mb-1"><?php echo $userViewLang('view_access_management'); ?></h3><p class="uv-sub"><?php echo $userViewLang('view_access_management_note'); ?></p></div></div></div>
+<div class="uv-nav mb-3"><a href="./user_access"><i class="ri-user-settings-line"></i><?php echo _lang['role']; ?></a><a href="./user_stracture"><i class="ri-node-tree"></i><?php echo _lang['user_stracture']; ?></a><a href="./user_operation"><i class="ri-layout-grid-line"></i><?php echo _lang['user_operation']; ?></a><a class="active" href="./user_view"><i class="ri-key-2-line"></i><?php echo _lang['user_view']; ?></a></div>
+<div class="uv-note mb-3"><i class="ri-information-line me-1"></i><?php echo $userViewLang('view_access_list_note'); ?></div>
+<div class="row g-3 mb-3">
+<div class="col-6 col-xl"><div class="uv-stat"><i class="ri-shield-user-line"></i><strong><?php echo number_format((int)$userViewSummary['roles']); ?></strong><span><?php echo $userViewLang('view_access_total_roles'); ?></span></div></div>
+<div class="col-6 col-xl"><div class="uv-stat"><i class="ri-checkbox-circle-line"></i><strong><?php echo number_format((int)$userViewSummary['configured']); ?></strong><span><?php echo $userViewLang('view_access_configured_roles'); ?></span></div></div>
+<div class="col-6 col-xl"><div class="uv-stat"><i class="ri-global-line"></i><strong><?php echo number_format((int)$userViewSummary['send_all']); ?></strong><span><?php echo $userViewLang('view_access_send_all_roles'); ?></span></div></div>
+<div class="col-6 col-xl"><div class="uv-stat"><i class="ri-lock-2-line"></i><strong><?php echo number_format((int)$userViewSummary['full_access']); ?></strong><span><?php echo $userViewLang('view_access_full_access_roles'); ?></span></div></div>
+<div class="col-6 col-xl"><div class="uv-stat"><i class="ri-error-warning-line"></i><strong><?php echo number_format((int)$userViewSummary['attention']); ?></strong><span><?php echo $userViewLang('view_access_attention_roles'); ?></span></div></div>
 </div>
+<div class="uv-toolbar mb-3"><div class="row g-2 align-items-center"><div class="col-lg-5"><div class="uv-search"><i class="ri-search-line"></i><input id="userViewSearch" class="form-control" placeholder="<?php echo $userViewEsc($userViewLang('view_access_role_search')); ?>"></div></div><div class="col-lg-7"><div class="uv-filter justify-content-lg-end">
+<?php foreach(['all','ipanel','iweb','shared','unassigned'] as $f): $url='./user_view'.($f==='all'?'':'?system='.$f); ?><a class="<?php echo $userViewSystemFilter===$f?'active':''; ?>" href="<?php echo $url; ?>"><?php echo $userViewLang('view_access_filter_'.$f); ?></a><?php endforeach; ?>
+</div></div></div></div>
+<div class="uv-table-card"><div class="table-responsive"><table class="table align-middle" id="userViewTable"><thead><tr><th><?php echo _lang['role']; ?></th><th><?php echo $userViewLang('view_access_origin'); ?></th><th><?php echo $userViewLang('view_access_system_scope'); ?></th><th><?php echo $userViewLang('view_access_operation_count'); ?></th><th><?php echo $userViewLang('view_access_ticket_scope'); ?></th><th><?php echo $userViewLang('view_access_state'); ?></th><th><?php echo _lang['actions']; ?></th></tr></thead><tbody>
+<?php foreach($userViewRoles as $role): $meta=$scopeMeta[$role['system_scope']]??$scopeMeta['unassigned']; $search=strtolower(($role['rbac_name']??'').' '.($role['company_name']??'').' '.($role['unit_name']??'').' '.($role['activity_name']??'')); ?>
+<tr data-search="<?php echo $userViewEsc($search); ?>"><td><div class="uv-role"><?php echo $userViewEsc($role['rbac_name']); ?> <?php if($role['needs_attention']): ?><span class="uv-warning-dot" title="<?php echo $userViewEsc($userViewLang('view_access_attention')); ?>"></span><?php endif; ?></div><div class="uv-code"><?php echo $userViewLang('view_access_rbac_id'); ?> #<?php echo (int)$role['id']; ?></div></td><td><div class="uv-origin"><?php echo $userViewEsc($role['company_name'] ?: '—'); ?><small><?php echo $userViewEsc($role['unit_name'] ?: '—'); ?> · <?php echo $userViewEsc($role['activity_name'] ?: '—'); ?></small></div></td><td><span class="uv-badge uv-scope-<?php echo $userViewEsc($role['system_scope']); ?>"><i class="<?php echo $meta['icon']; ?>"></i><?php echo $userViewLang($meta['key']); ?></span></td><td><?php if($role['is_full_access']): ?><span class="uv-badge uv-full"><i class="ri-vip-crown-2-line"></i><?php echo $userViewLang('view_access_effective_full'); ?></span><?php else: ?><span class="fw-semibold"><?php echo number_format((int)$role['operation_count']); ?></span><?php if($role['duplicate_diff']): ?><div class="small text-warning mt-1"><i class="ri-file-warning-line"></i> <?php echo $userViewLang('view_access_duplicate_short'); ?></div><?php endif; ?><?php endif; ?></td><td><?php if($role['is_full_access']): ?><span class="uv-badge uv-full"><?php echo $userViewLang('view_access_scope_all_effective'); ?></span><?php elseif($role['send_all']): ?><span class="uv-badge uv-send-all"><i class="ri-global-line"></i><?php echo $userViewLang('view_access_scenario_all'); ?></span><?php else: ?><span class="uv-badge uv-send-subtree"><i class="ri-node-tree"></i><?php echo $userViewLang('view_access_scenario_subtree'); ?></span><?php endif; ?></td><td><?php if($role['is_full_access']): ?><span class="uv-badge uv-full"><?php echo $userViewLang('view_access_protected'); ?></span><?php elseif($role['operation_count']>0): ?><span class="uv-badge uv-configured"><i class="ri-check-line"></i><?php echo $userViewLang('view_access_configured'); ?></span><?php else: ?><span class="uv-badge uv-empty"><?php echo $userViewLang('view_access_not_configured'); ?></span><?php endif; ?></td><td><a class="uv-action" href="./user_view?rbac_id=<?php echo (int)$role['id']; ?>" title="<?php echo $userViewEsc($role['can_mutate']?$userViewLang('view_access_configure'):$userViewLang('view_access_inspect')); ?>"><i class="<?php echo $role['can_mutate']?'ri-settings-3-line':'ri-eye-line'; ?>"></i></a></td></tr>
+<?php endforeach; ?>
+</tbody></table></div><div class="uv-no-results" id="userViewNoResults"><i class="ri-search-eye-line"></i><?php echo $userViewLang('view_access_no_role_results'); ?></div></div>
+</div></div></div>
+<script>document.addEventListener('DOMContentLoaded',function(){var q=document.getElementById('userViewSearch'),rows=[].slice.call(document.querySelectorAll('#userViewTable tbody tr')),empty=document.getElementById('userViewNoResults');if(!q)return;q.addEventListener('input',function(){var s=(this.value||'').toLocaleLowerCase().trim(),n=0;rows.forEach(function(r){var v=!s||(r.dataset.search||'').includes(s);r.classList.toggle('d-none',!v);if(v)n++});if(empty)empty.style.display=n?'none':'block'})});</script>

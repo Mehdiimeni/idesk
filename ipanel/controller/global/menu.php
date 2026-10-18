@@ -65,7 +65,6 @@ $permissions = [
                 'activity' => './activity',
                 'company' => './company',
                 'unit' => './unit',
-                'tag' => './tag',
                 'type' => './type'
             ],
             'members' => [

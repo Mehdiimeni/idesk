@@ -15,6 +15,12 @@ if (isset($_POST['id'], $_POST['table'])) {
     $itemId = htmlspecialchars(strip_tags($_POST['id']));
     $tableName = htmlspecialchars(strip_tags($_POST['table']));
 
+    if (in_array(strtolower(trim((string) $tableName)), ['users', 'admins', 'permissions_operation'], true)) {
+        http_response_code(403);
+        echo json_encode(['status' => 'error', 'message' => _lang['invalid_request']]);
+        exit;
+    }
+
     try {
         $stmt = $db->prepare("UPDATE " . $tableName . " SET status = 'Inactive' WHERE id = ?");
         $stmt->bind_param("i", $itemId);

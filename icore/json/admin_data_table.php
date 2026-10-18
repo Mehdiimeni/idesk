@@ -38,7 +38,41 @@ $referred = isset($_POST['referred']) ? $_POST['referred'] : '';
 $condition_name = isset($_POST['condition']) ? $_POST['condition'] : '';
 $details = isset($_POST['details']) ? $_POST['details'] : '';
 
+$adminId = (int) ($_SESSION['admin_id'] ?? 0);
+
+// Reject anonymous/direct endpoint calls before any RBAC helper reads session data.
+if ($adminId <= 0) {
+    http_response_code(401);
+    echo json_encode([
+        'draw' => isset($_POST['draw']) ? (int) $_POST['draw'] : 1,
+        'recordsTotal' => 0,
+        'recordsFiltered' => 0,
+        'data' => []
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    exit();
+}
+
+// Backend guard: direct calls to this DataTables endpoint must also have the
+// tickets Part permission; hiding the page/menu is not authorization.
+if (!$rbacClass->checkPermissionPartByName('tickets', 'inbox')) {
+    http_response_code(403);
+    echo json_encode([
+        'draw' => isset($_POST['draw']) ? (int) $_POST['draw'] : 1,
+        'recordsTotal' => 0,
+        'recordsFiltered' => 0,
+        'data' => []
+    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    exit();
+}
+
 $isEntry = $rbacClass->checkPermissionOperationByName('pointer_operation') ? 1 : 0;
+
+// Ticket visibility is independent from pointer_operation.
+// Explicit Send-All permission (or all_rbac through RBAC runtime) is the only
+// path to the unrestricted /tickets list. Without it the list is restricted
+// to the current admin plus admins in descendant RBAC roles.
+$canViewAllTickets = (bool) $rbacClass->checkPermissionOperationByName('ticket_send_all_operation');
+$ticketScopeAdminIds = $ticketModel->getAdminSubtreeAdminIds($adminId);
 
 $columns = [
     'ticket_id',
@@ -92,142 +126,98 @@ $totalRecords = 0;
 $filteredRecords = 0;
 $allTicketsResult = [];
 
-if ($isEntry) {
-    if ($referred == '1') {
-        $totalRecords = $ticketModel->getAllAdminForwardTicketsCount(
-            $_SESSION['admin_id'],
-            $condition_name,
-            $mark
-        );
+// referred=1 keeps its legacy meaning: tickets forwarded by the current admin.
+// referred=0 is the current/team inbox and therefore follows RBAC subtree scope.
+// The default /tickets route is unrestricted only with ticket_send_all_operation.
+if ($referred == '1') {
+    $totalRecords = $ticketModel->getAllAdminForwardTicketsCount(
+        $adminId,
+        $condition_name,
+        $mark
+    );
 
-        $filteredRecords = $ticketModel->getAllAdminForwardTicketsSearchCount(
-            $_SESSION['admin_id'],
-            $condition_name,
-            $searchWhere,
-            $mark
-        );
+    $filteredRecords = $ticketModel->getAllAdminForwardTicketsSearchCount(
+        $adminId,
+        $condition_name,
+        $searchWhere,
+        $mark
+    );
 
-        $allTicketsResult = $ticketModel->getAllAdminForwardTickets(
-            $_SESSION['admin_id'],
-            $condition_name,
-            $searchWhere,
-            $limit,
-            $orderBy,
-            $mark
-        );
-    } elseif ($referred == '0') {
-        $exceptConditions = [
-            'condition_archive',
-            'condition_final_done',
-            'condition_pendency'
-        ];
+    $allTicketsResult = $ticketModel->getAllAdminForwardTickets(
+        $adminId,
+        $condition_name,
+        $searchWhere,
+        $limit,
+        $orderBy,
+        $mark
+    );
+} elseif ($referred == '0') {
+    $exceptConditions = $isEntry
+        ? ['condition_archive', 'condition_final_done', 'condition_pendency']
+        : [];
 
-        $totalRecords = $ticketModel->getAllAdminNoActionTicketsWithExceptCount(
-            $_SESSION['admin_id'],
-            $exceptConditions,
-            $mark
-        );
+    $totalRecords = $ticketModel->getScopedCurrentTicketsCount(
+        $ticketScopeAdminIds,
+        $condition_name,
+        $mark,
+        $exceptConditions
+    );
 
-        $filteredRecords = $ticketModel->getAllAdminNoActionTicketsWithExceptSearchCount(
-            $_SESSION['admin_id'],
-            $exceptConditions,
-            $searchWhere,
-            $mark
-        );
+    $filteredRecords = $ticketModel->getScopedCurrentTicketsSearchCount(
+        $ticketScopeAdminIds,
+        $condition_name,
+        $searchWhere,
+        $mark,
+        $exceptConditions
+    );
 
-        $allTicketsResult = $ticketModel->getAllAdminNoActionTicketsWithExcept(
-            $_SESSION['admin_id'],
-            $exceptConditions,
-            $searchWhere,
-            $limit,
-            $orderBy,
-            $mark
-        );
-    } else {
-        $totalRecords = $ticketModel->getAllTicketsCount($condition_name, $mark);
+    $allTicketsResult = $ticketModel->getScopedCurrentTickets(
+        $ticketScopeAdminIds,
+        $condition_name,
+        $searchWhere,
+        $limit,
+        $orderBy,
+        $mark,
+        $exceptConditions
+    );
+} elseif ($canViewAllTickets) {
+    $totalRecords = $ticketModel->getAllTicketsCount($condition_name, $mark);
 
-        $filteredRecords = $ticketModel->getAllTicketsSearchCount(
-            $condition_name,
-            $mark,
-            $searchWhere
-        );
+    $filteredRecords = $ticketModel->getAllTicketsSearchCount(
+        $condition_name,
+        $mark,
+        $searchWhere
+    );
 
-        $allTicketsResult = $ticketModel->getAllTickets(
-            $condition_name,
-            $mark,
-            $searchWhere,
-            $limit,
-            $orderBy
-        );
-    }
+    $allTicketsResult = $ticketModel->getAllTickets(
+        $condition_name,
+        $mark,
+        $searchWhere,
+        $limit,
+        $orderBy
+    );
 } else {
-    if ($referred == '1') {
-        $totalRecords = $ticketModel->getAllAdminForwardTicketsCount(
-            $_SESSION['admin_id'],
-            $condition_name,
-            $mark
-        );
+    $totalRecords = $ticketModel->getScopedCurrentTicketsCount(
+        $ticketScopeAdminIds,
+        $condition_name,
+        $mark
+    );
 
-        $filteredRecords = $ticketModel->getAllAdminForwardTicketsSearchCount(
-            $_SESSION['admin_id'],
-            $condition_name,
-            $searchWhere,
-            $mark
-        );
+    $filteredRecords = $ticketModel->getScopedCurrentTicketsSearchCount(
+        $ticketScopeAdminIds,
+        $condition_name,
+        $searchWhere,
+        $mark
+    );
 
-        $allTicketsResult = $ticketModel->getAllAdminForwardTickets(
-            $_SESSION['admin_id'],
-            $condition_name,
-            $searchWhere,
-            $limit,
-            $orderBy,
-            $mark
-        );
-    } elseif ($referred == '0') {
-        $totalRecords = $ticketModel->getAllAdminNoActionTicketsCount(
-            $_SESSION['admin_id'],
-            $condition_name,
-            $mark
-        );
-
-        $filteredRecords = $ticketModel->getAllAdminNoActionTicketsSearchCount(
-            $_SESSION['admin_id'],
-            $condition_name,
-            $searchWhere,
-            $mark
-        );
-
-        $allTicketsResult = $ticketModel->getAllAdminNoActionTickets(
-            $_SESSION['admin_id'],
-            $condition_name,
-            $searchWhere,
-            $limit,
-            $orderBy,
-            $mark
-        );
-    } else {
-        $totalRecords = $ticketModel->getAllAdminNoActionTicketsCount(
-            $_SESSION['admin_id'],
-            $condition_name,
-            $mark
-        );
-
-        $filteredRecords = $ticketModel->getAllAdminNoActionTicketsSearchCount(
-            $_SESSION['admin_id'],
-            $condition_name,
-            $searchWhere,
-            $mark
-        );
-
-        $allTicketsResult = $ticketModel->getAllAdminNoActionTickets(
-            $_SESSION['admin_id'],
-            $condition_name,
-            $searchWhere,
-            $limit,
-            $orderBy,
-            $mark
-        );
-    }
+    $allTicketsResult = $ticketModel->getScopedCurrentTickets(
+        $ticketScopeAdminIds,
+        $condition_name,
+        $searchWhere,
+        $limit,
+        $orderBy,
+        $mark
+    );
 }
 
 function getPriorityBadge($priority)
