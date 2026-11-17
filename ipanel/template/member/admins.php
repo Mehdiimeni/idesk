@@ -59,6 +59,7 @@ $statusLabel = static function (string $status): string {
         <div class="container-fluid py-3">
             <div id="internalAdminsFeedback" class="alert ia-feedback" role="alert"></div>
 
+            <div class="mb-2"><a href="./organization_chart" class="btn btn-outline-primary btn-sm"><i class="ri-node-tree me-1"></i>چارت سازمانی واحدها و افراد</a></div>
             <div class="ia-hero">
                 <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
                     <div>

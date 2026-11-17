@@ -3,6 +3,7 @@
 use iweb\model\StructureModel;
 use iweb\model\TicketModel;
 use iweb\model\UserModel;
+use iweb\model\CustomerPortalService;
 
 
 $config = Configuration::getInstance();
@@ -18,6 +19,15 @@ if (!$userModel->loggedIn()) {
 $rbacClass = new RBAC($db);
 $ticketModel = new TicketModel($db);
 $structureModel = new StructureModel($db);
+$customerPortalFirstService = new CustomerPortalService($db);
+$customerPortalFirstContext = $customerPortalFirstService->getSessionContext();
+$dashboardNewTicketVisible = true;
+$dashboardNewTicketUrl = './tickets?add=r';
+if (!empty($customerPortalFirstContext['company_workflow_enabled'])) {
+    $dashboardNewTicketVisible = !empty($customerPortalFirstContext['can_create_draft']);
+    $dashboardNewTicketUrl = './customer_portal?view=new';
+}
+
 $allConditions = $structureModel->getConditionsByPart('tickets');
 
 $textToolsClass = TextTools::getInstance();

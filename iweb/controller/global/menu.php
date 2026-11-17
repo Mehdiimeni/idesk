@@ -1,10 +1,14 @@
 <?php
+use iweb\model\CustomerPortalService;
 ///controller/global/horizontal_menu.php
 $config = Configuration::getInstance();
 $database = Database::getInstance($config);
 $db = $database->getConnection();
 
 $rbacClass = new RBAC($db);
+
+$customerPortalMenuService = new CustomerPortalService($db);
+$customerPortalMenuContext = $customerPortalMenuService->getSessionContext();
 
 $permissions = [
 

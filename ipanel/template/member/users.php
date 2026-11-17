@@ -910,7 +910,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     const submitFormData = async (formData) => {
-        const response = await fetch('./icore/json/user_manage.php', {
+        const response = await fetch('../icore/json/user_manage.php', {
             method: 'POST',
             body: formData,
             headers: {'X-Requested-With': 'XMLHttpRequest'}

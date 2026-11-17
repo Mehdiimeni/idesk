@@ -2,6 +2,7 @@
 ///iweb/controller/ticket/tickets_add.php
 use iweb\model\StructureModel;
 use iweb\model\TicketModel;
+use iweb\model\CustomerPortalService;
 
 
 $config = Configuration::getInstance();
@@ -11,6 +12,16 @@ $dbHandler = new DatabaseHandler($db);
 $structureModel = new StructureModel($db);
 $rbacClass = new RBAC($db);
 $ticketsModel = new TicketModel($db);
+
+$customerPortalLegacyAddGate = new CustomerPortalService($db);
+$customerPortalLegacyAddContext = $customerPortalLegacyAddGate->getSessionContext();
+if (!empty($customerPortalLegacyAddContext['company_workflow_enabled'])) {
+    $target = !empty($customerPortalLegacyAddContext['can_create_draft'])
+        ? './customer_portal?view=new'
+        : './customer_portal';
+    header('Location: ' . $target);
+    exit;
+}
 
 $types = $structureModel->getTypesGroupedByTypeGroup();
 

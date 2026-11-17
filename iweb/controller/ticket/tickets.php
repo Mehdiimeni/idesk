@@ -3,6 +3,7 @@
 use iweb\model\StructureModel;
 use iweb\model\TicketModel;
 use iweb\model\UserModel;
+use iweb\model\CustomerPortalService;
 
 
 $config = Configuration::getInstance();
@@ -60,8 +61,14 @@ if (isset($_GET['referred'])) {
     $baseQueryParams['referred'] = $_GET['referred'];
 }
 
-$showAddTicketButton = $permissionAddTicket ?? false;
+$customerPortalTicketsService = new CustomerPortalService($db);
+$customerPortalTicketsContext = $customerPortalTicketsService->getSessionContext();
+$showAddTicketButton = $permissionAddTicket ?? false; // exact Legacy behavior while the new company workflow is disabled.
 $addTicketUrl = './tickets?add=r';
+if (!empty($customerPortalTicketsContext['company_workflow_enabled'])) {
+    $showAddTicketButton = !empty($customerPortalTicketsContext['can_create_draft']);
+    $addTicketUrl = './customer_portal?view=new';
+}
 if (!empty($baseQueryParams)) {
     $addTicketUrl .= '&' . http_build_query($baseQueryParams);
 }

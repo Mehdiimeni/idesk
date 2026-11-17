@@ -2,7 +2,41 @@
 ///template/ticket/priority_list.php
 ?>
 
-<div class="content-page">
+<style>
+/* Customer UI visual alignment with IPanel: scoped and nonfunctional */
+.iweb-consistent-page {direction:rtl; min-width:0;}
+.iweb-consistent-page .container-fluid {max-width:none; width:100%; padding-inline:clamp(12px,2vw,28px);}
+.iweb-consistent-page .page-title-box {display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:0 0 18px;padding:14px 18px;border-radius:12px;border:1px solid #e4ebf5;background:#fff;}
+.iweb-consistent-page .page-title {font-size:1.1rem;font-weight:700;color:#26364b;margin:0;}
+.iweb-consistent-page .card {border:1px solid #e6ecf5;border-radius:13px;box-shadow:0 3px 12px rgba(31,48,71,.04);min-width:0;}
+.iweb-consistent-page .card-body {min-width:0;}
+.iweb-consistent-page .btn {border-radius:8px;}
+.iweb-consistent-page .form-control,.iweb-consistent-page .form-select {max-width:100%;min-width:0;}
+.iweb-consistent-page .table-responsive {max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.iweb-consistent-page table {vertical-align:middle;}
+.iweb-consistent-page table th {background:#f6f8fc;color:#43536b;white-space:nowrap;}
+.iweb-consistent-page .dataTables_wrapper {max-width:100%;min-width:0;}
+.iweb-consistent-page .dataTables_wrapper .row {row-gap:10px;}
+.iweb-consistent-page .dataTables_wrapper input {max-width:100%;}
+.iweb-consistent-page .modal-dialog {max-width:min(96vw,560px);margin-inline:auto;}
+.iweb-consistent-page .board {display:flex;align-items:flex-start;gap:14px;min-width:max-content;}
+.iweb-consistent-page .tasks {flex:0 0 300px;min-width:300px;background:#fff;border:1px solid #e3eaf4;border-radius:14px;box-shadow:0 3px 13px rgba(31,48,71,.06);padding:12px;}
+.iweb-consistent-page .task-header {display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:12px;background:#f5f8fd;border-radius:10px;color:#26364b;font-weight:700;}
+.iweb-consistent-page .task-list-items .card {margin-bottom:12px!important;}
+.iweb-consistent-page .iweb-board-scroll {overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch;padding-bottom:14px;}
+@media(max-width:767.98px){
+ .iweb-consistent-page .container-fluid {padding-inline:12px;}
+ .iweb-consistent-page .page-title-box {padding:12px;}
+ .iweb-consistent-page .page-title {font-size:1rem;}
+ .iweb-consistent-page .card-body {padding:14px!important;}
+ .iweb-consistent-page .row>[class*="col-"] {min-width:0;}
+ .iweb-consistent-page .btn {white-space:normal;}
+ .iweb-consistent-page .tasks {min-width:min(280px,82vw);flex-basis:min(280px,82vw);}
+ .iweb-consistent-page .modal-dialog {margin:10px auto;max-width:calc(100vw - 20px);}
+ .iweb-consistent-page .dataTables_wrapper .dataTables_filter,.iweb-consistent-page .dataTables_wrapper .dataTables_length {text-align:start;}
+}
+</style>
+<div class="content-page iweb-consistent-page">
     <div class="content">
 
         <!-- Start Content-->

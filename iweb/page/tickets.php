@@ -2,6 +2,7 @@
 
 use iweb\model\TicketModel;
 use iweb\model\UserModel;
+use iweb\model\CustomerPortalService;
 //page / inbox / tickets
 
 $config = Configuration::getInstance();
@@ -20,6 +21,20 @@ if (!$rbacClass->checkPermissionPartByName('tickets', 'inbox', 'u')) {
 }
 
 $ticketModel = new TicketModel($db);
+
+// Company-scoped feature gate: once the new workflow is enabled, the legacy
+// ticket creation endpoint is no longer a valid bypass path.
+if (isset($_GET['add']) && !empty($_GET['add'])) {
+    $customerPortalTicketGate = new CustomerPortalService($db);
+    $customerPortalGateContext = $customerPortalTicketGate->getSessionContext();
+    if (!empty($customerPortalGateContext['company_workflow_enabled'])) {
+        $target = !empty($customerPortalGateContext['can_create_draft'])
+            ? './customer_portal?view=new'
+            : './customer_portal';
+        header('Location: ' . $target);
+        exit;
+    }
+}
 
 $objFileCaller = FileCaller::getInstance();
 $_SESSION['pageUserTitle'] = [];

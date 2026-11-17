@@ -25,7 +25,7 @@ $permissions = [
     'access' => [
         'icon' => 'uil-arrows-shrink-h',
         'parts' => [
-            'role' => './user_access',
+            'user_access' => './user_access',
             'user_stracture' => './user_stracture',
             'user_operation' => './user_operation',
             'user_view' => './user_view'
@@ -89,72 +89,63 @@ $permissions = [
             ]
 ];
 
-function checkPermissions($rbacClass, $permissions)
+// Menu visibility uses the exact Part/Subpart permission required by the target page.
+// A Group or parent Part alone does not grant access to its child pages.
+function getAuthorizedMenuItems($rbacClass, $group, $parts)
 {
-    foreach ($permissions as $group => $parts) {
-        if ($rbacClass->checkPermissionGroupByName($group)) {
-            return true;
-        }
-        foreach ($parts as $part => $subparts) {
-            if (is_array($subparts)) {
-                if ($rbacClass->checkPermissionPartByName($part, $group)) {
-                    return true;
-                }
-                foreach ($subparts as $subpart => $url) {
-                    if ($rbacClass->checkPermissionSubpartByName($subpart, $part, $group)) {
-                        return true;
-                    }
-                }
-            } else {
-                if ($rbacClass->checkPermissionPartByName($part, $group)) {
-                    return true;
+    $visible = [];
+    foreach ($parts as $part => $target) {
+        if (is_array($target)) {
+            $children = [];
+            foreach ($target as $subpart => $url) {
+                if ($rbacClass->checkPermissionSubpartByName($subpart, $part, $group)) {
+                    $children[$subpart] = $url;
                 }
             }
+            if ($children) {
+                $visible[$part] = $children;
+            }
+        } elseif ($rbacClass->checkPermissionPartByName($part, $group)) {
+            $visible[$part] = $target;
         }
     }
-    return false;
+    return $visible;
 }
 
 function renderMenu($rbacClass, $permissions)
 {
     foreach ($permissions as $group => $data) {
-        if (checkPermissions($rbacClass, [$group => $data['parts']])) {
-            echo '<li class="nav-item dropdown">';
-            echo '<a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-' . $group . '" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-            echo '<i class="' . $data['icon'] . '"></i>';
-            echo _lang[$group];
-            echo '<div class="arrow-down"></div>';
-            echo '</a>';
-            echo '<div class="dropdown-menu" aria-labelledby="topnav-' . $group . '">';
-            foreach ($data['parts'] as $part => $subparts) {
-                if (is_array($subparts)) {
-                    if (checkPermissions($rbacClass, [$group => [$part => $subparts]])) {
-                        echo '<div class="dropdown">';
-                        echo '<a class="dropdown-item dropdown-toggle arrow-none" href="#" id="topnav-' . $part . '" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-                        echo _lang[$part];
-                        echo '<div class="arrow-down"></div>';
-                        echo '</a>';
-                        echo '<div class="dropdown-menu" aria-labelledby="topnav-' . $part . '">';
-                        foreach ($subparts as $subpart => $url) {
-                            if ($rbacClass->checkPermissionSubpartByName($subpart, $part, $group)) {
-                                echo '<a href="' . $url . '" class="dropdown-item">';
-                                echo _lang[$subpart];
-                                echo '</a>';
-                            }
-                        }
-                        echo '</div>';
-                        echo '</div>';
-                    }
-                } else {
-                    if ($rbacClass->checkPermissionPartByName($part, $group)) {
-                        echo '<a href="' . $subparts . '" class="dropdown-item">';
-                        echo _lang[$part];
-                        echo '</a>';
-                    }
-                }
-            }
-            echo '</div>';
-            echo '</li>';
+        $visible = getAuthorizedMenuItems($rbacClass, $group, $data['parts']);
+        if (!$visible) {
+            continue;
         }
+        echo '<li class="nav-item dropdown">';
+        echo '<a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-' . htmlspecialchars($group, ENT_QUOTES, 'UTF-8') . '" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+        echo '<i class="' . htmlspecialchars($data['icon'], ENT_QUOTES, 'UTF-8') . '"></i>';
+        echo htmlspecialchars(_lang[$group] ?? $group, ENT_QUOTES, 'UTF-8');
+        echo '<div class="arrow-down"></div></a>';
+        echo '<div class="dropdown-menu" aria-labelledby="topnav-' . htmlspecialchars($group, ENT_QUOTES, 'UTF-8') . '">';
+        foreach ($visible as $part => $target) {
+            if (is_array($target)) {
+                echo '<div class="dropdown">';
+                echo '<a class="dropdown-item dropdown-toggle arrow-none" href="#" id="topnav-' . htmlspecialchars($group . '-' . $part, ENT_QUOTES, 'UTF-8') . '" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+                echo htmlspecialchars(_lang[$part] ?? $part, ENT_QUOTES, 'UTF-8');
+                echo '<div class="arrow-down"></div></a>';
+                echo '<div class="dropdown-menu" aria-labelledby="topnav-' . htmlspecialchars($group . '-' . $part, ENT_QUOTES, 'UTF-8') . '">';
+                foreach ($target as $subpart => $url) {
+                    echo '<a href="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" class="dropdown-item">';
+                    echo htmlspecialchars(_lang[$subpart] ?? $subpart, ENT_QUOTES, 'UTF-8');
+                    echo '</a>';
+                }
+                echo '</div></div>';
+            } else {
+                echo '<a href="' . htmlspecialchars($target, ENT_QUOTES, 'UTF-8') . '" class="dropdown-item">';
+                // Preserve the established menu label, while checking the real user_access permission.
+                $labelKey = ($group === 'access' && $part === 'user_access') ? 'role' : $part;
+                echo htmlspecialchars(_lang[$labelKey] ?? $labelKey, ENT_QUOTES, 'UTF-8');
+                echo '</a>';
+            }
+        }
+        echo '</div></li>';
     }
 }

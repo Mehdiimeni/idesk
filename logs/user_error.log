@@ -13,3 +13,58 @@ Stack trace:
 #10 E:\xampp\htdocs\idesk\index.php(32): require('E:\\xampp\\htdocs...')
 #11 {main}
   thrown in E:\xampp\htdocs\idesk\icore\class\mysql.php on line 62
+[18-Oct-2026 18:09:48 Europe/Berlin] PHP Warning:  Undefined array key "profile_active" in E:\xampp\htdocs\idesk\iweb\model\CustomerPortalService.php on line 680
+[18-Oct-2026 18:09:53 Europe/Berlin] PHP Warning:  Undefined array key "profile_active" in E:\xampp\htdocs\idesk\iweb\model\CustomerPortalService.php on line 680
+[17-Nov-2026 07:27:24 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'ticket_creation_date' in 'field list' in E:\xampp\htdocs\idesk\iweb\model\CustomerPortalService.php:1622
+Stack trace:
+#0 E:\xampp\htdocs\idesk\iweb\model\CustomerPortalService.php(1622): mysqli->prepare('\n            SE...')
+#1 E:\xampp\htdocs\idesk\iweb\model\CustomerPortalService.php(1791): iweb\model\CustomerPortalService->getCompanyTicketOverview(Array)
+#2 E:\xampp\htdocs\idesk\iweb\controller\customer_portal\customer_portal.php(281): iweb\model\CustomerPortalService->getPortalDashboard(Array)
+#3 E:\xampp\htdocs\idesk\iweb\view\customer_portal\customer_portal.php(2): include('E:\\xampp\\htdocs...')
+#4 E:\xampp\htdocs\idesk\icore\class\file_caller.php(30): require_once('E:\\xampp\\htdocs...')
+#5 E:\xampp\htdocs\idesk\iweb\page\customer_portal.php(27): FileCaller->includeFileWithController('./iweb', 'customer_portal...', 'customer_portal')
+#6 E:\xampp\htdocs\idesk\iweb\page\customer_portal.php(33): includeCustomerPortalFiles(Object(FileCaller), 'customer_portal')
+#7 E:\xampp\htdocs\idesk\icore\class\router.php(75): include_once('E:\\xampp\\htdocs...')
+#8 E:\xampp\htdocs\idesk\icore\class\router.php(29): Router->invokeHandler('customer_portal', './iweb')
+#9 E:\xampp\htdocs\idesk\iweb\core\route.php(26): Router->handleRequest('/customer_porta...', './iweb')
+#10 E:\xampp\htdocs\idesk\index.php(32): require('E:\\xampp\\htdocs...')
+#11 {main}
+  thrown in E:\xampp\htdocs\idesk\iweb\model\CustomerPortalService.php on line 1622
+[17-Nov-2026 07:27:57 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'ticket_creation_date' in 'field list' in E:\xampp\htdocs\idesk\iweb\model\CustomerPortalService.php:1622
+Stack trace:
+#0 E:\xampp\htdocs\idesk\iweb\model\CustomerPortalService.php(1622): mysqli->prepare('\n            SE...')
+#1 E:\xampp\htdocs\idesk\iweb\controller\customer_portal\customer_portal.php(351): iweb\model\CustomerPortalService->getCompanyTicketOverview(Array)
+#2 E:\xampp\htdocs\idesk\iweb\view\customer_portal\customer_portal.php(2): include('E:\\xampp\\htdocs...')
+#3 E:\xampp\htdocs\idesk\icore\class\file_caller.php(30): require_once('E:\\xampp\\htdocs...')
+#4 E:\xampp\htdocs\idesk\iweb\page\customer_portal.php(27): FileCaller->includeFileWithController('./iweb', 'customer_portal...', 'customer_portal')
+#5 E:\xampp\htdocs\idesk\iweb\page\customer_portal.php(33): includeCustomerPortalFiles(Object(FileCaller), 'customer_portal')
+#6 E:\xampp\htdocs\idesk\icore\class\router.php(75): include_once('E:\\xampp\\htdocs...')
+#7 E:\xampp\htdocs\idesk\icore\class\router.php(29): Router->invokeHandler('customer_portal', './iweb')
+#8 E:\xampp\htdocs\idesk\iweb\core\route.php(26): Router->handleRequest('/customer_porta...', './iweb')
+#9 E:\xampp\htdocs\idesk\index.php(32): require('E:\\xampp\\htdocs...')
+#10 {main}
+  thrown in E:\xampp\htdocs\idesk\iweb\model\CustomerPortalService.php on line 1622
+[17-Nov-2026 07:31:38 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'ticket_creation_date' in 'field list' in E:\xampp\htdocs\idesk\iweb\model\CustomerPortalService.php:1622
+Stack trace:
+#0 E:\xampp\htdocs\idesk\iweb\model\CustomerPortalService.php(1622): mysqli->prepare('\n            SE...')
+#1 E:\xampp\htdocs\idesk\iweb\model\CustomerPortalService.php(1791): iweb\model\CustomerPortalService->getCompanyTicketOverview(Array)
+#2 E:\xampp\htdocs\idesk\iweb\controller\customer_portal\customer_portal.php(281): iweb\model\CustomerPortalService->getPortalDashboard(Array)
+#3 E:\xampp\htdocs\idesk\iweb\view\customer_portal\customer_portal.php(2): include('E:\\xampp\\htdocs...')
+#4 E:\xampp\htdocs\idesk\icore\class\file_caller.php(30): require_once('E:\\xampp\\htdocs...')
+#5 E:\xampp\htdocs\idesk\iweb\page\customer_portal.php(27): FileCaller->includeFileWithController('./iweb', 'customer_portal...', 'customer_portal')
+#6 E:\xampp\htdocs\idesk\iweb\page\customer_portal.php(33): includeCustomerPortalFiles(Object(FileCaller), 'customer_portal')
+#7 E:\xampp\htdocs\idesk\icore\class\router.php(75): include_once('E:\\xampp\\htdocs...')
+#8 E:\xampp\htdocs\idesk\icore\class\router.php(29): Router->invokeHandler('customer_portal', './iweb')
+#9 E:\xampp\htdocs\idesk\iweb\core\route.php(26): Router->handleRequest('/customer_porta...', './iweb')
+#10 E:\xampp\htdocs\idesk\index.php(32): require('E:\\xampp\\htdocs...')
+#11 {main}
+  thrown in E:\xampp\htdocs\idesk\iweb\model\CustomerPortalService.php on line 1622
+[17-Nov-2026 08:11:12 Europe/Berlin] PHP Warning:  Undefined array key "profile_active" in E:\xampp\htdocs\idesk\iweb\model\CustomerPortalService.php on line 714
+[17-Nov-2026 08:11:18 Europe/Berlin] PHP Warning:  Undefined array key "profile_active" in E:\xampp\htdocs\idesk\iweb\model\CustomerPortalService.php on line 714
+[17-Nov-2026 08:11:21 Europe/Berlin] PHP Warning:  Undefined array key "profile_active" in E:\xampp\htdocs\idesk\iweb\model\CustomerPortalService.php on line 714
+[17-Nov-2026 08:13:04 Europe/Berlin] PHP Warning:  Undefined array key "profile_active" in E:\xampp\htdocs\idesk\iweb\model\CustomerPortalService.php on line 714
+[17-Nov-2026 08:13:11 Europe/Berlin] PHP Warning:  Undefined array key "profile_active" in E:\xampp\htdocs\idesk\iweb\model\CustomerPortalService.php on line 714
+[17-Nov-2026 08:22:10 Europe/Berlin] PHP Warning:  Undefined array key "upload" in E:\xampp\htdocs\idesk\iweb\template\customer_portal\customer_portal.php on line 502
+[17-Nov-2026 08:23:50 Europe/Berlin] PHP Warning:  Undefined array key "upload" in E:\xampp\htdocs\idesk\iweb\template\customer_portal\customer_portal.php on line 502
+[17-Nov-2026 08:23:59 Europe/Berlin] PHP Warning:  Undefined array key "upload" in E:\xampp\htdocs\idesk\iweb\template\customer_portal\customer_portal.php on line 502
+[17-Nov-2026 08:25:01 Europe/Berlin] PHP Warning:  Undefined array key "upload" in E:\xampp\htdocs\idesk\iweb\template\customer_portal\customer_portal.php on line 502
