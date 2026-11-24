@@ -994,6 +994,104 @@ class TicketModel
     }
 
     /**
+     * Resolve admins assigned to ancestor RBAC roles (manager chain).
+     * Used only for assignment recipients, not ticket visibility.
+     * Peers sharing the sender's RBAC role are deliberately excluded.
+     */
+    public function getAdminAncestorAdminIds($admin_id)
+    {
+        $admin_id = (int) $admin_id;
+        if ($admin_id <= 0) {
+            return [];
+        }
+
+        $sql = "
+            WITH RECURSIVE role_ancestors AS (
+                SELECT parent.id, parent.manager_id, 1 AS depth,
+                    CAST(CONCAT(',', child.id, ',', parent.id, ',') AS CHAR(2000)) AS role_path
+                FROM admins sender
+                INNER JOIN rbac child ON child.id = sender.rbac_id
+                INNER JOIN rbac parent ON parent.id = child.manager_id
+                WHERE sender.id = ? AND parent.id <> child.id
+
+                UNION ALL
+
+                SELECT parent.id, parent.manager_id, chain.depth + 1,
+                    CONCAT(chain.role_path, parent.id, ',')
+                FROM role_ancestors chain
+                INNER JOIN rbac parent ON parent.id = chain.manager_id
+                WHERE chain.depth < 64
+                  AND parent.id <> chain.id
+                  AND LOCATE(CONCAT(',', parent.id, ','), chain.role_path) = 0
+            )
+            SELECT DISTINCT a.id
+            FROM admins a
+            INNER JOIN role_ancestors roles ON roles.id = a.rbac_id
+            WHERE a.id <> ?
+        ";
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            throw new \Exception('Failed to resolve RBAC ancestors: ' . $this->conn->error);
+        }
+        $stmt->bind_param('ii', $admin_id, $admin_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $ids = [];
+        while ($row = $result->fetch_assoc()) {
+            $id = (int) ($row['id'] ?? 0);
+            if ($id > 0) {
+                $ids[] = $id;
+            }
+        }
+        $result->free();
+        $stmt->close();
+        return array_values(array_unique($ids));
+    }
+
+    /**
+     * Internal cross-unit manager recipients: managers in the sender's company.
+     * Uses RBAC's manager-role caption (not legacy admins.role = all).
+     * The target admin must also pass the caller's Active check.
+     */
+    public function getPeerCompanyManagerAdminIds($admin_id)
+    {
+        $admin_id = (int) $admin_id;
+        if ($admin_id <= 0) {
+            return [];
+        }
+        $sql = "
+            SELECT DISTINCT candidate.id
+            FROM admins sender
+            INNER JOIN units sender_unit ON sender_unit.id = sender.unit_id
+            INNER JOIN rbac sender_role ON sender_role.id = sender.rbac_id
+            INNER JOIN admins candidate ON candidate.id <> sender.id
+            INNER JOIN units candidate_unit ON candidate_unit.id = candidate.unit_id
+                AND candidate_unit.company_id = sender_unit.company_id
+            INNER JOIN rbac candidate_role ON candidate_role.id = candidate.rbac_id
+            WHERE sender.id = ?
+              AND sender_role.rbac_name LIKE 'مدیر%'
+              AND candidate_role.rbac_name LIKE 'مدیر%'
+        ";
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            throw new \Exception('Failed to resolve peer manager recipients: ' . $this->conn->error);
+        }
+        $stmt->bind_param('i', $admin_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $ids = [];
+        while ($row = $result->fetch_assoc()) {
+            $id = (int) ($row['id'] ?? 0);
+            if ($id > 0) {
+                $ids[] = $id;
+            }
+        }
+        $result->free();
+        $stmt->close();
+        return array_values(array_unique($ids));
+    }
+
+    /**
      * Resolve tickets whose *current* latest forward receiver is one of the supplied
      * iPanel admins. The query works from the base forwards table so receiver_type='a'
      * is enforced and a users.id/admins.id collision cannot leak another user's ticket.

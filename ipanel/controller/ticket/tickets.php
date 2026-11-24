@@ -10,6 +10,10 @@ $db = $database->getConnection();
 $rbacClass = new RBAC($db);
 $ticketModel = new TicketModel($db);
 
+// Team inbox option is displayed only when the admin actually manages descendants.
+$ticketTeamAdminIds = $ticketModel->getAdminSubtreeAdminIds((int) ($_SESSION['admin_id'] ?? 0));
+$permissionTeamInbox = count($ticketTeamAdminIds) > 1;
+
 $part_name = 'tickets';
 $structureModel = new StructureModel($db);
 

@@ -46,6 +46,16 @@
                                                 </a>
                                             <?php endif; ?>
 
+                                            <!-- Explicitly separate personal inbox from team inbox. -->
+                                            <a href="./tickets?referred=0" class="btn btn-sm btn-outline-primary rounded">
+                                                <i class="ri-inbox-line me-1"></i> کارتابل من
+                                            </a>
+                                            <?php if ($permissionTeamInbox): ?>
+                                                <a href="./tickets?referred=team" class="btn btn-sm btn-outline-info rounded">
+                                                    <i class="ri-team-line me-1"></i> تیکت‌های زیرمجموعه
+                                                </a>
+                                            <?php endif; ?>
+
                                             <div class="dropdown">
                                                 <button type="button"
                                                     class="btn btn-sm btn-outline-secondary rounded dropdown-toggle"
@@ -418,7 +428,63 @@
 
     z-index: 9999 !important;
 }
-#alternative-page-datatable tbody tr.ticket-overdue td:first-child {
+/* Ticket age indicator: first visible table cell only (RTL-safe). */
+#alternative-page-datatable tbody tr.ticket-age-blue td:first-child {
+    border-inline-start: 4px solid #0d6efd !important;
+}
+#alternative-page-datatable tbody tr.ticket-age-green td:first-child {
+    border-inline-start: 4px solid #198754 !important;
+}
+#alternative-page-datatable tbody tr.ticket-age-orange td:first-child {
+    border-inline-start: 4px solid #fd7e14 !important;
+}
+#alternative-page-datatable tbody tr.ticket-age-red td:first-child {
     border-inline-start: 4px solid #dc3545 !important;
 }
+#alternative-page-datatable tbody tr.ticket-age-black td:first-child {
+    border-inline-start: 4px solid #212529 !important;
+}
 </style>
+<script>
+/* Ticket age colors: attach AFTER jQuery/DataTables have loaded.
+   The previous early jQuery check ran before the shared footer scripts and
+   returned without ever registering the draw handler. */
+(function () {
+    var selector = '#alternative-page-datatable';
+    var ageClasses = 'ticket-overdue ticket-age-blue ticket-age-green ticket-age-orange ticket-age-red ticket-age-black';
+    var allowed = {blue: true, green: true, orange: true, red: true, black: true};
+    var installed = false;
+
+    function paintAgeRows() {
+        var $ = window.jQuery;
+        if (!$ || !$.fn.dataTable || !$.fn.dataTable.isDataTable(selector)) return;
+        var api = $(selector).DataTable();
+        api.rows({page: 'current'}).every(function () {
+            var node = this.node();
+            if (!node) return;
+            var data = this.data() || {};
+            var age = data.ticket_age_color;
+            $(node).removeClass(ageClasses);
+            if (typeof age === 'string' && allowed[age]) {
+                $(node).addClass('ticket-age-' + age);
+            }
+        });
+    }
+
+    function installAgeColors() {
+        var $ = window.jQuery;
+        if (installed || !$ || !$.fn.dataTable) return;
+        installed = true;
+        // Bind to the table's events even when DataTables has not initialized yet.
+        $(document).on('draw.dt', selector, paintAgeRows);
+        paintAgeRows();
+    }
+
+    // The page's shared JS libraries are loaded after this template.
+    if (document.readyState === 'complete') {
+        installAgeColors();
+    } else {
+        window.addEventListener('load', installAgeColors);
+    }
+})();
+</script>

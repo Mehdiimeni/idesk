@@ -73,20 +73,14 @@ $dashboardExceptConditions = [
     'condition_pendency'
 ];
 
-if ($isEntry) {
-    $dashboardInboxTickets = $ticketModel->getAllAdminNoActionTicketsWithExcept(
-        $adminId,
-        $dashboardExceptConditions
-    );
-
-    $intNoActionTicketCount = (int) $ticketModel->getAllAdminNoActionTicketsWithExceptCount(
-        $adminId,
-        $dashboardExceptConditions
-    );
-} else {
-    $dashboardInboxTickets = $ticketModel->getAllAdminNoActionTickets($adminId);
-    $intNoActionTicketCount = (int) $ticketModel->getAllAdminNoActionTicketsCount($adminId);
-}
+// Personal inbox: always restrict the latest receiver to the logged-in admin.
+// Never include RBAC descendants in the personal dashboard count.
+$dashboardInboxTickets = $ticketModel->getScopedCurrentTickets(
+    [$adminId],
+    '', null, null, null, null,
+    $isEntry ? $dashboardExceptConditions : []
+);
+$intNoActionTicketCount = count($dashboardInboxTickets);
 
 // Same source as tickets?referred=1.
 $intForwardTicketCount = (int) $ticketModel->getAllAdminForwardTicketsCount($adminId);

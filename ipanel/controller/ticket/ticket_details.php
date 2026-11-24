@@ -89,8 +89,9 @@ $ticketAllStatusHistory = $ticketsModel->getStatusHistory($ticket_id, 'tickets')
 
 /*
  * Assignment recipient scope (Phase 7):
- * - Sender without ticket_send_all_operation: own RBAC subtree + admins who themselves have Send-All.
- * - Sender with ticket_send_all_operation (or all_rbac): every active admin except self.
+ * - Sender without ticket_send_all_operation: RBAC ancestors + own RBAC subtree + admins with Send-All.
+ * - Managers may also send to managers of other units in the same company.
+ * - Sender with ticket_send_all_operation: every active admin except self and Superadmin.
  * - assign_other_operation authorizes the action itself; it is NOT a receiver eligibility flag.
  *
  * The same ID set is reused below for POST validation, so the rule cannot be bypassed by a forged request.
@@ -100,20 +101,31 @@ $allowedAssignmentAdminIds = [];
 
 if ($canAssignOthers) {
     $subtreeAdminIds = $ticketsModel->getAdminSubtreeAdminIds($adminId);
-    $subtreeAdminSet = array_fill_keys(array_map('intval', $subtreeAdminIds), true);
+    $ancestorAdminIds = $ticketsModel->getAdminAncestorAdminIds($adminId);
+    $peerManagerAdminIds = $ticketsModel->getPeerCompanyManagerAdminIds($adminId);
+    $peerManagerSet = array_fill_keys(array_map('intval', $peerManagerAdminIds), true);
+    $hierarchyAdminSet = array_fill_keys(array_map('intval', array_merge($subtreeAdminIds, $ancestorAdminIds)), true);
     $allActiveAdmins = $adminModel->getAdmins();
 
     if ($allActiveAdmins) {
         while ($assignmentAdmin = $allActiveAdmins->fetch_assoc()) {
             $candidateId = (int) ($assignmentAdmin['id'] ?? 0);
             $candidateStatus = (string) ($assignmentAdmin['status'] ?? '');
+            $candidateEmail = strtolower(trim((string) ($assignmentAdmin['email'] ?? '')));
+            $candidateName = strtolower(trim((string) ($assignmentAdmin['name'] ?? '')));
+
+            // Superadmin is a system account, never a manual forwarding recipient.
+            if ($candidateEmail === 'superadmin@intek.ir' || $candidateName === 'superadmin') {
+                continue;
+            }
 
             if ($candidateId <= 0 || $candidateId === $adminId || strcasecmp($candidateStatus, 'Active') !== 0) {
                 continue;
             }
 
             $isAllowedReceiver = $canSendAllTickets
-                || isset($subtreeAdminSet[$candidateId])
+                || isset($hierarchyAdminSet[$candidateId])
+                || isset($peerManagerSet[$candidateId])
                 || (bool) $rbacClass->checkPermissionOperationByNameAndId('ticket_send_all_operation', $candidateId);
 
             if (!$isAllowedReceiver) {

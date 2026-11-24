@@ -127,7 +127,8 @@ $filteredRecords = 0;
 $allTicketsResult = [];
 
 // referred=1 keeps its legacy meaning: tickets forwarded by the current admin.
-// referred=0 is the current/team inbox and therefore follows RBAC subtree scope.
+// referred=0 is the logged-in admin's PERSONAL inbox only.
+// referred=team is the current RBAC subtree inbox (manager and descendants).
 // The default /tickets route is unrestricted only with ticket_send_all_operation.
 if ($referred == '1') {
     $totalRecords = $ticketModel->getAllAdminForwardTicketsCount(
@@ -155,6 +156,33 @@ if ($referred == '1') {
     $exceptConditions = $isEntry
         ? ['condition_archive', 'condition_final_done', 'condition_pendency']
         : [];
+
+    $totalRecords = $ticketModel->getScopedCurrentTicketsCount(
+        [$adminId],
+        $condition_name,
+        $mark,
+        $exceptConditions
+    );
+
+    $filteredRecords = $ticketModel->getScopedCurrentTicketsSearchCount(
+        [$adminId],
+        $condition_name,
+        $searchWhere,
+        $mark,
+        $exceptConditions
+    );
+
+    $allTicketsResult = $ticketModel->getScopedCurrentTickets(
+        [$adminId],
+        $condition_name,
+        $searchWhere,
+        $limit,
+        $orderBy,
+        $mark,
+        $exceptConditions
+    );
+} elseif ($referred === 'team') {
+    $exceptConditions = [];
 
     $totalRecords = $ticketModel->getScopedCurrentTicketsCount(
         $ticketScopeAdminIds,
@@ -247,7 +275,7 @@ if ($rbacClass->checkPermissionOperationByName('table_filter_operation')) {
     $allConditions = $structureModel->getConditionsByPart($part_name);
 }
 
-$permissionViewLocation = $rbacClass->checkPermissionOperationByName('view_location_operation') || ($referred == 1);
+$permissionViewLocation = $rbacClass->checkPermissionOperationByName('view_location_operation') || ($referred == '1') || ($referred === 'team');
 $permissionView = $rbacClass->checkPermissionOperationByName('view_operation');
 $permissionViewBeforeStatus = $rbacClass->checkPermissionOperationByName('view_before_status_operation');
 $permissionAddTicket = $rbacClass->checkPermissionOperationByName('add_ticket_operation');
@@ -289,27 +317,27 @@ foreach ($allTicketsResult as $row) {
     $dateConverter = new DateConverter($row['ticket_creation_date'], $config->getNowLanguage('a'));
     $rowJson['ticket_creation_date_shamsi'] = $dateConverter->convertToShamsi();
 
-    // Ticket older than 14 days
+    // Age bands use the ticket creation timestamp, not last activity.
+    // Boundaries: <=3 days blue, <=7 green, <=14 orange,
+    // <=3 calendar months red, older black.
     $rowJson['is_overdue'] = 0;
-
+    $rowJson['ticket_age_color'] = '';
     if (!empty($row['ticket_creation_date'])) {
-
         $createdTime = strtotime($row['ticket_creation_date']);
-
-        if (
-            $createdTime !== false &&
-            $createdTime < strtotime('-14 days')
-        ) {
-            $rowJson['is_overdue'] = 1;
-        }
-    }
-
-    if (!empty($row['ticket_creation_date'])) {
-        $ticketCreatedAt = strtotime($row['ticket_creation_date']);
-        $fourteenDaysAgo = strtotime('-14 days');
-
-        if ($ticketCreatedAt !== false && $ticketCreatedAt < $fourteenDaysAgo) {
-            $rowJson['is_overdue'] = 1;
+        if ($createdTime !== false) {
+            $now = time();
+            if ($createdTime < strtotime('-3 months', $now)) {
+                $rowJson['ticket_age_color'] = 'black';
+            } elseif ($createdTime < strtotime('-14 days', $now)) {
+                $rowJson['ticket_age_color'] = 'red';
+            } elseif ($createdTime < strtotime('-7 days', $now)) {
+                $rowJson['ticket_age_color'] = 'orange';
+            } elseif ($createdTime < strtotime('-3 days', $now)) {
+                $rowJson['ticket_age_color'] = 'green';
+            } else {
+                $rowJson['ticket_age_color'] = 'blue';
+            }
+            $rowJson['is_overdue'] = ($createdTime < strtotime('-14 days', $now)) ? 1 : 0;
         }
     }
 
