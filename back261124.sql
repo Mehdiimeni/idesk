@@ -217,9 +217,9 @@ CREATE TABLE IF NOT EXISTS `admin_log` (
   `system_info` tinytext DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4430 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4432 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.admin_log: ~3,520 rows (approximately)
+-- Dumping data for table idesk.admin_log: ~3,522 rows (approximately)
 DELETE FROM `admin_log`;
 INSERT INTO `admin_log` (`id`, `admin_id`, `action`, `local_ip`, `internet_ip`, `system_info`, `timestamp`) VALUES
 	(71, 1, 'logout', '0.0.0.0', '0.0.0.0', NULL, '2024-06-18 07:14:36'),
@@ -4558,7 +4558,9 @@ INSERT INTO `admin_log` (`id`, `admin_id`, `action`, `local_ip`, `internet_ip`, 
 	(4426, 16, 'login', '192.168.50.12', '192.168.253.66', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 08:19:03'),
 	(4427, 39, 'login', '192.168.50.12', '192.168.253.19', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 10:49:45'),
 	(4428, 38, 'logout', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 14:09:25'),
-	(4429, 38, 'login', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 14:11:06');
+	(4429, 38, 'login', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 14:11:06'),
+	(4430, 38, 'logout', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 16:36:18'),
+	(4431, 38, 'login', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 16:36:56');
 
 -- Dumping structure for table idesk.admin_remember_tokens
 CREATE TABLE IF NOT EXISTS `admin_remember_tokens` (
@@ -19631,12 +19633,18 @@ CREATE TABLE IF NOT EXISTS `iweb_customer_portal_company_settings` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_iweb_cp_settings_company` (`company_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.iweb_customer_portal_company_settings: ~1 rows (approximately)
+-- Dumping data for table idesk.iweb_customer_portal_company_settings: ~7 rows (approximately)
 DELETE FROM `iweb_customer_portal_company_settings`;
 INSERT INTO `iweb_customer_portal_company_settings` (`id`, `company_id`, `customer_portal_workflow_enabled`, `portal_unit_id`, `admin_rbac_id`, `manager_rbac_id`, `expert_rbac_id`, `draft_aging_days`, `created_by`, `created_at`, `updated_by`, `updated_at`) VALUES
-	(1, 10, 0, NULL, 37, NULL, NULL, 14, 38, '2026-11-17 10:26:22', 38, '2026-11-17 10:26:42');
+	(1, 10, 1, 24, 37, 45, 52, 14, 38, '2026-11-17 10:26:22', 38, '2026-11-24 16:31:41'),
+	(3, 4, 1, 20, 31, 39, 46, 14, NULL, '2026-11-24 16:23:54', 38, '2026-11-24 16:32:31'),
+	(4, 5, 1, 25, 32, 40, 47, 14, NULL, '2026-11-24 16:23:54', 38, '2026-11-24 16:31:57'),
+	(5, 6, 0, 21, 33, 41, 48, 14, NULL, '2026-11-24 16:23:54', NULL, '2026-11-24 16:23:54'),
+	(6, 7, 0, 26, 34, 42, 49, 14, NULL, '2026-11-24 16:23:54', NULL, '2026-11-24 16:23:54'),
+	(7, 8, 1, 22, 35, 43, 50, 14, NULL, '2026-11-24 16:23:54', 38, '2026-11-24 16:32:08'),
+	(8, 9, 1, 23, 36, 44, 51, 14, NULL, '2026-11-24 16:23:54', 38, '2026-11-24 16:31:49');
 
 -- Dumping structure for table idesk.iweb_customer_portal_permissions
 CREATE TABLE IF NOT EXISTS `iweb_customer_portal_permissions` (
@@ -19651,16 +19659,63 @@ CREATE TABLE IF NOT EXISTS `iweb_customer_portal_permissions` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_iweb_cp_permissions_user_name` (`user_id`,`permission_name`),
   KEY `ix_iweb_cp_permissions_company` (`company_id`,`permission_name`,`is_allowed`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.iweb_customer_portal_permissions: ~5 rows (approximately)
+-- Dumping data for table idesk.iweb_customer_portal_permissions: ~52 rows (approximately)
 DELETE FROM `iweb_customer_portal_permissions`;
 INSERT INTO `iweb_customer_portal_permissions` (`id`, `company_id`, `user_id`, `permission_name`, `is_allowed`, `granted_by_admin_id`, `created_at`, `updated_at`) VALUES
 	(1, 10, 65, 'customer_admin_create_manager', 1, 38, '2026-11-17 12:44:38', '2026-11-17 12:44:38'),
 	(2, 10, 65, 'customer_admin_assign_manager_to_section', 1, 38, '2026-11-17 12:44:41', '2026-11-17 12:44:41'),
 	(3, 10, 65, 'customer_admin_create_expert', 1, 38, '2026-11-17 12:44:43', '2026-11-17 12:44:43'),
 	(4, 10, 65, 'customer_admin_reassign_expert', 1, 38, '2026-11-17 12:44:47', '2026-11-17 12:44:47'),
-	(5, 10, 55, 'customer_admin_create_expert', 1, 38, '2026-11-17 12:44:59', '2026-11-17 12:44:59');
+	(5, 10, 55, 'customer_admin_create_expert', 1, 38, '2026-11-17 12:44:59', '2026-11-17 12:44:59'),
+	(6, 10, 55, 'customer_admin_assign_manager_to_section', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(7, 10, 55, 'customer_admin_create_manager', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(8, 10, 55, 'customer_admin_reassign_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(9, 4, 10, 'manager_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(10, 4, 25, 'manager_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(11, 5, 26, 'manager_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(12, 6, 30, 'manager_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(13, 8, 31, 'manager_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(14, 9, 35, 'manager_create_expert', 0, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(15, 9, 37, 'manager_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(16, 9, 37, 'manager_finance_access', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(17, 9, 38, 'manager_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(18, 9, 42, 'manager_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(19, 9, 45, 'manager_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(20, 7, 46, 'manager_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(21, 7, 48, 'manager_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(22, 7, 49, 'manager_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(23, 7, 50, 'manager_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(24, 9, 52, 'manager_create_expert', 0, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(25, 4, 54, 'manager_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(26, 10, 56, 'manager_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(27, 10, 57, 'manager_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(28, 5, 58, 'manager_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(29, 4, 59, 'customer_admin_assign_manager_to_section', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(30, 4, 59, 'customer_admin_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(31, 4, 59, 'customer_admin_create_manager', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(32, 4, 59, 'customer_admin_reassign_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(33, 5, 60, 'customer_admin_assign_manager_to_section', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(34, 5, 60, 'customer_admin_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(35, 5, 60, 'customer_admin_create_manager', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(36, 5, 60, 'customer_admin_reassign_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(37, 6, 61, 'customer_admin_assign_manager_to_section', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(38, 6, 61, 'customer_admin_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(39, 6, 61, 'customer_admin_create_manager', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(40, 6, 61, 'customer_admin_reassign_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(41, 7, 62, 'customer_admin_assign_manager_to_section', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(42, 7, 62, 'customer_admin_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(43, 7, 62, 'customer_admin_create_manager', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(44, 7, 62, 'customer_admin_reassign_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(45, 8, 63, 'customer_admin_assign_manager_to_section', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(46, 8, 63, 'customer_admin_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(47, 8, 63, 'customer_admin_create_manager', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(48, 8, 63, 'customer_admin_reassign_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(49, 9, 64, 'customer_admin_assign_manager_to_section', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(50, 9, 64, 'customer_admin_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(51, 9, 64, 'customer_admin_create_manager', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(52, 9, 64, 'customer_admin_reassign_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54');
 
 -- Dumping structure for table idesk.iweb_customer_portal_sections
 CREATE TABLE IF NOT EXISTS `iweb_customer_portal_sections` (
@@ -19675,10 +19730,13 @@ CREATE TABLE IF NOT EXISTS `iweb_customer_portal_sections` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_iweb_customer_portal_sections_company_name` (`company_id`,`name`),
   KEY `ix_iweb_customer_portal_sections_company_active` (`company_id`,`is_active`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.iweb_customer_portal_sections: ~0 rows (approximately)
+-- Dumping data for table idesk.iweb_customer_portal_sections: ~2 rows (approximately)
 DELETE FROM `iweb_customer_portal_sections`;
+INSERT INTO `iweb_customer_portal_sections` (`id`, `company_id`, `name`, `is_active`, `created_by`, `created_at`, `updated_by`, `updated_at`) VALUES
+	(1, 9, 'بخش ایشو', 1, 64, '2026-11-24 16:23:54', NULL, NULL),
+	(2, 9, 'فنی', 1, 64, '2026-11-24 16:23:54', NULL, NULL);
 
 -- Dumping structure for table idesk.iweb_customer_portal_ticket_audit_logs
 CREATE TABLE IF NOT EXISTS `iweb_customer_portal_ticket_audit_logs` (
@@ -19703,9 +19761,9 @@ CREATE TABLE IF NOT EXISTS `iweb_customer_portal_ticket_audit_logs` (
   KEY `ix_iweb_customer_portal_audit_actor` (`actor_source`,`actor_user_id`,`created_at`),
   KEY `ix_iweb_customer_portal_audit_entity` (`entity_type`,`entity_id`,`created_at`),
   KEY `ix_iweb_customer_portal_audit_action` (`action_type`,`created_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.iweb_customer_portal_ticket_audit_logs: ~10 rows (approximately)
+-- Dumping data for table idesk.iweb_customer_portal_ticket_audit_logs: ~17 rows (approximately)
 DELETE FROM `iweb_customer_portal_ticket_audit_logs`;
 INSERT INTO `iweb_customer_portal_ticket_audit_logs` (`id`, `company_id`, `section_id`, `actor_user_id`, `actor_source`, `actor_role`, `action_type`, `entity_type`, `entity_id`, `target_user_id`, `old_data`, `new_data`, `ip_address`, `user_agent`, `created_at`) VALUES
 	(1, 10, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'PORTAL_SETTINGS_UPDATED', 'COMPANY', 10, NULL, '{"company_id":10,"customer_portal_workflow_enabled":0,"portal_unit_id":null,"admin_rbac_id":null,"manager_rbac_id":null,"expert_rbac_id":null,"draft_aging_days":14}', '{"id":1,"company_id":10,"customer_portal_workflow_enabled":0,"portal_unit_id":null,"admin_rbac_id":null,"manager_rbac_id":null,"expert_rbac_id":null,"draft_aging_days":14,"created_by":38,"created_at":"2026-11-17 13:56:22","updated_by":38,"updated_at":"2026-11-17 13:56:22"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-17 10:26:22'),
@@ -19717,7 +19775,14 @@ INSERT INTO `iweb_customer_portal_ticket_audit_logs` (`id`, `company_id`, `secti
 	(7, 10, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_MANAGEMENT_PERMISSION_GRANTED', 'USER', 65, 65, '{"permission":"customer_admin_assign_manager_to_section","is_allowed":0}', '{"permission":"customer_admin_assign_manager_to_section","is_allowed":1}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-17 12:44:41'),
 	(8, 10, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_MANAGEMENT_PERMISSION_GRANTED', 'USER', 65, 65, '{"permission":"customer_admin_create_expert","is_allowed":0}', '{"permission":"customer_admin_create_expert","is_allowed":1}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-17 12:44:43'),
 	(9, 10, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_MANAGEMENT_PERMISSION_GRANTED', 'USER', 65, 65, '{"permission":"customer_admin_reassign_expert","is_allowed":0}', '{"permission":"customer_admin_reassign_expert","is_allowed":1}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-17 12:44:47'),
-	(10, 10, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_MANAGEMENT_PERMISSION_GRANTED', 'USER', 55, 55, '{"permission":"customer_admin_create_expert","is_allowed":0}', '{"permission":"customer_admin_create_expert","is_allowed":1}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-17 12:44:59');
+	(10, 10, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_MANAGEMENT_PERMISSION_GRANTED', 'USER', 55, 55, '{"permission":"customer_admin_create_expert","is_allowed":0}', '{"permission":"customer_admin_create_expert","is_allowed":1}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-17 12:44:59'),
+	(11, 10, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'PORTAL_SETTINGS_UPDATED', 'COMPANY', 10, NULL, '{"id":1,"company_id":10,"customer_portal_workflow_enabled":0,"portal_unit_id":24,"admin_rbac_id":37,"manager_rbac_id":45,"expert_rbac_id":52,"draft_aging_days":14,"created_by":38,"created_at":"2026-11-17 13:56:22","updated_by":38,"updated_at":"2026-11-24 19:53:54"}', '{"id":1,"company_id":10,"customer_portal_workflow_enabled":1,"portal_unit_id":24,"admin_rbac_id":37,"manager_rbac_id":45,"expert_rbac_id":52,"draft_aging_days":14,"created_by":38,"created_at":"2026-11-17 13:56:22","updated_by":38,"updated_at":"2026-11-24 20:01:41"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-24 16:31:41'),
+	(12, 9, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'PORTAL_SETTINGS_UPDATED', 'COMPANY', 9, NULL, '{"id":8,"company_id":9,"customer_portal_workflow_enabled":0,"portal_unit_id":23,"admin_rbac_id":36,"manager_rbac_id":44,"expert_rbac_id":51,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":null,"updated_at":"2026-11-24 19:53:54"}', '{"id":8,"company_id":9,"customer_portal_workflow_enabled":1,"portal_unit_id":23,"admin_rbac_id":36,"manager_rbac_id":44,"expert_rbac_id":51,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:01:49"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-24 16:31:49'),
+	(13, 5, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'PORTAL_SETTINGS_UPDATED', 'COMPANY', 5, NULL, '{"id":4,"company_id":5,"customer_portal_workflow_enabled":0,"portal_unit_id":25,"admin_rbac_id":32,"manager_rbac_id":40,"expert_rbac_id":47,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":null,"updated_at":"2026-11-24 19:53:54"}', '{"id":4,"company_id":5,"customer_portal_workflow_enabled":1,"portal_unit_id":25,"admin_rbac_id":32,"manager_rbac_id":40,"expert_rbac_id":47,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:01:57"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-24 16:31:57'),
+	(14, 8, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'PORTAL_SETTINGS_UPDATED', 'COMPANY', 8, NULL, '{"id":7,"company_id":8,"customer_portal_workflow_enabled":0,"portal_unit_id":22,"admin_rbac_id":35,"manager_rbac_id":43,"expert_rbac_id":50,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":null,"updated_at":"2026-11-24 19:53:54"}', '{"id":7,"company_id":8,"customer_portal_workflow_enabled":1,"portal_unit_id":22,"admin_rbac_id":35,"manager_rbac_id":43,"expert_rbac_id":50,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:02:08"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-24 16:32:08'),
+	(15, 4, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'PORTAL_SETTINGS_UPDATED', 'COMPANY', 4, NULL, '{"id":3,"company_id":4,"customer_portal_workflow_enabled":0,"portal_unit_id":20,"admin_rbac_id":31,"manager_rbac_id":39,"expert_rbac_id":46,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":null,"updated_at":"2026-11-24 19:53:54"}', '{"id":3,"company_id":4,"customer_portal_workflow_enabled":0,"portal_unit_id":20,"admin_rbac_id":31,"manager_rbac_id":39,"expert_rbac_id":46,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:02:17"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-24 16:32:17'),
+	(16, 4, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'PORTAL_SETTINGS_UPDATED', 'COMPANY', 4, NULL, '{"id":3,"company_id":4,"customer_portal_workflow_enabled":0,"portal_unit_id":20,"admin_rbac_id":31,"manager_rbac_id":39,"expert_rbac_id":46,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:02:17"}', '{"id":3,"company_id":4,"customer_portal_workflow_enabled":1,"portal_unit_id":20,"admin_rbac_id":31,"manager_rbac_id":39,"expert_rbac_id":46,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:02:31"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-24 16:32:31'),
+	(17, 4, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_UPDATED', 'USER', 59, 59, '{"name":"ادمین پرتال پرداخت نوین آرین","email":"admin.pna@intek.ir","mobile":null,"portal_role":"ADMIN","section_id":null,"unit_id":7,"rbac_id":31,"status":"Active"}', '{"name":"ادمین پرتال پرداخت نوین آرین","email":"admin.pna@intek.ir","mobile":"09120000022","portal_role":"ADMIN","section_id":null,"unit_id":7,"rbac_id":31,"status":"Active"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-24 16:34:52');
 
 -- Dumping structure for table idesk.iweb_customer_portal_ticket_drafts
 CREATE TABLE IF NOT EXISTS `iweb_customer_portal_ticket_drafts` (
@@ -19798,13 +19863,45 @@ CREATE TABLE IF NOT EXISTS `iweb_customer_portal_user_profiles` (
   UNIQUE KEY `ux_iweb_customer_portal_user_profiles_user` (`user_id`),
   KEY `ix_iweb_customer_portal_user_profiles_company_role` (`company_id`,`portal_role`),
   KEY `ix_iweb_customer_portal_user_profiles_section` (`section_id`,`is_active`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.iweb_customer_portal_user_profiles: ~2 rows (approximately)
+-- Dumping data for table idesk.iweb_customer_portal_user_profiles: ~34 rows (approximately)
 DELETE FROM `iweb_customer_portal_user_profiles`;
 INSERT INTO `iweb_customer_portal_user_profiles` (`id`, `user_id`, `company_id`, `portal_role`, `section_id`, `is_active`, `created_by`, `created_at`, `updated_by`, `updated_at`) VALUES
 	(1, 55, 10, 'ADMIN', NULL, 1, 38, '2026-11-17 12:41:00', 38, NULL),
-	(2, 65, 10, 'ADMIN', NULL, 1, 38, '2026-11-17 12:41:21', 38, NULL);
+	(2, 65, 10, 'ADMIN', NULL, 1, 38, '2026-11-17 12:41:21', 38, NULL),
+	(3, 10, 4, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(4, 25, 4, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(5, 26, 5, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(6, 30, 6, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(7, 31, 8, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(8, 35, 9, 'EXPERT', 2, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(9, 37, 9, 'MANAGER', 1, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(10, 38, 9, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(11, 39, 4, 'EXPERT', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(12, 40, 4, 'EXPERT', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(13, 41, 4, 'EXPERT', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(14, 42, 9, 'MANAGER', 2, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(15, 43, 9, 'EXPERT', 1, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(16, 44, 9, 'EXPERT', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(17, 45, 9, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(18, 46, 7, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(19, 48, 7, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(20, 49, 7, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(21, 50, 7, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(22, 51, 9, 'EXPERT', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(23, 52, 9, 'EXPERT', 2, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(24, 53, 9, 'EXPERT', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(25, 54, 4, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(26, 56, 10, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(27, 57, 10, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(28, 58, 5, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(29, 59, 4, 'ADMIN', NULL, 1, 1, '2026-11-24 16:23:54', 38, '2026-11-24 16:34:52'),
+	(30, 60, 5, 'ADMIN', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(31, 61, 6, 'ADMIN', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(32, 62, 7, 'ADMIN', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(33, 63, 8, 'ADMIN', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(34, 64, 9, 'ADMIN', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL);
 
 -- Dumping structure for table idesk.kanban_board
 CREATE TABLE IF NOT EXISTS `kanban_board` (
@@ -25014,9 +25111,9 @@ CREATE TABLE IF NOT EXISTS `rbac` (
   `unit_id` int(11) NOT NULL,
   `tag_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.rbac: ~32 rows (approximately)
+-- Dumping data for table idesk.rbac: ~46 rows (approximately)
 DELETE FROM `rbac`;
 INSERT INTO `rbac` (`id`, `rbac_name`, `rbac_description`, `manager_id`, `all_rbac`, `creation_date`, `last_updated_date`, `activity_id`, `company_id`, `unit_id`, `tag_id`) VALUES
 	(1, 'مدیر تحقیق و توسعه', '', 0, 1, '2024-01-07 07:05:11', '2026-05-04 10:14:08', 4, 2, 14, 0),
@@ -25050,7 +25147,21 @@ INSERT INTO `rbac` (`id`, `rbac_name`, `rbac_description`, `manager_id`, `all_rb
 	(35, 'ادمین پرتال - پرداخت الکترونیک سامان کیش', 'RBAC فنی مخصوص Customer Portal Admin', 0, 0, '2026-10-18 03:29:21', '2026-11-17 12:56:00', 1, 8, 22, NULL),
 	(36, 'ادمین پرتال - تجارت الکترونیک پارسیان', 'RBAC فنی مخصوص Customer Portal Admin', 0, 0, '2026-10-18 03:29:21', '2026-11-17 12:55:52', 1, 9, 23, NULL),
 	(37, 'ادمین پرتال - ایران کیش', 'RBAC فنی مخصوص Customer Portal Admin', 0, 0, '2026-10-18 03:29:21', '2026-11-17 12:55:41', 3, 10, 24, NULL),
-	(38, 'کارشناس امنیت و شبکه اینتک', '', 14, 0, '2026-11-17 13:09:20', '2026-11-17 13:09:20', 4, 2, 16, NULL);
+	(38, 'کارشناس امنیت و شبکه اینتک', '', 14, 0, '2026-11-17 13:09:20', '2026-11-17 13:09:20', 4, 2, 16, NULL),
+	(39, 'مدیر پرتال - پرداخت نوین آرین', 'Customer Portal manager; scoped to company', 31, 0, '2026-11-24 16:23:54', '2026-11-24 16:23:54', 3, 4, 20, NULL),
+	(40, 'مدیر پرتال - توسعه فناوری رفاه پردیس', 'Customer Portal manager; scoped to company', 32, 0, '2026-11-24 16:23:54', '2026-11-24 16:23:54', 1, 5, 25, NULL),
+	(41, 'مدیر پرتال - توسعه فناوری و اطلاعات گردشگری ایران', 'Customer Portal manager; scoped to company', 33, 0, '2026-11-24 16:23:54', '2026-11-24 16:23:54', 1, 6, 21, NULL),
+	(42, 'مدیر پرتال - سابین تجارت آریا', 'Customer Portal manager; scoped to company', 34, 0, '2026-11-24 16:23:54', '2026-11-24 16:23:54', 1, 7, 26, NULL),
+	(43, 'مدیر پرتال - پرداخت الکترونیک سامان کیش', 'Customer Portal manager; scoped to company', 35, 0, '2026-11-24 16:23:54', '2026-11-24 16:23:54', 1, 8, 22, NULL),
+	(44, 'مدیر پرتال - تجارت الکترونیک پارسیان', 'Customer Portal manager; scoped to company', 36, 0, '2026-11-24 16:23:54', '2026-11-24 16:23:54', 1, 9, 23, NULL),
+	(45, 'مدیر پرتال - ایران کیش', 'Customer Portal manager; scoped to company', 37, 0, '2026-11-24 16:23:54', '2026-11-24 16:23:54', 3, 10, 24, NULL),
+	(46, 'کارشناس پرتال - پرداخت نوین آرین', 'Customer Portal expert; scoped to company', 39, 0, '2026-11-24 16:23:54', '2026-11-24 16:23:54', 3, 4, 20, NULL),
+	(47, 'کارشناس پرتال - توسعه فناوری رفاه پردیس', 'Customer Portal expert; scoped to company', 40, 0, '2026-11-24 16:23:54', '2026-11-24 16:23:54', 1, 5, 25, NULL),
+	(48, 'کارشناس پرتال - توسعه فناوری و اطلاعات گردشگری ایران', 'Customer Portal expert; scoped to company', 41, 0, '2026-11-24 16:23:54', '2026-11-24 16:23:54', 1, 6, 21, NULL),
+	(49, 'کارشناس پرتال - سابین تجارت آریا', 'Customer Portal expert; scoped to company', 42, 0, '2026-11-24 16:23:54', '2026-11-24 16:23:54', 1, 7, 26, NULL),
+	(50, 'کارشناس پرتال - پرداخت الکترونیک سامان کیش', 'Customer Portal expert; scoped to company', 43, 0, '2026-11-24 16:23:54', '2026-11-24 16:23:54', 1, 8, 22, NULL),
+	(51, 'کارشناس پرتال - تجارت الکترونیک پارسیان', 'Customer Portal expert; scoped to company', 44, 0, '2026-11-24 16:23:54', '2026-11-24 16:23:54', 1, 9, 23, NULL),
+	(52, 'کارشناس پرتال - ایران کیش', 'Customer Portal expert; scoped to company', 45, 0, '2026-11-24 16:23:54', '2026-11-24 16:23:54', 3, 10, 24, NULL);
 
 -- Dumping structure for table idesk.requests
 CREATE TABLE IF NOT EXISTS `requests` (
@@ -44118,13 +44229,13 @@ INSERT INTO `users` (`id`, `email`, `mobile`, `password`, `name`, `role`, `statu
 	(56, 'a.olfati@irankish.com', '09125014950', '$2y$10$B/indeIDTP9h5U7ZJU9k4eS7B1ODlX9JO.NbWUfEjx5ifiP77rjf.', 'ارشیا الفتی', 'all', 'Active', '2026-10-07 13:12:33', '2026-10-12 09:52:55', 18, 29),
 	(57, 'z.lorestani@kiccc.com', '09368944626', '$2y$10$.OKLcP/oICbT9yznETSgBeaYTwYUMupv8HZ.tZeJLOeJHPqpSsemG', 'زهره لرستانی', 'all', 'Active', '2026-10-07 13:13:35', '2026-10-07 13:13:35', 19, 30),
 	(58, 'm.sadoughian@refah-td.com', '09128240885', '$2y$10$0cl.4zImadpVXTgy.Fxdm.Vc7pHdF3Ea4WgExy.mzZtXYRhSYc2gy', 'مهدی صدوقیان ', 'all', 'Active', '2026-10-28 12:37:54', '2026-10-31 07:02:06', 8, 18),
-	(59, 'admin.pna@intek.ir', NULL, '$2y$12$pY49k58zcq5bdpJLMzOpz.vrCU578a1ToS9OOL7Zx3lEpsOMLblCS', 'ادمین پرتال پرداخت نوین آرین', 'member', 'Active', '2026-10-18 03:29:21', '2026-11-17 10:33:25', 7, 31),
-	(60, 'admin.refah@intek.ir', NULL, '$2y$12$QnrYmKcWgd/v.7R/INrMKuQVvNuX7fxMFzckZvuwvylKWO/SKsNxS', 'ادمین پرتال رفاه پردیس', 'member', 'Active', '2026-10-18 03:29:21', '2026-11-17 10:33:39', 8, 32),
-	(61, 'admin.tourism@intek.ir', NULL, '$2y$12$yRzMVVyUxH7eFTGtA8Ya7.5C0TZ1B6vznm.B67qfpiPoKOJ2J6F/i', 'ادمین پرتال گردشگری', 'member', 'Active', '2026-10-18 03:29:21', '2026-10-18 03:29:21', 21, 33),
-	(62, 'admin.sabin@intek.ir', NULL, '$2y$12$59q4ZQjZQVOI.aKgbRkJH.4VmAZ9NB3FVg9fh73lhnGBtgIC0NZ7y', 'ادمین پرتال سابین تجارت آریا', 'member', 'Active', '2026-10-18 03:29:21', '2026-10-18 03:29:21', 26, 34),
-	(63, 'admin.sep@intek.ir', NULL, '$2y$12$vg3ilEs0v6UNTQnaVqJqX.eWVrFSG0j6NaDMCnO2IuCz78fKYJMYa', 'ادمین پرتال پرداخت الکترونیک سامان', 'member', 'Active', '2026-10-18 03:29:21', '2026-11-17 10:34:02', 11, 35),
-	(64, 'admin.pec@intek.ir', NULL, '$2y$10$aK3zoXmAx2uwmbZ.WP.KdOM9SB1G3w0wkx.v3FCR8eyTQJnQTw3j6', 'ادمین پرتال تجارت الکترونیک پارسیان', 'member', 'Active', '2026-10-18 03:29:21', '2026-11-17 10:34:13', 15, 36),
-	(65, 'admin.ikc@intek.ir', '09354400522', '$2y$10$BwaOxG4g1XhnQmPESj51t.QPY7wWgc6.asoE1TF1aIHZIc0LbzHN.', 'ادمین پرتال ایران کیش', 'member', 'Active', '2026-10-18 03:29:21', '2026-11-17 12:46:43', 24, 37);
+	(59, 'admin.pna@intek.ir', '09120000022', '$2y$10$EXz/3h9uIr9WKUiLjtlVAe38oSMsqM/sXZnWRmc9OitHPjIAI326y', 'ادمین پرتال پرداخت نوین آرین', 'member', 'Active', '2026-10-18 03:29:21', '2026-11-24 16:34:52', 7, 31),
+	(60, 'admin.refah@intek.ir', NULL, '$2y$10$EXz/3h9uIr9WKUiLjtlVAe38oSMsqM/sXZnWRmc9OitHPjIAI326y', 'ادمین پرتال رفاه پردیس', 'member', 'Active', '2026-10-18 03:29:21', '2026-11-24 16:35:24', 8, 32),
+	(61, 'admin.tourism@intek.ir', NULL, '$2y$10$EXz/3h9uIr9WKUiLjtlVAe38oSMsqM/sXZnWRmc9OitHPjIAI326y', 'ادمین پرتال گردشگری', 'member', 'Active', '2026-10-18 03:29:21', '2026-11-24 16:35:27', 21, 33),
+	(62, 'admin.sabin@intek.ir', NULL, '$2y$10$EXz/3h9uIr9WKUiLjtlVAe38oSMsqM/sXZnWRmc9OitHPjIAI326y', 'ادمین پرتال سابین تجارت آریا', 'member', 'Active', '2026-10-18 03:29:21', '2026-11-24 16:35:29', 26, 34),
+	(63, 'admin.sep@intek.ir', NULL, '$2y$10$EXz/3h9uIr9WKUiLjtlVAe38oSMsqM/sXZnWRmc9OitHPjIAI326y', 'ادمین پرتال پرداخت الکترونیک سامان', 'member', 'Active', '2026-10-18 03:29:21', '2026-11-24 16:35:31', 11, 35),
+	(64, 'admin.pec@intek.ir', NULL, '$2y$10$EXz/3h9uIr9WKUiLjtlVAe38oSMsqM/sXZnWRmc9OitHPjIAI326y', 'ادمین پرتال تجارت الکترونیک پارسیان', 'member', 'Active', '2026-10-18 03:29:21', '2026-11-24 16:35:33', 15, 36),
+	(65, 'admin.ikc@intek.ir', '09354400522', '$2y$10$EXz/3h9uIr9WKUiLjtlVAe38oSMsqM/sXZnWRmc9OitHPjIAI326y', 'ادمین پرتال ایران کیش', 'member', 'Active', '2026-10-18 03:29:21', '2026-11-24 16:35:36', 24, 37);
 
 -- Dumping structure for view idesk.users_details_view
 -- Creating temporary table to overcome VIEW dependency errors
@@ -44207,9 +44318,9 @@ CREATE TABLE IF NOT EXISTS `user_log` (
   `system_info` tinytext DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2682 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2684 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.user_log: ~2,516 rows (approximately)
+-- Dumping data for table idesk.user_log: ~2,518 rows (approximately)
 DELETE FROM `user_log`;
 INSERT INTO `user_log` (`id`, `user_id`, `action`, `local_ip`, `internet_ip`, `system_info`, `timestamp`) VALUES
 	(1, 10, 'logout', '0.0.0.0', '0.0.0.0', NULL, '2024-04-29 15:16:19'),
@@ -46869,7 +46980,9 @@ INSERT INTO `user_log` (`id`, `user_id`, `action`, `local_ip`, `internet_ip`, `s
 	(2678, 53, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 06:29:57'),
 	(2679, 52, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 07:03:33'),
 	(2680, 58, 'login', '192.168.50.12', '5.160.236.102', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 08:33:30'),
-	(2681, 10, 'login', '192.168.50.12', '5.160.72.211', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 10:24:47');
+	(2681, 10, 'login', '192.168.50.12', '5.160.72.211', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 10:24:47'),
+	(2682, 64, 'login', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 16:36:31'),
+	(2683, 64, 'logout', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 16:36:36');
 
 -- Dumping structure for table idesk.user_remember_tokens
 CREATE TABLE IF NOT EXISTS `user_remember_tokens` (
@@ -53705,6 +53818,190 @@ INSERT INTO `views` (`id`, `person_id`, `person_rbac_id`, `person_type`, `elemen
 	(6797, 38, NULL, 1, 2268, 'tickets', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 09:07:28', '2026-11-24 09:07:28'),
 	(6798, 24, NULL, 1, 2267, 'tickets', '192.168.50.12', '192.168.253.43', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 10:14:19', '2026-11-24 10:14:19'),
 	(6799, 9, NULL, 1, 2242, 'tickets', '192.168.50.12', '192.168.253.54', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 12:30:08', '2026-11-24 12:30:08');
+
+-- Dumping structure for table idesk._iw_mig_permissions
+CREATE TEMPORARY TABLE IF NOT EXISTS `_iw_mig_permissions` (
+  `company_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `permission_name` varchar(100) NOT NULL,
+  `is_allowed` tinyint(4) NOT NULL,
+  PRIMARY KEY (`user_id`,`permission_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Dumping data for table idesk._iw_mig_permissions: ~52 rows (approximately)
+DELETE FROM `_iw_mig_permissions`;
+INSERT INTO `_iw_mig_permissions` (`company_id`, `user_id`, `permission_name`, `is_allowed`) VALUES
+	(4, 10, 'manager_create_expert', 1),
+	(4, 25, 'manager_create_expert', 1),
+	(5, 26, 'manager_create_expert', 1),
+	(6, 30, 'manager_create_expert', 1),
+	(8, 31, 'manager_create_expert', 1),
+	(9, 35, 'manager_create_expert', 0),
+	(9, 37, 'manager_create_expert', 1),
+	(9, 37, 'manager_finance_access', 1),
+	(9, 38, 'manager_create_expert', 1),
+	(9, 42, 'manager_create_expert', 1),
+	(9, 45, 'manager_create_expert', 1),
+	(7, 46, 'manager_create_expert', 1),
+	(7, 48, 'manager_create_expert', 1),
+	(7, 49, 'manager_create_expert', 1),
+	(7, 50, 'manager_create_expert', 1),
+	(9, 52, 'manager_create_expert', 0),
+	(4, 54, 'manager_create_expert', 1),
+	(10, 55, 'customer_admin_assign_manager_to_section', 1),
+	(10, 55, 'customer_admin_create_expert', 1),
+	(10, 55, 'customer_admin_create_manager', 1),
+	(10, 55, 'customer_admin_reassign_expert', 1),
+	(10, 56, 'manager_create_expert', 1),
+	(10, 57, 'manager_create_expert', 1),
+	(5, 58, 'manager_create_expert', 1),
+	(4, 59, 'customer_admin_assign_manager_to_section', 1),
+	(4, 59, 'customer_admin_create_expert', 1),
+	(4, 59, 'customer_admin_create_manager', 1),
+	(4, 59, 'customer_admin_reassign_expert', 1),
+	(5, 60, 'customer_admin_assign_manager_to_section', 1),
+	(5, 60, 'customer_admin_create_expert', 1),
+	(5, 60, 'customer_admin_create_manager', 1),
+	(5, 60, 'customer_admin_reassign_expert', 1),
+	(6, 61, 'customer_admin_assign_manager_to_section', 1),
+	(6, 61, 'customer_admin_create_expert', 1),
+	(6, 61, 'customer_admin_create_manager', 1),
+	(6, 61, 'customer_admin_reassign_expert', 1),
+	(7, 62, 'customer_admin_assign_manager_to_section', 1),
+	(7, 62, 'customer_admin_create_expert', 1),
+	(7, 62, 'customer_admin_create_manager', 1),
+	(7, 62, 'customer_admin_reassign_expert', 1),
+	(8, 63, 'customer_admin_assign_manager_to_section', 1),
+	(8, 63, 'customer_admin_create_expert', 1),
+	(8, 63, 'customer_admin_create_manager', 1),
+	(8, 63, 'customer_admin_reassign_expert', 1),
+	(9, 64, 'customer_admin_assign_manager_to_section', 1),
+	(9, 64, 'customer_admin_create_expert', 1),
+	(9, 64, 'customer_admin_create_manager', 1),
+	(9, 64, 'customer_admin_reassign_expert', 1),
+	(10, 65, 'customer_admin_assign_manager_to_section', 1),
+	(10, 65, 'customer_admin_create_expert', 1),
+	(10, 65, 'customer_admin_create_manager', 1),
+	(10, 65, 'customer_admin_reassign_expert', 1);
+
+-- Dumping structure for table idesk._iw_mig_profiles
+CREATE TEMPORARY TABLE IF NOT EXISTS `_iw_mig_profiles` (
+  `user_id` int(11) NOT NULL,
+  `company_id` int(11) NOT NULL,
+  `portal_role` varchar(10) NOT NULL,
+  `section_name` varchar(150) DEFAULT NULL,
+  `is_active` tinyint(4) NOT NULL,
+  `created_by` int(11) NOT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Dumping data for table idesk._iw_mig_profiles: ~34 rows (approximately)
+DELETE FROM `_iw_mig_profiles`;
+INSERT INTO `_iw_mig_profiles` (`user_id`, `company_id`, `portal_role`, `section_name`, `is_active`, `created_by`) VALUES
+	(10, 4, 'MANAGER', NULL, 1, 1),
+	(25, 4, 'MANAGER', NULL, 1, 1),
+	(26, 5, 'MANAGER', NULL, 1, 1),
+	(30, 6, 'MANAGER', NULL, 1, 1),
+	(31, 8, 'MANAGER', NULL, 1, 1),
+	(35, 9, 'EXPERT', 'فنی', 1, 1),
+	(37, 9, 'MANAGER', 'بخش ایشو', 1, 1),
+	(38, 9, 'MANAGER', NULL, 1, 1),
+	(39, 4, 'EXPERT', NULL, 1, 1),
+	(40, 4, 'EXPERT', NULL, 1, 1),
+	(41, 4, 'EXPERT', NULL, 1, 1),
+	(42, 9, 'MANAGER', 'فنی', 1, 1),
+	(43, 9, 'EXPERT', 'بخش ایشو', 1, 1),
+	(44, 9, 'EXPERT', NULL, 1, 1),
+	(45, 9, 'MANAGER', NULL, 1, 1),
+	(46, 7, 'MANAGER', NULL, 1, 1),
+	(48, 7, 'MANAGER', NULL, 1, 1),
+	(49, 7, 'MANAGER', NULL, 1, 1),
+	(50, 7, 'MANAGER', NULL, 1, 1),
+	(51, 9, 'EXPERT', NULL, 1, 1),
+	(52, 9, 'EXPERT', 'فنی', 1, 1),
+	(53, 9, 'EXPERT', NULL, 1, 1),
+	(54, 4, 'MANAGER', NULL, 1, 1),
+	(55, 10, 'ADMIN', NULL, 1, 38),
+	(56, 10, 'MANAGER', NULL, 1, 1),
+	(57, 10, 'MANAGER', NULL, 1, 1),
+	(58, 5, 'MANAGER', NULL, 1, 1),
+	(59, 4, 'ADMIN', NULL, 1, 1),
+	(60, 5, 'ADMIN', NULL, 1, 1),
+	(61, 6, 'ADMIN', NULL, 1, 1),
+	(62, 7, 'ADMIN', NULL, 1, 1),
+	(63, 8, 'ADMIN', NULL, 1, 1),
+	(64, 9, 'ADMIN', NULL, 1, 1),
+	(65, 10, 'ADMIN', NULL, 1, 38);
+
+-- Dumping structure for table idesk._iw_mig_roles
+CREATE TEMPORARY TABLE IF NOT EXISTS `_iw_mig_roles` (
+  `source_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `source_manager_id` int(11) NOT NULL,
+  `all_rbac` tinyint(4) NOT NULL,
+  `activity_id` int(11) NOT NULL,
+  `company_id` int(11) NOT NULL,
+  `unit_id` int(11) NOT NULL,
+  `tag_id` int(11) DEFAULT NULL,
+  `kind` varchar(12) NOT NULL,
+  PRIMARY KEY (`source_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Dumping data for table idesk._iw_mig_roles: ~14 rows (approximately)
+DELETE FROM `_iw_mig_roles`;
+INSERT INTO `_iw_mig_roles` (`source_id`, `name`, `description`, `source_manager_id`, `all_rbac`, `activity_id`, `company_id`, `unit_id`, `tag_id`, `kind`) VALUES
+	(39, 'مدیر پرتال - پرداخت نوین آرین', 'Customer Portal manager; scoped to company', 31, 0, 3, 4, 20, NULL, 'MANAGER'),
+	(40, 'مدیر پرتال - توسعه فناوری رفاه پردیس', 'Customer Portal manager; scoped to company', 32, 0, 1, 5, 25, NULL, 'MANAGER'),
+	(41, 'مدیر پرتال - توسعه فناوری و اطلاعات گردشگری ایران', 'Customer Portal manager; scoped to company', 33, 0, 1, 6, 21, NULL, 'MANAGER'),
+	(42, 'مدیر پرتال - سابین تجارت آریا', 'Customer Portal manager; scoped to company', 34, 0, 1, 7, 26, NULL, 'MANAGER'),
+	(43, 'مدیر پرتال - پرداخت الکترونیک سامان کیش', 'Customer Portal manager; scoped to company', 35, 0, 1, 8, 22, NULL, 'MANAGER'),
+	(44, 'مدیر پرتال - تجارت الکترونیک پارسیان', 'Customer Portal manager; scoped to company', 36, 0, 1, 9, 23, NULL, 'MANAGER'),
+	(45, 'مدیر پرتال - ایران کیش', 'Customer Portal manager; scoped to company', 37, 0, 3, 10, 24, NULL, 'MANAGER'),
+	(46, 'کارشناس پرتال - پرداخت نوین آرین', 'Customer Portal expert; scoped to company', 39, 0, 3, 4, 20, NULL, 'EXPERT'),
+	(47, 'کارشناس پرتال - توسعه فناوری رفاه پردیس', 'Customer Portal expert; scoped to company', 40, 0, 1, 5, 25, NULL, 'EXPERT'),
+	(48, 'کارشناس پرتال - توسعه فناوری و اطلاعات گردشگری ایران', 'Customer Portal expert; scoped to company', 41, 0, 1, 6, 21, NULL, 'EXPERT'),
+	(49, 'کارشناس پرتال - سابین تجارت آریا', 'Customer Portal expert; scoped to company', 42, 0, 1, 7, 26, NULL, 'EXPERT'),
+	(50, 'کارشناس پرتال - پرداخت الکترونیک سامان کیش', 'Customer Portal expert; scoped to company', 43, 0, 1, 8, 22, NULL, 'EXPERT'),
+	(51, 'کارشناس پرتال - تجارت الکترونیک پارسیان', 'Customer Portal expert; scoped to company', 44, 0, 1, 9, 23, NULL, 'EXPERT'),
+	(52, 'کارشناس پرتال - ایران کیش', 'Customer Portal expert; scoped to company', 45, 0, 3, 10, 24, NULL, 'EXPERT');
+
+-- Dumping structure for table idesk._iw_mig_sections
+CREATE TEMPORARY TABLE IF NOT EXISTS `_iw_mig_sections` (
+  `company_id` int(11) NOT NULL,
+  `name` varchar(150) NOT NULL,
+  `is_active` tinyint(4) NOT NULL,
+  `created_by` int(11) NOT NULL,
+  PRIMARY KEY (`company_id`,`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Dumping data for table idesk._iw_mig_sections: ~2 rows (approximately)
+DELETE FROM `_iw_mig_sections`;
+INSERT INTO `_iw_mig_sections` (`company_id`, `name`, `is_active`, `created_by`) VALUES
+	(9, 'بخش ایشو', 1, 64),
+	(9, 'فنی', 1, 64);
+
+-- Dumping structure for table idesk._iw_mig_settings
+CREATE TEMPORARY TABLE IF NOT EXISTS `_iw_mig_settings` (
+  `company_id` int(11) NOT NULL,
+  `portal_unit_id` int(11) NOT NULL,
+  `admin_rbac_id` int(11) NOT NULL,
+  `manager_rbac_name` varchar(255) NOT NULL,
+  `expert_rbac_name` varchar(255) NOT NULL,
+  `draft_aging_days` int(11) NOT NULL,
+  PRIMARY KEY (`company_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Dumping data for table idesk._iw_mig_settings: ~7 rows (approximately)
+DELETE FROM `_iw_mig_settings`;
+INSERT INTO `_iw_mig_settings` (`company_id`, `portal_unit_id`, `admin_rbac_id`, `manager_rbac_name`, `expert_rbac_name`, `draft_aging_days`) VALUES
+	(4, 20, 31, 'مدیر پرتال - پرداخت نوین آرین', 'کارشناس پرتال - پرداخت نوین آرین', 14),
+	(5, 25, 32, 'مدیر پرتال - توسعه فناوری رفاه پردیس', 'کارشناس پرتال - توسعه فناوری رفاه پردیس', 14),
+	(6, 21, 33, 'مدیر پرتال - توسعه فناوری و اطلاعات گردشگری ایران', 'کارشناس پرتال - توسعه فناوری و اطلاعات گردشگری ایران', 14),
+	(7, 26, 34, 'مدیر پرتال - سابین تجارت آریا', 'کارشناس پرتال - سابین تجارت آریا', 14),
+	(8, 22, 35, 'مدیر پرتال - پرداخت الکترونیک سامان کیش', 'کارشناس پرتال - پرداخت الکترونیک سامان کیش', 14),
+	(9, 23, 36, 'مدیر پرتال - تجارت الکترونیک پارسیان', 'کارشناس پرتال - تجارت الکترونیک پارسیان', 14),
+	(10, 24, 37, 'مدیر پرتال - ایران کیش', 'کارشناس پرتال - ایران کیش', 14);
 
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `admins_details_view`;
