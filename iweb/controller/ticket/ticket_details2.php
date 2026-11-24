@@ -34,12 +34,20 @@ $commentModel->part_name = $part_name;
 $commentModel->part_id = $ticket_id;
 $person_id = $_SESSION['user_id'];
 $company_id = $_SESSION['company_id'];
+require_once __DIR__ . '/../../../icore/class/portal_finance_access.php';
+$customerFinanceAllowed = iwebFinanceAllowed($db, (int)$ticket_id);
+
 
 
 
 
 // user access
-$ticketDetail = $ticketsModel->getTicketById($ticket_id)->fetch_assoc();
+$ticketDetailResult = $ticketsModel->getTicketById($ticket_id);
+if (!$ticketDetailResult || $ticketDetailResult->num_rows === 0) {
+    header('Location: ./tickets');
+    exit;
+}
+$ticketDetail = $ticketDetailResult->fetch_assoc();
 
 
 // Ticket condition control
@@ -172,6 +180,12 @@ if ($allAccountingFileData && $allAccountingFileData->num_rows > 0) {
 }
 
 if (isset($_GET['accounting_file']) && !empty($_GET['accounting_file'])) {
+    if (!$customerFinanceAllowed) { http_response_code(403); exit; }
+    $matchedAccountingFile = false;
+    foreach ($allAccountingFileInfo as $accountingInfo) {
+        if (isset($accountingInfo['downloadLink']) && hash_equals((string)$accountingInfo['downloadLink'], (string)$_GET['accounting_file'])) { $matchedAccountingFile = true; break; }
+    }
+    if (!$matchedAccountingFile) { http_response_code(404); exit; }
     $accountingFileManager->fileDownload($_GET['accounting_file']);
 }
 
@@ -223,6 +237,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // attach accounting file
 
     if (isset($_FILES['accounting_attach_file']) && ($_FILES['accounting_attach_file']['size']) > 0) {
+        if (!$customerFinanceAllowed) { http_response_code(403); exit; }
         $uploadedFile = $accountingFileManager->uploadFile($_FILES['accounting_attach_file']);
         $file_title = $_POST['accounting_file_title'];
 

@@ -311,6 +311,78 @@ $usersRoleClass = static function ($role): string {
         .users-summary-grid { grid-template-columns: repeat(2, 1fr); }
         .company-user-stats { grid-template-columns: repeat(2, 1fr); }
     }
+
+    /* Dark theme: company users management (scoped, no global theme overrides). */
+    :is(html[data-bs-theme="dark"], html[data-layout-color="dark"], body[data-bs-theme="dark"], body[data-layout-color="dark"]) .customer-users-page {
+        --cu-border: #38465b;
+        --cu-text: #e9eef8;
+        --cu-muted: #a6b3c6;
+        --cu-soft: #263347;
+        --cu-primary: #85adff;
+        color: var(--cu-text);
+    }
+    :is(html[data-bs-theme="dark"], html[data-layout-color="dark"], body[data-bs-theme="dark"], body[data-layout-color="dark"]) .customer-users-page .customer-users-hero {
+        background: radial-gradient(circle at top left, rgba(96,149,255,.14), transparent 35%), linear-gradient(135deg,#202d40,#25344a);
+        border-color: var(--cu-border);
+        box-shadow: 0 10px 26px rgba(0,0,0,.13);
+    }
+    :is(html[data-bs-theme="dark"], html[data-layout-color="dark"], body[data-bs-theme="dark"], body[data-layout-color="dark"]) .customer-users-page :is(.company-user-card, .users-summary-card, .users-panel, .org-section-card, .migration-pool-card) {
+        background: #222e40;
+        border-color: var(--cu-border);
+        color: var(--cu-text);
+        box-shadow: 0 6px 20px rgba(0,0,0,.12);
+    }
+    :is(html[data-bs-theme="dark"], html[data-layout-color="dark"], body[data-bs-theme="dark"], body[data-layout-color="dark"]) .customer-users-page :is(.org-chart-wrap, .org-section-card.inactive) {
+        background: #1c2838;
+    }
+    :is(html[data-bs-theme="dark"], html[data-layout-color="dark"], body[data-bs-theme="dark"], body[data-layout-color="dark"]) .customer-users-page :is(.company-user-stat, .org-user-pill) {
+        background: #2c3b50;
+        border-color: var(--cu-border);
+        color: var(--cu-text);
+    }
+    :is(html[data-bs-theme="dark"], html[data-layout-color="dark"], body[data-bs-theme="dark"], body[data-layout-color="dark"]) .customer-users-page :is(.users-table, .users-table thead th, .users-table tbody td) {
+        background: #222e40;
+        color: var(--cu-text);
+        border-color: var(--cu-border);
+    }
+    :is(html[data-bs-theme="dark"], html[data-layout-color="dark"], body[data-bs-theme="dark"], body[data-layout-color="dark"]) .customer-users-page .users-table tbody tr:hover > * {
+        background: #2d3c51;
+    }
+    :is(html[data-bs-theme="dark"], html[data-layout-color="dark"], body[data-bs-theme="dark"], body[data-layout-color="dark"]) .customer-users-page :is(.users-panel-header, .org-role-group, .migration-user-row) {
+        border-color: var(--cu-border);
+    }
+    :is(html[data-bs-theme="dark"], html[data-layout-color="dark"], body[data-bs-theme="dark"], body[data-layout-color="dark"]) .customer-users-page :is(.form-control, .form-select) {
+        background-color: #1c2838;
+        border-color: #45556d;
+        color: #e9eef8;
+    }
+    :is(html[data-bs-theme="dark"], html[data-layout-color="dark"], body[data-bs-theme="dark"], body[data-layout-color="dark"]) .customer-users-page :is(.form-control, .form-select)::placeholder { color: #9facbd; }
+    :is(html[data-bs-theme="dark"], html[data-layout-color="dark"], body[data-bs-theme="dark"], body[data-layout-color="dark"]) .customer-users-page :is(.text-muted, .user-sub, .company-meta, .org-section-subtitle, .migration-pool-note) { color: var(--cu-muted) !important; }
+    :is(html[data-bs-theme="dark"], html[data-layout-color="dark"], body[data-bs-theme="dark"], body[data-layout-color="dark"]) .customer-users-page :is(.bg-light, .btn-light) {
+        background-color: #304058 !important;
+        color: #e9eef8 !important;
+        border-color: var(--cu-border) !important;
+    }
+    :is(html[data-bs-theme="dark"], html[data-layout-color="dark"], body[data-bs-theme="dark"], body[data-layout-color="dark"]) .customer-users-page .portal-warning {
+        background: #473922;
+        border-color: #74603b;
+        color: #ffe2a3;
+    }
+    :is(html[data-bs-theme="dark"], html[data-layout-color="dark"], body[data-bs-theme="dark"], body[data-layout-color="dark"]) .customer-users-page .user-form-modal .modal-content {
+        background: #222e40;
+        color: var(--cu-text);
+        border: 1px solid var(--cu-border);
+    }
+    :is(html[data-bs-theme="dark"], html[data-layout-color="dark"], body[data-bs-theme="dark"], body[data-layout-color="dark"]) .customer-users-page .user-form-modal .modal-header {
+        background: #263347;
+        border-color: var(--cu-border);
+    }
+    :is(html[data-bs-theme="dark"], html[data-layout-color="dark"], body[data-bs-theme="dark"], body[data-layout-color="dark"]) .customer-users-page .user-form-modal .form-label { color: var(--cu-muted); }
+    :is(html[data-bs-theme="dark"], html[data-layout-color="dark"], body[data-bs-theme="dark"], body[data-layout-color="dark"]) .customer-users-page .org-company-node .org-user-pill {
+        background: rgba(255,255,255,.14);
+        border-color: rgba(255,255,255,.2);
+        color: #fff;
+    }
 </style>
 
 <div class="content-page customer-users-page">

@@ -25,6 +25,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $id = $_POST['id'];
             $description = isset($_POST['description']) ? $_POST['description'] : null;
 
+            // A financial condition requires a current manager grant and in-scope ticket.
+            // Never trust a client-provided finance flag: consult conditions.finance.
+            $conditionStmt = $db->prepare("SELECT finance FROM conditions WHERE condition_name=? AND condition_part=? LIMIT 1");
+            if (!$conditionStmt) throw new Exception('UNKNOWN_STATUS');
+            $conditionStmt->bind_param('ss', $operation, $table_set);
+            $conditionStmt->execute();
+            $conditionRow = $conditionStmt->get_result()->fetch_assoc();
+            $conditionStmt->close();
+            if (!$conditionRow) {
+                http_response_code(403); throw new Exception('INVALID_TICKET_STATUS');
+            }
+            if ((int)$conditionRow['finance'] === 1) {
+                if ($table_set !== 'tickets') { http_response_code(403); throw new Exception('INVALID_FINANCE_TARGET'); }
+                require_once __DIR__ . '/../class/portal_finance_access.php';
+                if (!iwebFinanceAllowed($db, (int)$id)) {
+                    http_response_code(403); throw new Exception('FINANCE_ACCESS_DENIED');
+                }
+            }
             $stmt = $db->prepare("UPDATE `$table_set` SET status = ? WHERE id = ?");
             if ($stmt === false) {
                 throw new Exception(_lang['query_preparation_failed']);

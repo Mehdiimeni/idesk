@@ -94,6 +94,22 @@ if ($customerPortalBlockedReason === null && isset($_GET['download_file'], $_GET
     exit;
 }
 
+// CSV export is available only for authenticated company admins and uses server-side company scope.
+if ($customerPortalBlockedReason === null && $customerPortalView === 'company_tickets'
+    && ($_GET['export'] ?? '') === 'csv'
+    && ($customerPortalContext['portal_role'] ?? '') === CustomerPortalService::ROLE_ADMIN) {
+    $filters = ['q' => (string)($_GET['q'] ?? ''), 'priority' => (string)($_GET['priority'] ?? '')];
+    header('Content-Type: text/csv; charset=UTF-8');
+    header('Content-Disposition: attachment; filename="company_tickets_' . date('Ymd_His') . '.csv"');
+    header('Cache-Control: private, no-store');
+    $output = fopen('php://output', 'w');
+    fwrite($output, "\xEF\xBB\xBF");
+    fputcsv($output, ['شماره تیکت', 'عنوان', 'تاریخ ایجاد', 'اولویت']);
+    $customerPortalService->exportCompanyTicketsCsv($customerPortalContext, $filters, $output);
+    fclose($output);
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($customerPortalBlockedReason !== null) {
         customerPortalRedirect('./customer_portal', 'danger', $customerPortalBlockedReason);
@@ -143,8 +159,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'name' => $_POST['name'] ?? '',
                     'email' => $_POST['email'] ?? '',
                     'mobile' => $_POST['mobile'] ?? '',
+                    'portal_role' => $_POST['portal_role'] ?? '',
+                    'section_id' => $_POST['section_id'] ?? '',
                 ]);
                 customerPortalRedirect('./customer_portal?view=users', 'success', 'USER_UPDATED');
+                break;
+
+            case 'manager_finance_permission':
+                if (($customerPortalContext['portal_role'] ?? '') !== CustomerPortalService::ROLE_ADMIN
+                    || empty($customerPortalContext['profile_valid'])) {
+                    throw new RuntimeException('PORTAL_PERMISSION_DENIED');
+                }
+                $managerId = (int) ($_POST['user_id'] ?? 0);
+                $companyId = (int) $customerPortalContext['company_id'];
+                // Validate target company and role before touching permissions.
+                $stmt = $db->prepare("SELECT 1 FROM iweb_customer_portal_user_profiles WHERE user_id=? AND company_id=? AND portal_role='MANAGER' AND is_active=1 LIMIT 1");
+                if (!$stmt) throw new RuntimeException('PORTAL_PERMISSION_DENIED');
+                $stmt->bind_param('ii', $managerId, $companyId);
+                $stmt->execute();
+                $ok = (bool)$stmt->get_result()->fetch_assoc();
+                $stmt->close();
+                if (!$ok) throw new RuntimeException('PERMISSION_ROLE_MISMATCH');
+                $customerPortalService->setPermissionByAdmin(
+                    (int)$customerPortalContext['user_id'], $managerId,
+                    'manager_finance_access', !empty($_POST['finance_allowed'])
+                );
+                customerPortalRedirect('./customer_portal?view=users', 'success', 'USER_MANAGEMENT_PERMISSION_UPDATED');
                 break;
 
             case 'user_toggle':
@@ -287,7 +327,8 @@ if ($customerPortalBlockedReason === null) {
 
     if ($customerPortalView === 'company_tickets' && $customerPortalContext['portal_role'] === CustomerPortalService::ROLE_ADMIN) {
         $customerPortalCompanyTickets = $customerPortalService->listCompanyTicketsPage(
-            $customerPortalContext, (int) ($_GET['page_num'] ?? 1)
+            $customerPortalContext, (int) ($_GET['page_num'] ?? 1), 25,
+            ['q' => (string)($_GET['q'] ?? ''), 'priority' => (string)($_GET['priority'] ?? '')]
         );
     }
 
@@ -311,6 +352,17 @@ if ($customerPortalBlockedReason === null) {
     if ($customerPortalView === 'users' && in_array($customerPortalContext['portal_role'], [CustomerPortalService::ROLE_ADMIN, CustomerPortalService::ROLE_MANAGER], true)) {
         $customerPortalUsers = $customerPortalService->listUsersForContext($customerPortalContext);
         $customerPortalSections = $customerPortalService->listSections($companyId);
+        $customerPortalFinancePermissions = [];
+        if ($customerPortalContext['portal_role'] === CustomerPortalService::ROLE_ADMIN) {
+            $stmt = $db->prepare("SELECT p.user_id, p.is_allowed FROM iweb_customer_portal_permissions p JOIN iweb_customer_portal_user_profiles up ON up.user_id=p.user_id AND up.company_id=p.company_id AND up.portal_role='MANAGER' WHERE p.company_id=? AND p.permission_name='manager_finance_access'");
+            if ($stmt) {
+                $stmt->bind_param('i', $companyId);
+                $stmt->execute();
+                $rs = $stmt->get_result();
+                while ($rs && ($pr = $rs->fetch_assoc())) $customerPortalFinancePermissions[(int)$pr['user_id']] = ((int)$pr['is_allowed']===1);
+                $stmt->close();
+            }
+        }
     }
 
     if ($customerPortalView === 'drafts') {

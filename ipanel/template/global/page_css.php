@@ -99,4 +99,6 @@ $basePath = '../itheme/panel/';
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
     </style>
+    <!-- Shared INTEK Admin workspace design. Load after legacy styles to unify all views. -->
+    <link href="<?php echo $basePath; ?>css/ipanel-workspace-ui.css?v=20261124-1" rel="stylesheet" type="text/css" />
 </head>

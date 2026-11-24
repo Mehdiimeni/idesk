@@ -2,7 +2,7 @@
 ///template/global/page_top.php
 ?>
 
-<body dir="<?php echo ($_COOKIE['adminLanguageDir']); ?>">
+<body class="intek-admin-workspace" dir="<?php echo ($_COOKIE['adminLanguageDir']); ?>">
     <div class="wrapper">
 
         <div class="navbar-custom intek-topbar">

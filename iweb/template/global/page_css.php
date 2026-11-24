@@ -67,6 +67,9 @@ foreach ($cssComponents as $component => $styles) {
     <link href="./itheme/panel/css/app-creative.min.css" rel="stylesheet" type="text/css" id="app-style" />
 <?php endif; ?>
 
+<!-- Unified user interface: shared headers, sizing and dark mode -->
+<link href="./itheme/panel/css/iweb-workspace-ui.css?v=20261124-hero" rel="stylesheet" type="text/css" />
+
 <!-- Chart JS (اگر نیاز باشد) -->
 <?php if (in_array('chart', $arrayComponents)): ?>
     <script src="./itheme/panel/js/jquery-3.6.4.min.js" defer></script>

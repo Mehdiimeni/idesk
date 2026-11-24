@@ -1,0 +1,484 @@
+/* INTEK iWeb | Unified Customer Workspace Design System | 2026-11-24
+   Presentation only. Does not change forms, permissions, routing or data. */
+:root {
+  --iw-width: 100%;
+  --iw-gutter: clamp(16px,2.0vw,26px);
+  --iw-ink: #20304a;
+  --iw-muted: #6b7890;
+  --iw-primary: #3468dc;
+  --iw-accent: #0d9386;
+  --iw-border: #e2e8f0;
+  --iw-surface: #fff;
+  --iw-soft: #f7f9fc;
+  --iw-page: #f3f6fb;
+  --iw-shadow: 0 12px 34px rgba(38,64,107,.075);
+  --iw-radius: 17px;
+  --iw-font: 'Vazirmatn','Noto Sans Arabic','IRANSans','Segoe UI',Tahoma,sans-serif;
+}
+body, button, input, textarea, select, .dropdown-menu, .btn, .table {
+  font-family: var(--iw-font) !important;
+}
+body {font-size: 13px; line-height: 1.8; font-weight: 400; letter-spacing: 0;}
+body .content-page {background: var(--iw-page); min-width: 0;}
+/* All page content uses the exact same measure; horizontal topbar/footer align with it. */
+body .content-page > .content > .container-fluid,
+body .content-page > .content > .container,
+body .content-page > .content > .container-fluid.cp-shell,
+body .content-page.dashboard-page > .content > .container-fluid,
+body .content-page.customer-portal-page > .content > .container-fluid.cp-shell,
+body .content-page.iweb-consistent-page > .content > .container-fluid {
+  box-sizing:border-box !important;
+  width:100% !important;
+  max-width:var(--iw-width) !important;
+  margin-inline:auto !important;
+  padding:18px var(--iw-gutter) 36px !important;
+}
+/* Address varying nesting used by legacy page templates. */
+body .content-page .content-page > .content > .container-fluid,
+body .content-page .content-page > .content > .container {
+  box-sizing:border-box !important;
+  width:100% !important;
+  max-width:var(--iw-width) !important;
+  margin-inline:auto !important;
+  padding:18px var(--iw-gutter) 36px !important;
+}
+body .content-page .content-page,
+body .content-page .content-page .content {min-width:0;}
+body .footer > .container-fluid,
+body .navbar-custom .topbar.container-fluid {
+  max-width:var(--iw-width) !important;
+  width:100% !important;
+  margin-inline:auto !important;
+  padding-inline:var(--iw-gutter) !important;
+  box-sizing:border-box;
+}
+body .content-page .row > *, body .content-page .row,
+body .content-page .card, body .content-page .cp-card,
+body .content-page .table-responsive {min-width:0;}
+/* Page header and hero typography. */
+body .content-page :is(.page-title-box,.dashboard-hero,.cp-hero) {
+  border-radius:var(--iw-radius) !important;
+  border:1px solid var(--iw-border) !important;
+  box-shadow:var(--iw-shadow) !important;
+  margin-block:0 20px;
+}
+body .content-page .page-title-box {
+  background:linear-gradient(115deg,#fff 0%,#f4f8ff 100%) !important;
+  padding:19px 23px !important;
+  min-height:75px;
+  display:flex; align-items:center; justify-content:space-between;gap:14px;flex-wrap:wrap;
+}
+body .content-page .page-title,
+body .content-page .dashboard-title,
+body .content-page .cp-hero h3 {
+  font-size:clamp(1.12rem,1.45vw,1.42rem) !important;
+  font-weight:800 !important;
+  line-height:1.65 !important;
+  letter-spacing:0;
+}
+body .content-page :is(.dashboard-subtitle,.cp-hero p,.cp-muted,.cp-card-header p) {
+  font-size:.86rem !important;line-height:1.85;
+}
+body .content-page :is(.dashboard-panel-header h4,.cp-card-title,.card-header h4,.dashboard-command-title strong) {
+  font-size:1.02rem !important;font-weight:800 !important;line-height:1.7;
+}
+/* Balanced warmth across components, without changing status semantics. */
+body .content-page :is(.card,.dashboard-panel,.dashboard-summary-card,.dashboard-kpi-card,.cp-card,.cp-stat,.cp-draft-card,.portal-workspace,.dashboard-command-bar,.dashboard-top-summary,.dashboard-stat-card) {
+  border:1px solid var(--iw-border) !important;
+  border-radius:var(--iw-radius) !important;
+  box-shadow:var(--iw-shadow) !important;
+}
+body .content-page :is(.card,.dashboard-panel,.cp-card,.portal-workspace) {overflow-wrap:anywhere;}
+body .content-page :is(.card-header,.dashboard-panel-header,.cp-card-header,.portal-workspace-head) {
+  padding:17px 21px !important;
+  border-bottom:1px solid var(--iw-border) !important;
+}
+body .content-page :is(.card-body,.cp-card-body) {padding:20px !important;}
+body .content-page :is(.dashboard-summary-grid,.dashboard-kpi-grid,.cp-grid) {gap:16px !important;}
+body .content-page .dashboard-lower-grid {gap:16px;}
+/* Bootstrap .row handles its own gutters: adding gap breaks 7/5 columns. */
+body .content-page .dashboard-insight-row {gap:0 !important;}
+body .content-page :is(.dashboard-summary-card,.dashboard-kpi-card,.cp-stat) {min-height:126px; padding:19px !important;}
+body .content-page :is(.dashboard-summary-card,.dashboard-kpi-card,.cp-stat,.cp-draft-card,.portal-nav-item,.cp-nav a) {
+  transition:box-shadow .18s ease, transform .18s ease, border-color .18s ease;
+}
+body .content-page :is(.dashboard-summary-card,.dashboard-kpi-card,.cp-stat,.cp-draft-card,.portal-nav-item,.cp-nav a):hover {
+  transform:translateY(-2px);box-shadow:0 15px 32px rgba(44,76,130,.12) !important;border-color:#c4d4e9 !important;
+}
+body .content-page :is(.stat-number,.kpi-body strong,.cp-stat .value) {
+  font-size:clamp(1.55rem,2vw,1.94rem) !important;font-weight:850 !important;line-height:1.3;
+}
+body .content-page :is(.stat-label,.kpi-body>span,.cp-stat .label) {
+  font-size:.84rem !important;line-height:1.7;
+}
+/* More polished navigation tabs and workspace links. */
+body .customer-portal-page .cp-nav {gap:9px !important;margin:16px 0 21px !important;}
+body .customer-portal-page .cp-nav a,
+body .dashboard-page .portal-nav-item {
+  border:1px solid var(--iw-border) !important;
+  background:var(--iw-surface) !important;
+  color:var(--iw-ink) !important;
+  border-radius:12px !important;
+  min-height:43px !important;
+  padding:9px 15px !important;
+  font-size:.86rem !important;
+  font-weight:700 !important;
+  box-shadow:0 4px 12px rgba(35,58,92,.035);
+}
+body .customer-portal-page .cp-nav a.active,
+body .dashboard-page .portal-nav-item:hover {background:#e9f1ff !important;border-color:#abc6fb !important;color:#1e52bd !important;}
+body .content-page :is(.btn,.dashboard-main-btn) {
+  border-radius:10px !important;font-size:.85rem !important;font-weight:750 !important;
+  min-height:37px;line-height:1.45;
+}
+body .content-page .btn:not(.btn-sm,.btn-lg,.btn-close) {padding:8px 14px;}
+body .content-page .btn-sm {padding:6px 10px;min-height:33px;}
+body .content-page :is(.form-control,.form-select,.select2-selection,.input-group-text) {
+  border-radius:10px !important;font-size:.86rem !important;min-height:39px;
+}
+body .content-page :is(.form-control,.form-select):focus {
+  border-color:#87aeed !important;box-shadow:0 0 0 3px rgba(52,104,220,.12) !important;
+}
+body .content-page label,body .content-page .form-label {font-size:.82rem;font-weight:700;}
+/* Tables: consistent density and legibility. */
+body .content-page :is(.table,.cp-table,.dataTable) {font-size:.84rem !important;line-height:1.75;}
+body .content-page :is(.table,.cp-table,.dataTable) thead th {
+  background:#edf3fa !important;color:#3f5069 !important;font-size:.78rem !important;font-weight:800 !important;
+  padding:12px 13px !important;white-space:nowrap;
+}
+body .content-page :is(.table,.cp-table,.dataTable) tbody td {padding:12px 13px !important;vertical-align:middle;}
+body .content-page :is(.table,.cp-table,.dataTable) tbody tr:hover td {background:#f1f6fd;}
+body .content-page .dataTables_wrapper {width:100%;max-width:100%;min-width:0;}
+body .content-page :is(.table-responsive,.dataTables_scrollBody) {overflow-x:auto;max-width:100%;}
+/* Boards, charts, dialogs and support screens. */
+body .content-page :is(.tasks,.kanban-item,.todo-item,.cp-org-section,.cp-org-person,.cp-comment,.dashboard-request-card,.priority-guide-item) {
+  border-radius:13px !important;border-color:var(--iw-border) !important;
+}
+body .content-page :is(.modal-content,.offcanvas) {border-radius:18px;border:1px solid var(--iw-border);box-shadow:0 20px 55px rgba(16,37,73,.17);}
+body .content-page :is(.modal-header,.offcanvas-header) {border-bottom:1px solid var(--iw-border);}
+body .content-page .dashboard-hero {
+  background:linear-gradient(118deg,#fff 0%,#f2f7ff 72%,#eaf9f6 100%) !important;
+}
+body .content-page .cp-hero {
+  background:linear-gradient(115deg,#14334b 0%,#235a77 50%,#327b88 100%) !important;
+  border-color:#3b758d !important; padding:20px 24px !important;
+}
+body .content-page .cp-hero :is(h3,p) {color:#fff !important;}
+/* Light colored accents for a less sterile experience. */
+body .content-page .dashboard-summary-card:nth-child(4n+1),
+body .content-page .dashboard-kpi-card:nth-child(4n+1),
+body .content-page .cp-stat:nth-child(4n+1) {border-top:3px solid #3478ed !important;}
+body .content-page .dashboard-summary-card:nth-child(4n+2),
+body .content-page .dashboard-kpi-card:nth-child(4n+2),
+body .content-page .cp-stat:nth-child(4n+2) {border-top:3px solid #0eaa96 !important;}
+body .content-page .dashboard-summary-card:nth-child(4n+3),
+body .content-page .dashboard-kpi-card:nth-child(4n+3),
+body .content-page .cp-stat:nth-child(4n+3) {border-top:3px solid #e7a13e !important;}
+body .content-page .dashboard-summary-card:nth-child(4n),
+body .content-page .dashboard-kpi-card:nth-child(4n),
+body .content-page .cp-stat:nth-child(4n) {border-top:3px solid #8c78d7 !important;}
+@media(max-width:991.98px) {
+  body .content-page :is(.dashboard-summary-grid,.dashboard-kpi-grid,.cp-grid) {grid-template-columns:repeat(2,minmax(0,1fr)) !important;}
+  body .content-page :is(.page-title-box,.dashboard-hero,.cp-hero) {padding:16px 18px !important;}
+}
+@media(max-width:575.98px) {
+  :root{--iw-gutter:12px;--iw-radius:14px;}
+  body .content-page > .content > .container-fluid,
+  body .content-page > .content > .container,
+  body .content-page .content-page > .content > .container-fluid,
+  body .content-page.dashboard-page > .content > .container-fluid,
+  body .content-page.customer-portal-page > .content > .container-fluid.cp-shell {
+    padding:12px var(--iw-gutter) 24px !important;
+  }
+  body .content-page :is(.dashboard-summary-grid,.dashboard-kpi-grid,.cp-grid) {grid-template-columns:1fr !important;}
+  body .content-page :is(.card-body,.cp-card-body) {padding:15px !important;}
+  body .content-page :is(.card-header,.dashboard-panel-header,.cp-card-header) {padding:13px 15px !important;}
+  body .content-page :is(.page-title-box,.dashboard-hero,.cp-hero) {min-height:auto;padding:15px !important;}
+  body .content-page .cp-nav a {min-height:40px !important;padding:8px 10px !important;}
+  body .content-page :is(.form-control,.form-select) {font-size:16px !important;}
+}
+/* Dark palette: keep semantic status badges and their colors intact. */
+:is(html[data-bs-theme='dark'],html[data-layout-color='dark'],body[data-bs-theme='dark'],body[data-layout-color='dark']) {
+  --iw-ink:#e6ecf6;--iw-muted:#aab9ca;--iw-border:#354359;
+  --iw-surface:#222e40;--iw-soft:#2b3a50;--iw-page:#172332;
+  --iw-shadow:0 12px 32px rgba(0,0,0,.16);
+}
+:is(html[data-bs-theme='dark'],html[data-layout-color='dark'],body[data-bs-theme='dark'],body[data-layout-color='dark']) body .content-page,
+body[data-bs-theme='dark'] .content-page,body[data-layout-color='dark'] .content-page {background:var(--iw-page) !important;}
+:is(html[data-bs-theme='dark'],html[data-layout-color='dark'],body[data-bs-theme='dark'],body[data-layout-color='dark']) .content-page :is(.card,.dashboard-panel,.dashboard-summary-card,.dashboard-kpi-card,.cp-card,.cp-stat,.cp-draft-card,.portal-workspace,.dashboard-command-bar,.dashboard-top-summary,.dashboard-stat-card,.page-title-box) {
+  background:var(--iw-surface) !important;color:var(--iw-ink) !important;border-color:var(--iw-border) !important;
+}
+:is(html[data-bs-theme='dark'],html[data-layout-color='dark'],body[data-bs-theme='dark'],body[data-layout-color='dark']) .content-page :is(.page-title-box,.dashboard-hero) {
+  background:linear-gradient(115deg,#223248,#263f53) !important;color:var(--iw-ink) !important;
+}
+:is(html[data-bs-theme='dark'],html[data-layout-color='dark'],body[data-bs-theme='dark'],body[data-layout-color='dark']) .content-page :is(.cp-nav a,.portal-nav-item) {
+  background:#26374b !important;color:#e5edf6 !important;border-color:#3b526b !important;
+}
+:is(html[data-bs-theme='dark'],html[data-layout-color='dark'],body[data-bs-theme='dark'],body[data-layout-color='dark']) .content-page :is(.table,.cp-table,.dataTable) thead th {background:#293b51 !important;color:#d5e1ee !important;}
+:is(html[data-bs-theme='dark'],html[data-layout-color='dark'],body[data-bs-theme='dark'],body[data-layout-color='dark']) .content-page :is(.table,.cp-table,.dataTable) tbody tr:hover td {background:#2c4055 !important;}
+:is(html[data-bs-theme='dark'],html[data-layout-color='dark'],body[data-bs-theme='dark'],body[data-layout-color='dark']) .content-page :is(.dashboard-title,.page-title,.dashboard-panel-header h4,.cp-card-title,.cp-stat .value,.stat-number,.kpi-body strong) {color:#e9f1fb !important;}
+:is(html[data-bs-theme='dark'],html[data-layout-color='dark'],body[data-bs-theme='dark'],body[data-layout-color='dark']) .content-page :is(.cp-muted,.dashboard-subtitle,.cp-stat .label) {color:#afc0d3 !important;}
+
+/* v2 layout correction: shared outer layout, nested legacy page wrappers. */
+html body .wrapper > .content-page,
+html body .wrapper > .content-page > .content-page,
+html body .wrapper > .content-page > .content-page > .content,
+html body .wrapper > .content-page > .content {
+  width:100% !important;
+  max-width:none !important;
+  min-width:0 !important;
+  margin-inline:0 !important;
+  box-sizing:border-box !important;
+}
+/* Horizontal menu opens the outer .content-page; the template opens another.
+   Do not allow horizontal-sidebar theme offsets on the nested wrapper. */
+html body .content-page .content-page {
+  margin:0 !important;
+  padding:0 !important;
+  width:100% !important;
+  max-width:none !important;
+  min-height:0 !important;
+  background:transparent !important;
+}
+html body .content-page .content-page > .content,
+html body .content-page > .content {margin:0 !important; padding:0 !important; width:100% !important; max-width:none !important;}
+html body .content-page > .content > .container-fluid,
+html body .content-page .content-page > .content > .container-fluid,
+html body .content-page .content-page > .content > .container-fluid.cp-shell,
+html body .content-page.dashboard-page > .content > .container-fluid,
+html body .content-page.customer-portal-page > .content > .container-fluid.cp-shell,
+html body .content-page.iweb-consistent-page > .content > .container-fluid {
+  width:100% !important;
+  max-width:none !important;
+  padding:18px var(--iw-gutter) 36px !important;
+  margin:0 auto !important;
+  box-sizing:border-box !important;
+}
+/* Topbar, horizontal nav, page and footer use one horizontal gutter. */
+html body .navbar-custom .topbar.container-fluid,
+html body .topnav > .container-fluid,
+html body .footer > .container-fluid {
+  width:100% !important;
+  max-width:none !important;
+  box-sizing:border-box !important;
+  padding-inline:var(--iw-gutter) !important;
+  margin-inline:auto !important;
+}
+html body .topnav .navbar {padding-inline:0 !important;}
+/* One consistent, branded header on both dashboard and customer portal. */
+html body .content-page .dashboard-hero,
+html body .content-page .cp-hero {
+  background:linear-gradient(112deg,#153650 0%,#1f5671 56%,#27828a 100%) !important;
+  color:#fff !important;
+  border:1px solid #36768b !important;
+  border-radius:17px !important;
+  padding:20px 24px !important;
+  box-shadow:0 10px 28px rgba(21,54,80,.15) !important;
+}
+html body .content-page .dashboard-hero :is(.dashboard-title,.dashboard-subtitle,.dashboard-user-info strong,.dashboard-user-info span),
+html body .content-page .cp-hero :is(h3,p) {color:#fff !important;}
+html body .content-page .dashboard-hero .dashboard-user {background:rgba(255,255,255,.13) !important;border-color:rgba(255,255,255,.23) !important;}
+html body .content-page .dashboard-insight-row {gap:0 !important;}
+/* Preserve Bootstrap columns; avoid forced card widths from page-specific styles. */
+html body .dashboard-page .dashboard-insight-row > [class*="col-"] {min-width:0;}
+@media(max-width:575.98px){
+  html body .content-page .content-page > .content > .container-fluid,
+  html body .content-page > .content > .container-fluid {padding:12px 12px 24px !important;}
+  html body .navbar-custom .topbar.container-fluid,
+  html body .topnav > .container-fluid,
+  html body .footer > .container-fluid {padding-inline:12px !important;}
+  html body .content-page :is(.dashboard-hero,.cp-hero) {padding:16px !important;}
+}
+
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) body .content-page :is(.dashboard-hero,.cp-hero),
+body[data-bs-theme="dark"] .content-page :is(.dashboard-hero,.cp-hero),
+body[data-layout-color="dark"] .content-page :is(.dashboard-hero,.cp-hero) {
+  background:linear-gradient(112deg,#13283a,#1e3d51,#20545c) !important;
+  border-color:#31536a !important;
+}
+
+
+/* === V3: DARK MODE CONTRAST AND SURFACE CONSISTENCY =======================
+   Scoped to the actual dark-theme attributes. Do not affect light mode.
+   Keep priority/status badge semantic colors intact. */
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page {
+  --dashboard-card-bg:#222e40;
+  --dashboard-row-bg:#29374b;
+  --dashboard-title:#edf3fc;
+  --dashboard-text:#dce6f5;
+  --dashboard-muted:#a5b6cc;
+  --dashboard-border:#39495f;
+  --dashboard-border-hover:#4b6280;
+  --db-text:#e7edf7;
+  --db-muted:#acc0d3;
+  --db-border:#3c4c62;
+  --db-soft:#2a394c;
+  --cu-text:#e9eff8;
+  --cu-muted:#b0bfd1;
+  --cu-border:#3c4c62;
+  --bs-card-bg:#222e40;
+  --bs-body-color:#e7edf7;
+  --bs-table-bg:#222e40;
+  --bs-table-color:#e7edf7;
+  --bs-table-border-color:#3c4c62;
+  --bs-tertiary-bg:#2b3a50;
+}
+/* Panels can be built from plain divs, and page-local CSS contains white backgrounds. */
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page :is(
+  .dashboard-panel,.dashboard-panel-header,.dashboard-recent-panel,.dashboard-activity-panel,
+  .dashboard-finance-panel,.dashboard-summary-card,.dashboard-kpi-card,.dashboard-stat-card,
+  .dashboard-grid-panel,.dashboard-top-summary,.dashboard-command-bar,.dashboard-action-bar,
+  .dashboard-table tbody tr,.dashboard-requests-panel,.dashboard-request-card,
+  .dashboard-empty-state,.monthly-activity-total,.activity-metric,.activity-pair > div,
+  .priority-guide-item,.finance-status-item,.status-overview-item,.kanban-item,.todo-item,
+  .portal-workspace,.portal-workspace-head,.portal-nav-item,.cp-card,.cp-card-header,
+  .cp-card-body,.cp-stat,.cp-draft-card,.card,.card-header,.card-body,
+  .table-responsive,.dataTables_wrapper,.dataTables_scroll,.dataTables_scrollBody,
+  .dataTables_scrollHead,.dataTables_scrollFoot,.tasks,.task-header
+) {
+  background-color:#222e40 !important;
+  background-image:none !important;
+  color:#e4ecf7 !important;
+  border-color:#39495f !important;
+}
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page :is(
+  .dashboard-panel-header,.portal-workspace-head,.card-header,.cp-card-header,
+  .activity-metric,.monthly-activity-total,.priority-guide-item,.finance-status-item,
+  .dashboard-request-card,.kanban-item,.todo-item,.dashboard-empty-state,.task-header
+) {background-color:#29384c !important;}
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page :is(
+  .dashboard-title,.dashboard-panel-title,.dashboard-panel-header h4,.dashboard-command-title strong,
+  .kpi-body strong,.activity-pair strong,.activity-single-value,.monthly-activity-total strong,
+  .status-overview-head strong,.priority-guide-main strong,.dashboard-ticket-total,
+  .dashboard-hero .dashboard-title,.dashboard-hero .dashboard-subtitle,
+  .dashboard-hero .dashboard-user-info strong,.dashboard-hero .dashboard-user-info span,
+  .todo-title a,.kanban-title,.stat-number,.cp-card-title,.cp-stat .value,
+  .card-title,.page-title,.form-label, label
+) {color:#ebf2fb !important;}
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page :is(
+  .dashboard-panel-header span,.dashboard-subtitle,.kpi-body small,.stat-label,
+  .dashboard-command-title small,.recent-date,.cp-muted,.status-overview-list small,
+  .priority-guide-item small,.summary-caption,.activity-metric-head,.dashboard-empty-state
+) {color:#b1c0d3 !important;}
+/* The dashboard hero must keep its branded gradient, not the plain panel color. */
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page :is(.dashboard-hero,.cp-hero) {
+  background:linear-gradient(112deg,#122c43 0%,#20425b 58%,#1d6570 100%) !important;
+  border-color:#37617c !important;
+  color:#fff !important;
+}
+/* Table colors must be applied on cells as well as rows: Bootstrap and
+   DataTables frequently set a white --bs-table-bg on individual cells. */
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page :is(table.table,table.dataTable,table.cp-table,#alternative-page-datatable,.dashboard-table) {
+  --bs-table-bg:#222e40 !important;
+  --bs-table-color:#e2eaf6 !important;
+  --bs-table-striped-bg:#2a3a50 !important;
+  --bs-table-hover-bg:#334961 !important;
+  --bs-table-border-color:#3a4b62 !important;
+  background-color:#222e40 !important;
+  color:#e2eaf6 !important;
+  border-color:#3a4b62 !important;
+}
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page :is(table.table,table.dataTable,table.cp-table,#alternative-page-datatable,.dashboard-table) :is(tbody tr,tbody td,tbody th) {
+  background:#222e40 !important;
+  box-shadow:none !important;
+  color:#e2eaf6 !important;
+  border-color:#394a60 !important;
+}
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page :is(table.table,table.dataTable,table.cp-table,#alternative-page-datatable,.dashboard-table) tbody tr:nth-child(odd) > :is(td,th) {background:#29384b !important;}
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page :is(table.table,table.dataTable,table.cp-table,#alternative-page-datatable,.dashboard-table) tbody tr:hover > :is(td,th) {background:#344961 !important;}
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page :is(table.table,table.dataTable,table.cp-table,#alternative-page-datatable,.dashboard-table) thead th {
+  background:#31445b !important;color:#e6f0fb !important;border-color:#455872 !important;
+}
+/* Keep the existing age indicators on the left/right edges of ticket rows. */
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page :is(.dataTables_wrapper,.dataTables_filter,.dataTables_length,.dataTables_info,.dataTables_paginate,.dt-container,.dt-layout-row) {
+  background-color:transparent !important;color:#b7c7d9 !important;
+}
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page :is(.form-control,.form-select,.dashboard-input,.input-group-text,.select2-selection,.dt-input,.dataTables_filter input,.dataTables_length select) {
+  background:#27374c !important;color:#e7eff9 !important;
+  border-color:#435771 !important;
+  -webkit-text-fill-color:currentColor;
+}
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page :is(input,textarea)::placeholder {color:#b1c0d3 !important;opacity:1;}
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page :is(.modal-content,.modal-header,.modal-body,.modal-footer,.dropdown-menu,.offcanvas,.offcanvas-header) {
+  background-color:#222e40 !important;color:#e7edf7 !important;border-color:#405169 !important;
+}
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page :is(.dropdown-item,.dataTables_info,.pagination .page-link) {color:#dce7f5 !important;}
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page .pagination .page-link {background:#293b51 !important;border-color:#42566f !important;}
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page .pagination .active .page-link {background:#3468dc !important;color:#fff !important;}
+/* Semantic badges and action buttons retain their own identifiable colors. */
+
+
+/* V4 - Ticket list toolbar: the page-local tickets.php stylesheet declares
+   .ticket-table-toolbar { background:#fff }, which V3 did not override.
+   Keep this override scoped to the ticket page and to dark mode only. */
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page.iweb-consistent-page .ticket-table-toolbar {
+  background:#29384b !important;
+  background-image:none !important;
+  color:#e8f0fa !important;
+  border:1px solid #40536b !important;
+  box-shadow:none !important;
+}
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page.iweb-consistent-page .ticket-table-toolbar :is(label,span,small,.form-label,.dataTables_length,.dataTables_filter,.dt-length,.dt-search) {
+  color:#c6d6e9 !important;
+}
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page.iweb-consistent-page .ticket-table-toolbar :is(input,select,.form-control,.form-select,.dt-input,.dataTables_filter input,.dataTables_length select) {
+  background-color:#223044 !important;
+  color:#e8f1fc !important;
+  border-color:#4a5f79 !important;
+  -webkit-text-fill-color:currentColor;
+}
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) .content-page.iweb-consistent-page .ticket-table-toolbar :is(input,textarea)::placeholder {
+  color:#a9bdd3 !important;
+  opacity:1;
+}
+
+
+/* === INTEK Unified User Page Header: shared across dashboard, portal and ticket pages === */
+html body .content-page :is(.page-title-box,.dashboard-hero,.cp-hero) {
+  width:100% !important;
+  box-sizing:border-box !important;
+  min-height:66px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+  padding:18px 22px !important;
+  margin:10px 0 16px !important;
+  background:linear-gradient(112deg,#153650 0%,#1f5671 56%,#27828a 100%) !important;
+  border:1px solid #36768b !important;
+  border-radius:16px !important;
+  box-shadow:0 10px 28px rgba(21,54,80,.15) !important;
+  color:#ffffff !important;
+}
+html body .content-page :is(.page-title-box,.dashboard-hero,.cp-hero) :is(.page-title,.dashboard-title,h3,h4,h5,p,.dashboard-subtitle,.dashboard-user-info strong,.dashboard-user-info span) {
+  color:#fff !important;
+}
+html body .content-page .page-title-box .page-title,
+html body .content-page .dashboard-hero .dashboard-title,
+html body .content-page .cp-hero h3 {
+  margin:0 !important;
+  font-size:clamp(1.1rem,1.35vw,1.34rem) !important;
+  font-weight:800 !important;
+  line-height:1.6 !important;
+}
+html body .content-page :is(.page-title-box,.dashboard-hero,.cp-hero) :is(.btn-light,.btn-outline-secondary,.cp-role-pill) {
+  background:rgba(255,255,255,.96) !important;
+  border-color:rgba(255,255,255,.72) !important;
+  color:#17516b !important;
+}
+html body .content-page .page-title-box :is(.breadcrumb,.breadcrumb-item,.breadcrumb-item a) {color:rgba(255,255,255,.85) !important;}
+html body .content-page .page-title-box :is(.dropdown-menu,.dropdown-menu *) {color:inherit;}
+html body .content-page .page-title-box .dropdown-menu {background:var(--bs-body-bg,#fff) !important;}
+:is(html[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-bs-theme="dark"],body[data-layout-color="dark"]) body .content-page :is(.page-title-box,.dashboard-hero,.cp-hero),
+body[data-bs-theme="dark"] .content-page :is(.page-title-box,.dashboard-hero,.cp-hero),
+body[data-layout-color="dark"] .content-page :is(.page-title-box,.dashboard-hero,.cp-hero) {
+  background:linear-gradient(112deg,#122c43 0%,#20425b 58%,#1d6570 100%) !important;
+  border-color:#37617c !important;
+  color:#fff !important;
+}
+@media (max-width:767.98px) {
+  html body .content-page :is(.page-title-box,.dashboard-hero,.cp-hero) {min-height:60px;padding:14px 16px !important;gap:10px;margin:8px 0 14px !important;}
+  html body .content-page :is(.page-title-box,.dashboard-hero,.cp-hero) :is(.page-title,.dashboard-title,h3) {font-size:1.08rem !important;}
+}
+/* End unified header */

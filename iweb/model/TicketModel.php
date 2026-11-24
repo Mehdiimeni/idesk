@@ -275,6 +275,76 @@ class TicketModel
         return $rows;
     }
 
+    /** The customer-portal manager must see only tickets of their own section.
+     * Resolve scope from active, same-company profiles on the server; never trust GET.
+     */
+    /** Strict server-side customer-portal EXPERT access; legacy RBAC cannot widen it. */
+    private function portalExpertUserId(): ?int
+    {
+        $userId = (int) ($_SESSION['user_id'] ?? 0);
+        $companyId = (int) ($_SESSION['company_id'] ?? 0);
+        if ($userId <= 0 || $companyId <= 0) return null;
+
+        $sql = "SELECT p.user_id FROM iweb_customer_portal_user_profiles p
+                INNER JOIN users u ON u.id=p.user_id AND u.status='Active'
+                WHERE p.user_id=? AND p.company_id=?
+                  AND p.portal_role='EXPERT' AND p.is_active=1 LIMIT 1";
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) throw new \RuntimeException('Cannot verify expert ticket scope');
+        $stmt->bind_param('ii', $userId, $companyId);
+        if (!$stmt->execute()) {
+            $stmt->close();
+            throw new \RuntimeException('Cannot verify expert ticket scope');
+        }
+        $found = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        return $found ? $userId : null;
+    }
+
+    private function portalManagerTicketScope(): ?array
+    {
+        $userId = (int) ($_SESSION['user_id'] ?? 0);
+        $companyId = (int) ($_SESSION['company_id'] ?? 0);
+        if ($userId <= 0 || $companyId <= 0) return null;
+        $sql = "SELECT p.section_id FROM iweb_customer_portal_user_profiles p
+                INNER JOIN users u ON u.id=p.user_id AND u.status='Active'
+                INNER JOIN iweb_customer_portal_sections s
+                  ON s.id=p.section_id AND s.company_id=p.company_id AND s.is_active=1
+                INNER JOIN iweb_customer_portal_company_settings cs
+                  ON cs.company_id=p.company_id AND cs.customer_portal_workflow_enabled=1
+                WHERE p.user_id=? AND p.company_id=? AND p.portal_role='MANAGER'
+                  AND p.is_active=1 AND p.section_id IS NOT NULL LIMIT 1";
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) return null;
+        $stmt->bind_param('ii', $userId, $companyId);
+        $stmt->execute();
+        $row = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        return $row ? ['user_id'=>$userId,'company_id'=>$companyId,'section_id'=>(int)$row['section_id']] : null;
+    }
+
+    /** SQL aliases are internal constants, IDs are cast integers. Also include
+     * portal-published tickets that retain their authoritative section mapping.
+     */
+    private function portalManagerTicketClause(string $alias, ?array $scope): string
+    {
+        if (!$scope) return '';
+        $companyId=(int)$scope['company_id'];
+        $sectionId=(int)$scope['section_id'];
+        $userId=(int)$scope['user_id'];
+        $companyColumn = $alias === 'tickets' ? 'COALESCE(ud.company_id, tickets.company_id)' : "{$alias}.company_id";
+        return " AND {$companyColumn} = {$companyId} AND
+          ({$alias}.user_id = {$userId}
+           OR EXISTS (SELECT 1 FROM iweb_customer_portal_user_profiles team
+                      WHERE team.user_id={$alias}.user_id AND team.company_id={$companyId}
+                        AND team.section_id={$sectionId} AND team.portal_role='EXPERT'
+                        AND team.is_active=1)
+           OR EXISTS (SELECT 1 FROM iweb_customer_portal_ticket_publish_map pm
+                      JOIN iweb_customer_portal_ticket_drafts pd ON pd.id=pm.draft_id
+                      WHERE pm.ticket_id={$alias}.ticket_id AND pm.section_id={$sectionId}
+                        AND pd.company_id={$companyId}))";
+    }
+
     function generateSqlWhereFromSession($company_id = null)
     {
         if ($company_id != null) {
@@ -303,6 +373,18 @@ class TicketModel
                 $whereClauses[] = "tuv.user_id = ?";
                 $params[] = (int) $userId;
                 $types .= "i";
+            }
+
+            $managerScope = $this->portalManagerTicketScope();
+            if ($managerScope) {
+                $whereClauses[] = '1=1 ' . $this->portalManagerTicketClause('tuv', $managerScope);
+            }
+            // Enforce personal visibility even if an old RBAC grants view_all.
+            $expertUserId = $this->portalExpertUserId();
+            if ($expertUserId !== null) {
+                $whereClauses[] = 'tuv.user_id = ?';
+                $params[] = $expertUserId;
+                $types .= 'i';
             }
 
             if ($condition_name != '') {
@@ -404,6 +486,18 @@ class TicketModel
                 $types .= "i";
             }
 
+            $managerScope = $this->portalManagerTicketScope();
+            if ($managerScope) {
+                $whereClauses[] = '1=1 ' . $this->portalManagerTicketClause('tuv', $managerScope);
+            }
+            // Enforce personal visibility even if an old RBAC grants view_all.
+            $expertUserId = $this->portalExpertUserId();
+            if ($expertUserId !== null) {
+                $whereClauses[] = 'tuv.user_id = ?';
+                $params[] = $expertUserId;
+                $types .= 'i';
+            }
+
             if ($condition_name != '') {
                 $whereClauses[] = "tuv.ticket_status = ?";
                 $params[] = $condition_name;
@@ -501,6 +595,18 @@ class TicketModel
                 $whereClauses[] = "tuv.user_id = ?";
                 $params[] = (int) $userId;
                 $types .= "i";
+            }
+
+            $managerScope = $this->portalManagerTicketScope();
+            if ($managerScope) {
+                $whereClauses[] = '1=1 ' . $this->portalManagerTicketClause('tuv', $managerScope);
+            }
+            // Enforce personal visibility even if an old RBAC grants view_all.
+            $expertUserId = $this->portalExpertUserId();
+            if ($expertUserId !== null) {
+                $whereClauses[] = 'tuv.user_id = ?';
+                $params[] = $expertUserId;
+                $types .= 'i';
             }
 
             if ($condition_name != '') {
@@ -765,6 +871,13 @@ class TicketModel
                 $types .= 'i';
             }
 
+            $expertUserId = $this->portalExpertUserId();
+            if ($expertUserId !== null) {
+                $where[] = 'tuv.user_id = ?';
+                $params[] = $expertUserId;
+                $types .= 'i';
+            }
+
             if ($condition_name !== '') {
                 $where[] = 'LOWER(tuv.ticket_status) = LOWER(?)';
                 $params[] = $condition_name;
@@ -1003,6 +1116,9 @@ LEFT JOIN (
 ) last_status
     ON last_status.part_id = tickets.id
 WHERE tickets.id = ?
+" . ($this->portalExpertUserId() !== null ? ' AND tickets.user_id = ' . (int)$this->portalExpertUserId() : '') . "
+" . ($this->portalManagerTicketScope() ?
+    str_replace('tickets.ticket_id', 'tickets.id', $this->portalManagerTicketClause('tickets', $this->portalManagerTicketScope())) : '') . "
 LIMIT 1
         ";
 

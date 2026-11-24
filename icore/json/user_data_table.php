@@ -88,8 +88,24 @@ $orderBy = " ORDER BY $orderColumn $orderDir";
 
 $companyId = null;
 
-if ($rbacClass->checkPermissionOperationByName('view_all_ticket_operation', 'u')) {
-    $companyId = $_SESSION["company_id"];
+// TicketModel also enforces EXPERT scope on every query and direct ticket view.
+// The legacy permission must not expand the EXPERT's DataTable scope.
+$portalExpert = false;
+$portalUserId = (int) ($_SESSION['user_id'] ?? 0);
+$portalCompanyId = (int) ($_SESSION['company_id'] ?? 0);
+if ($portalUserId > 0 && $portalCompanyId > 0) {
+    $roleSql = "SELECT 1 FROM iweb_customer_portal_user_profiles
+                WHERE user_id=? AND company_id=? AND portal_role='EXPERT'
+                  AND is_active=1 LIMIT 1";
+    $roleStmt = $db->prepare($roleSql);
+    if (!$roleStmt) { http_response_code(500); exit; }
+    $roleStmt->bind_param('ii', $portalUserId, $portalCompanyId);
+    $roleStmt->execute();
+    $portalExpert = (bool) $roleStmt->get_result()->fetch_assoc();
+    $roleStmt->close();
+}
+if (!$portalExpert && $rbacClass->checkPermissionOperationByName('view_all_ticket_operation', 'u')) {
+    $companyId = $_SESSION['company_id'];
 }
 
 $totalRecords = $ticketModel->getTicketCount(

@@ -31,14 +31,7 @@
             <!-- end page title -->
 
             <div class="row">
-                <?php if (
-                    ($showAccounting) and (
-                        $rbacClass->checkPermissionOperationByName('condition_clearing', 'u') or
-                        $rbacClass->checkPermissionOperationByName('condition_acepted_invoice', 'u') or
-                        $rbacClass->checkPermissionOperationByName('condition_reject_invoice', 'u') or
-                        $rbacClass->checkPermissionOperationByName('condition_official_bill', 'u') or
-                        $rbacClass->checkPermissionOperationByName('condition_invoice', 'u'))
-                ) { ?>
+                <?php if ($customerFinanceAllowed) { ?>
                     <div class="col-lg-12">
 
                         <!-- Checkout Steps -->
@@ -46,7 +39,7 @@
 
                             <li class="nav-item">
                                 <a href="#payment-information" data-bs-toggle="collapse" aria-controls="payment-information"
-                                    aria-expanded="false" class="nav-link rounded-0">
+                                    aria-expanded="true" class="nav-link rounded-0">
                                     <i class="mdi mdi-cash-multiple font-18"></i>
                                     <span class="d-none d-lg-block"><?php echo _lang['accounting']; ?></span>
                                 </a>
@@ -56,7 +49,7 @@
                         <!-- Steps Information -->
                         <div class="tab-content">
                             <!-- Payment Content-->
-                            <div class="collapse" id="payment-information">
+                            <div class="collapse show" id="payment-information">
                                 <div class="card d-block">
 
                                     <div class="card-body border">
@@ -69,9 +62,9 @@
                                         <!-- Pay with Paypal box-->
                                         <div class="border p-3 mb-3 rounded">
                                             <div class="row">
-                                                <?php if ($rbacClass->checkPermissionOperationByName('accounting_view_operation', 'u')) { ?>
+                                                <?php if ($customerFinanceAllowed) { ?>
                                                     <div class="card-body">
-                                                        <?php if ($rbacClass->checkPermissionOperationByName('accounting_add_operation', 'u')) { ?>
+                                                        <?php if ($customerFinanceAllowed) { ?>
 
                                                             <form validate
                                                                 action="./tickets?ticket_id=<?php echo ($_GET['ticket_id']); ?>"
@@ -99,7 +92,7 @@
                                                                     </div>
 
                                                                     <div class="input-group mb-1">
-                                                                        <?php if ($rbacClass->checkPermissionOperationByName('accounting_local_operation', 'u')) { ?>
+                                                                        <?php if ($customerFinanceAllowed) { ?>
 
                                                                             <input type="checkbox" id="switch3" name="local"
                                                                                 data-switch="success" />
@@ -127,7 +120,7 @@
                                                         </h5>
                                                         <?php foreach ($allAccountingFileInfo as $accountingfileInfo) {
 
-                                                            if (!empty($accountingfileInfo['CompanyId']) && $accountingfileInfo['CompanyId'] != $structureModel->getCompanyByUnitId($_SESSION['unit_id'])) {
+                                                            if (!empty($accountingfileInfo['CompanyId']) && (int)$accountingfileInfo['CompanyId'] !== (int)($_SESSION['company_id'] ?? 0)) {
                                                                 continue;
                                                             }
 
@@ -196,7 +189,7 @@
                                     <?php echo $ticketDetail['ticket_number']; ?> )
                                 </h4>
 
-                                <?php if ($rbacClass->checkPermissionOperationByName('condition_operation', 'u')) { ?>
+                                <?php if (($rbacClass->checkPermissionOperationByName('condition_operation', 'u') || $customerFinanceAllowed)) { ?>
                                     <div class="dropdown">
                                         <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown"
                                             aria-expanded="false" title="<?php echo _lang['chnage_status']; ?>">
@@ -204,9 +197,9 @@
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end">
                                             <!-- item-->
-                                            <?php if ($changeCondition) { ?>
+                                            <?php if ($changeCondition || $customerFinanceAllowed) { ?>
                                                 <?php while ($conditions = $allConditions->fetch_assoc()) { ?>
-                                                    <?php if ($rbacClass->checkPermissionOperationByName($conditions['condition_name'], 'u')) { ?>
+                                                    <?php if (((int)($conditions['finance'] ?? 0) === 1 ? $customerFinanceAllowed : ($changeCondition && $rbacClass->checkPermissionOperationByName($conditions['condition_name'], 'u')))) { ?>
                                                         <a href="javascript:void(0);"
                                                             id="<?php echo $textToolsClass->capitalizeFirstLetter($conditions['condition_name']); ?>"
                                                             class="dropdown-item operation-link"

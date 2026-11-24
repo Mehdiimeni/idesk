@@ -5,6 +5,37 @@ if (!function_exists('cp_e')) {
         return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
     }
 }
+
+if (!function_exists('cp_audit_action_codes')) {
+    function cp_audit_action_codes(): array
+    {
+        return ['SECTION_CREATED', 'SECTION_UPDATED', 'SECTION_ACTIVATED', 'SECTION_DEACTIVATED', 'MANAGER_ASSIGNED', 'EXPERT_ASSIGNED', 'EXPERT_REASSIGNED', 'USER_CREATED', 'USER_UPDATED', 'USER_ACTIVATED', 'USER_DEACTIVATED', 'PORTAL_USER_ROLE_UPDATED', 'MANAGER_CREATED', 'EXPERT_CREATED', 'TICKET_DRAFT_CREATED', 'TICKET_EDITED', 'TICKET_PRIORITY_CHANGED', 'TICKET_SENT_TO_MANAGER', 'TICKET_SENT_TO_EXPERT', 'TICKET_ASSIGNED_TO_EXPERT', 'TICKET_APPROVED', 'TICKET_REJECTED', 'TICKET_CANCELLED', 'TICKET_SENT_TO_INTEK', 'TICKET_FIRST_VIEWED', 'COMMENT_CREATED', 'FILE_UPLOADED', 'FILE_REMOVED', 'PORTAL_SETTINGS_UPDATED', 'PORTAL_PROFILE_SAVED'];
+    }
+}
+
+/** Localize stored audit codes at presentation time; never alter persisted codes. */
+if (!function_exists('cp_audit_action_label')) {
+    function cp_audit_action_label($action): string
+    {
+        $key = 'cp_audit_action_' . strtolower((string)$action);
+        return isset(_lang[$key]) ? (string)_lang[$key] : (string)$action;
+    }
+}
+if (!function_exists('cp_audit_entity_label')) {
+    function cp_audit_entity_label($entity): string
+    {
+        $key = 'cp_audit_entity_' . strtolower((string)$entity);
+        return isset(_lang[$key]) ? (string)_lang[$key] : (string)$entity;
+    }
+}
+if (!function_exists('cp_audit_actor_role_label')) {
+    function cp_audit_actor_role_label($role): string
+    {
+        $key = 'cp_role_' . strtolower((string)$role);
+        return isset(_lang[$key]) ? (string)_lang[$key] : (string)$role;
+    }
+}
+
 if (!function_exists('cp_flash_text')) {
     function cp_flash_text($code): string
     {
@@ -337,13 +368,102 @@ $isExpert = $role === \iweb\model\CustomerPortalService::ROLE_EXPERT;
     .customer-portal-page .cp-nav { grid-template-columns:1fr; }
     .customer-portal-page .cp-table.cp-mobile-cards td[data-label]:not([colspan]) { grid-template-columns:minmax(66px,34%) minmax(0,1fr); }
 }
+
+/* Portal organizational chart, scoped to its own component. */
+.cp-org-chart .cp-org-top{text-align:center;margin-bottom:20px}
+.cp-org-chart .cp-org-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.cp-org-chart .cp-org-section{border:1px solid #e2e9f3;border-radius:14px;padding:15px;background:#fbfcff;min-width:0}
+.cp-org-chart .cp-org-heading{font-weight:800;color:#243955;margin-bottom:12px;font-size:.92rem}
+.cp-org-chart .cp-org-tier{font-size:.78rem;color:#64748b;margin:12px 0 8px;font-weight:700}
+.cp-org-chart .cp-org-people{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-start}
+.cp-org-chart .cp-org-top .cp-org-people{justify-content:center}
+.cp-org-chart .cp-org-person{display:flex;flex-direction:column;gap:3px;padding:9px 12px;border:1px solid #dce5f0;border-radius:11px;background:#fff;min-width:110px;max-width:100%;overflow-wrap:anywhere;font-size:.82rem}
+.cp-org-chart .cp-org-person small{color:#7b8797;font-size:.72rem}
+.cp-org-chart .cp-org-person.admin{border-color:#bdd3ff;background:#eef4ff}
+.cp-org-chart .cp-org-person.manager{border-color:#c0d7f2;background:#f0f7ff}
+.cp-org-chart .cp-org-unassigned{border-top:1px solid #e5ebf2;margin-top:20px;padding-top:8px}
+@media(max-width:575px){.cp-org-chart .cp-org-grid{grid-template-columns:1fr}}
+
+/* Portal theme: honor the shell's light/dark mode, scoped to this portal only. */
+:is(html[data-bs-theme="dark"],body[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-layout-color="dark"]) .customer-portal-page {
+    --cu-border:#344255;
+    --cu-text:#e8eef7;
+    --cu-muted:#adbbca;
+    --cu-soft:#283547;
+    --cu-primary:#9abaff;
+    --cp-dark-panel:#202b39;
+    --cp-dark-panel-soft:#263344;
+    --cp-dark-border:#344255;
+    background:#17212d;
+    color:#dbe5ef;
+}
+:is(html[data-bs-theme="dark"],body[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-layout-color="dark"]) .customer-portal-page .cp-hero {
+    background:linear-gradient(135deg,#1c3049,#263e5c);
+    border-color:#3a5068;
+    color:#edf3fb;
+    box-shadow:0 8px 24px rgba(0,0,0,.15);
+}
+:is(html[data-bs-theme="dark"],body[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-layout-color="dark"]) .customer-portal-page .cp-hero h3 {color:#f0f5ff;}
+:is(html[data-bs-theme="dark"],body[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-layout-color="dark"]) .customer-portal-page .cp-hero p {color:#b8c9df;}
+:is(html[data-bs-theme="dark"],body[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-layout-color="dark"]) .customer-portal-page :is(.cp-card,.cp-stat,.cp-nav,.cp-draft-card,.cp-comment,.cp-form-note,.cp-json,.cp-org-section,.cp-org-person,.cp-file-picker,.cp-danger-zone,.cp-owner-banner) {
+    background:var(--cp-dark-panel);
+    border-color:var(--cp-dark-border);
+    color:#dbe5ef;
+    box-shadow:none;
+}
+:is(html[data-bs-theme="dark"],body[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-layout-color="dark"]) .customer-portal-page :is(.cp-card-header,.cp-table thead th,.cp-nav a,.cp-org-person.admin,.cp-org-person.manager,.cp-file-picker .cp-file-trigger) {
+    background:var(--cp-dark-panel-soft);
+    color:#dbe5ef;
+    border-color:var(--cp-dark-border);
+}
+:is(html[data-bs-theme="dark"],body[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-layout-color="dark"]) .customer-portal-page :is(.cp-card-title,.cp-section-name,.cp-draft-title,.cp-stat .value,.cp-org-heading,.cp-info-row strong,.cp-history-item strong,.cp-comment-body) {color:#ecf3ff;}
+:is(html[data-bs-theme="dark"],body[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-layout-color="dark"]) .customer-portal-page :is(.cp-muted,.cp-stat .label,.cp-table thead th,.cp-org-tier,.cp-org-person small,.cp-info-row span,.cp-draft-meta,.cp-comment-head,.cp-empty) {color:#b2c0d1;}
+:is(html[data-bs-theme="dark"],body[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-layout-color="dark"]) .customer-portal-page .cp-table :is(td,th) {color:#dbe5ef;border-color:#394859;background:transparent;}
+:is(html[data-bs-theme="dark"],body[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-layout-color="dark"]) .customer-portal-page .cp-table tbody tr:hover td {background:#29394c;}
+:is(html[data-bs-theme="dark"],body[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-layout-color="dark"]) .customer-portal-page :is(.form-control,.form-select,.input-group-text) {background-color:#263344;color:#eef4fc;border-color:#47586a;}
+:is(html[data-bs-theme="dark"],body[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-layout-color="dark"]) .customer-portal-page .form-control::placeholder {color:#a3b0bf;}
+:is(html[data-bs-theme="dark"],body[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-layout-color="dark"]) .customer-portal-page .cp-nav a:is(.active,:hover) {background:#314968;border-color:#607b9d;color:#e0ecff;}
+:is(html[data-bs-theme="dark"],body[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-layout-color="dark"]) .customer-portal-page :is(.cp-role-pill,.cp-badge.role) {background:#284568;color:#bcd5ff;border-color:#52739c;}
+:is(html[data-bs-theme="dark"],body[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-layout-color="dark"]) .customer-portal-page .cp-org-unassigned {border-color:#344255;}
+@media(max-width:575.98px){
+:is(html[data-bs-theme="dark"],body[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-layout-color="dark"]) .customer-portal-page .cp-table.cp-mobile-cards tbody tr {background:#202b39;border-color:#344255;}
+:is(html[data-bs-theme="dark"],body[data-bs-theme="dark"],html[data-layout-color="dark"],body[data-layout-color="dark"]) .customer-portal-page .cp-table.cp-mobile-cards td {border-color:#344255;}
+}
+
+/* The role pill must stay on the opposite side of the hero title in RTL/LTR. */
+.customer-portal-page .cp-hero > .cp-hero-layout {
+    display:flex !important;
+    flex-direction:row !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    flex-wrap:wrap !important;
+    width:100%;
+    gap:12px;
+}
+.customer-portal-page .cp-hero-layout > .cp-hero-text {flex:1 1 220px;min-width:0;}
+.customer-portal-page .cp-hero-layout > .cp-role-pill {
+    position:relative !important;
+    inset:auto !important;
+    order:1;
+    flex:0 0 auto;
+    margin-inline-start:auto !important;
+    max-width:100%;
+    white-space:normal;
+    background:#fff !important;
+    color:#195177 !important;
+    border-color:rgba(255,255,255,.8) !important;
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+@media(max-width:575px){
+    .customer-portal-page .cp-hero-layout > .cp-role-pill {margin-inline-start:0 !important;}
+}
 </style>
 <div class="content-page customer-portal-page">
     <div class="content">
         <div class="container-fluid cp-shell">
             <div class="cp-hero mb-3">
-                <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap position-relative" style="z-index:1">
-                    <div>
+                <div class="cp-hero-layout position-relative" style="z-index:1">
+                    <div class="cp-hero-text">
                         <h3><i class="ri-building-4-line me-1"></i><?php echo _lang['cp_title']; ?></h3>
                         <p><?php echo _lang['cp_subtitle_' . strtolower($role)] ?? _lang['cp_subtitle']; ?></p>
                     </div>
@@ -432,6 +552,29 @@ $isExpert = $role === \iweb\model\CustomerPortalService::ROLE_EXPERT;
 
                 <?php elseif ($customerPortalView === 'company_tickets' && $isAdmin): ?>
                     <?php $ct = $customerPortalCompanyTickets ?? ['rows'=>[],'total'=>0,'page'=>1,'pages'=>1]; ?>
+                    <?php
+                    $ticketSearch = (string)($ct['q'] ?? '');
+                    $ticketPriority = (string)($ct['priority'] ?? '');
+                    $ticketBase = './customer_portal?view=company_tickets&amp;q=' . rawurlencode($ticketSearch) . '&amp;priority=' . rawurlencode($ticketPriority);
+                    ?>
+                    <div class="cp-card mb-3">
+                        <div class="cp-card-body">
+                            <form action="./customer_portal" method="get" class="row g-2 align-items-end">
+                                <input type="hidden" name="view" value="company_tickets">
+                                <div class="col-lg-7"><label class="form-label"><?php echo _lang['cp_ticket_search_label']; ?></label><input type="search" class="form-control" name="q" value="<?php echo cp_e($ticketSearch); ?>" placeholder="<?php echo cp_e(_lang['cp_ticket_search_placeholder']); ?>"></div>
+                                <div class="col-lg-3"><label class="form-label"><?php echo _lang['priority']; ?></label><select class="form-select" name="priority">
+                                <option value=""><?php echo _lang['cp_ticket_all_priorities']; ?></option>
+                                <?php foreach (['low','medium','high'] as $value): ?>
+                                    <option value="<?php echo $value; ?>" <?php echo $ticketPriority === $value ? 'selected' : ''; ?>><?php echo cp_e(_lang[$value] ?? $value); ?></option>
+                                <?php endforeach; ?></select></div>
+                                <div class="col-lg-2"><button class="btn btn-primary w-100"><i class="ri-search-line me-1"></i><?php echo _lang['search']; ?></button></div>
+                            </form>
+                            <div class="d-flex gap-2 mt-3 flex-wrap">
+                                <a href="<?php echo $ticketBase; ?>&amp;export=csv" class="btn btn-sm btn-outline-success"><i class="ri-file-excel-2-line me-1"></i><?php echo _lang['cp_ticket_export_csv']; ?></a>
+                                <a href="./customer_portal?view=company_tickets" class="btn btn-sm btn-outline-secondary"><?php echo _lang['cp_ticket_clear_filters']; ?></a>
+                            </div>
+                        </div>
+                    </div>
                     <div class="cp-card">
                         <div class="cp-card-header"><div><h5 class="cp-card-title"><?php echo _lang['cp_company_tickets']; ?></h5><div class="cp-muted"><?php echo _lang['cp_company_tickets_note']; ?></div></div><strong><?php echo number_format((int)$ct['total']); ?></strong></div>
                         <div class="table-responsive"><table class="table cp-table"><thead><tr>
@@ -442,7 +585,7 @@ $isExpert = $role === \iweb\model\CustomerPortalService::ROLE_EXPERT;
                                 <td><?php echo cp_e($t['ticket_number'] ?: $t['ticket_id']); ?></td>
                                 <td><a class="text-decoration-none fw-semibold" href="./customer_portal?view=company_ticket&amp;ticket_id=<?php echo (int)$t['ticket_id']; ?>"><?php echo cp_e($t['ticket_title']); ?></a></td>
                                 <td><?php echo cp_e(cp_date($t['ticket_creation_date'], $config)); ?></td>
-                                <td><?php echo cp_e($t['priority']); ?></td>
+                                <td><?php echo cp_e(_lang[(string)$t['priority']] ?? (string)$t['priority']); ?></td>
                             </tr><?php endforeach; ?>
                         <?php endif; ?>
                         </tbody></table></div>
@@ -450,8 +593,8 @@ $isExpert = $role === \iweb\model\CustomerPortalService::ROLE_EXPERT;
                             <div class="cp-card-body d-flex justify-content-between align-items-center gap-2">
                                 <span class="cp-muted"><?php echo _lang['cp_page']; ?> <?php echo (int)$ct['page']; ?> / <?php echo (int)$ct['pages']; ?></span>
                                 <div class="d-flex gap-2">
-                                    <?php if ((int)$ct['page'] > 1): ?><a class="btn btn-sm btn-outline-secondary" href="./customer_portal?view=company_tickets&amp;page_num=<?php echo (int)$ct['page']-1; ?>"><?php echo _lang['cp_prev_page']; ?></a><?php endif; ?>
-                                    <?php if ((int)$ct['page'] < (int)$ct['pages']): ?><a class="btn btn-sm btn-outline-primary" href="./customer_portal?view=company_tickets&amp;page_num=<?php echo (int)$ct['page']+1; ?>"><?php echo _lang['cp_next_page']; ?></a><?php endif; ?>
+                                    <?php if ((int)$ct['page'] > 1): ?><a class="btn btn-sm btn-outline-secondary" href="<?php echo $ticketBase; ?>&amp;page_num=<?php echo (int)$ct['page']-1; ?>"><?php echo _lang['cp_prev_page']; ?></a><?php endif; ?>
+                                    <?php if ((int)$ct['page'] < (int)$ct['pages']): ?><a class="btn btn-sm btn-outline-primary" href="<?php echo $ticketBase; ?>&amp;page_num=<?php echo (int)$ct['page']+1; ?>"><?php echo _lang['cp_next_page']; ?></a><?php endif; ?>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -563,14 +706,121 @@ $isExpert = $role === \iweb\model\CustomerPortalService::ROLE_EXPERT;
                     })();
                     </script><?php endif; ?>
                     <div class="cp-card"><div class="cp-card-header"><div><h5 class="cp-card-title"><?php echo _lang['cp_users']; ?></h5><div class="cp-muted"><?php echo _lang['cp_users_note']; ?></div></div></div><div class="table-responsive"><table class="table cp-table"><thead><tr><th><?php echo _lang['name']; ?></th><th><?php echo _lang['role']; ?></th><th><?php echo _lang['cp_section']; ?></th><th><?php echo _lang['email']; ?></th><th><?php echo _lang['status']; ?></th><th><?php echo _lang['action']; ?></th></tr></thead><tbody>
-                    <?php foreach ($customerPortalUsers as $u): if ($isManager && $u['portal_role'] !== 'EXPERT') continue; ?><tr><td><strong><?php echo cp_e($u['name']); ?></strong></td><td><span class="cp-badge role"><?php echo cp_e(_lang['cp_role_' . strtolower($u['portal_role'])]); ?></span></td><td><?php echo cp_e($u['section_name'] ?: _lang['cp_unassigned']); ?></td><td><?php echo cp_e($u['email']); ?></td><td><span class="cp-badge <?php echo ($u['profile_active'] && $u['status']==='Active')?'active':'inactive'; ?>"><?php echo ($u['profile_active'] && $u['status']==='Active')?_lang['active']:_lang['inactive']; ?></span></td><td><div class="cp-actions">
+                    <?php foreach ($customerPortalUsers as $u): if ($isManager && $u['portal_role'] !== 'EXPERT') continue; ?><tr><td><strong><?php echo cp_e($u['name']); ?></strong></td><td><span class="cp-badge role"><?php echo cp_e(_lang['cp_role_' . strtolower($u['portal_role'])]); ?></span><?php if ($u['portal_role']==='MANAGER'): ?><div class="mt-1"><span class="badge <?php echo !empty($customerPortalFinancePermissions[(int)$u['user_id']]) ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary'; ?>"><i class="ri-bank-card-line me-1"></i><?php echo cp_e(!empty($customerPortalFinancePermissions[(int)$u['user_id']]) ? _lang['cp_finance_status_enabled'] : _lang['cp_finance_status_disabled']); ?></span></div><?php endif; ?></td><td><?php echo cp_e($u['section_name'] ?: _lang['cp_unassigned']); ?></td><td><?php echo cp_e($u['email']); ?></td><td><span class="cp-badge <?php echo ($u['profile_active'] && $u['status']==='Active')?'active':'inactive'; ?>"><?php echo ($u['profile_active'] && $u['status']==='Active')?_lang['active']:_lang['inactive']; ?></span></td><td><div class="cp-actions">
+                        <?php if ($isAdmin && $u['portal_role']==='MANAGER'): ?>
+                        <button class="btn btn-sm btn-outline-warning" type="button" data-bs-toggle="modal" data-bs-target="#financeAccess<?php echo (int)$u['user_id']; ?>" title="<?php echo cp_e(_lang['cp_finance_permission']); ?>"><i class="ri-bank-card-line"></i></button>
+                        <?php endif; ?>
                         <?php if ($isAdmin): ?><button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editUser<?php echo (int)$u['user_id']; ?>"><i class="ri-edit-line"></i></button><form method="post"><input type="hidden" name="csrf_token" value="<?php echo cp_e($customerPortalCsrf); ?>"><input type="hidden" name="cp_action" value="user_toggle"><input type="hidden" name="return_view" value="users"><input type="hidden" name="user_id" value="<?php echo (int)$u['user_id']; ?>"><input type="hidden" name="set_active" value="<?php echo ($u['profile_active'] && $u['status']==='Active')?'0':'1'; ?>"><button class="btn btn-sm <?php echo ($u['profile_active'] && $u['status']==='Active')?'btn-outline-danger':'btn-outline-success'; ?>"><i class="ri-user-<?php echo ($u['profile_active'] && $u['status']==='Active')?'unfollow':'follow'; ?>-line"></i></button></form><?php endif; ?>
                         <?php $canAssignThisExpert = $u['portal_role']==='EXPERT' && (($isManager && empty($u['section_id']) && !empty($customerPortalContext['permissions']['manager_assign_unassigned_expert'])) || ($isAdmin && !empty($customerPortalContext['permissions']['customer_admin_reassign_expert']))); if ($canAssignThisExpert): ?><button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#assignExpert<?php echo (int)$u['user_id']; ?>"><i class="ri-node-tree"></i></button><?php endif; ?>
                     </div></td></tr>
-                    <?php if ($isAdmin): ?><div class="modal fade" id="editUser<?php echo (int)$u['user_id']; ?>" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><form method="post"><div class="modal-header"><h5 class="modal-title"><?php echo _lang['cp_edit_user']; ?></h5><button class="btn-close" type="button" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" name="csrf_token" value="<?php echo cp_e($customerPortalCsrf); ?>"><input type="hidden" name="cp_action" value="user_update"><input type="hidden" name="return_view" value="users"><input type="hidden" name="user_id" value="<?php echo (int)$u['user_id']; ?>"><div class="mb-2"><label class="form-label"><?php echo _lang['name']; ?></label><input class="form-control" name="name" value="<?php echo cp_e($u['name']); ?>" required></div><div class="mb-2"><label class="form-label"><?php echo _lang['email']; ?></label><input class="form-control" type="email" name="email" value="<?php echo cp_e($u['email']); ?>" required></div><div><label class="form-label"><?php echo _lang['mobile']; ?></label><input class="form-control" name="mobile" value="<?php echo cp_e($u['mobile']); ?>"></div></div><div class="modal-footer"><button class="btn btn-primary"><?php echo _lang['save_changes']; ?></button></div></form></div></div></div><?php endif; ?>
+                    <?php if ($isAdmin && $u['portal_role']==='MANAGER'): ?>
+                    <div class="modal fade" id="financeAccess<?php echo (int)$u['user_id']; ?>" tabindex="-1" aria-hidden="true">
+                      <div class="modal-dialog"><div class="modal-content"><form method="post">
+                        <div class="modal-header"><h5 class="modal-title"><?php echo cp_e(_lang['cp_finance_permission']); ?> — <?php echo cp_e($u['name']); ?></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+                        <div class="modal-body">
+                          <input type="hidden" name="csrf_token" value="<?php echo cp_e($customerPortalCsrf); ?>">
+                          <input type="hidden" name="cp_action" value="manager_finance_permission">
+                          <input type="hidden" name="return_view" value="users">
+                          <input type="hidden" name="user_id" value="<?php echo (int)$u['user_id']; ?>">
+                          <div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" name="finance_allowed" value="1" id="financeAllowed<?php echo (int)$u['user_id']; ?>" <?php echo !empty($customerPortalFinancePermissions[(int)$u['user_id']])?'checked':''; ?>>
+                            <label class="form-check-label" for="financeAllowed<?php echo (int)$u['user_id']; ?>"><?php echo cp_e(_lang['cp_finance_enable']); ?></label></div>
+                          <p class="small text-muted mt-3"><?php echo cp_e(_lang['cp_finance_note']); ?></p>
+                        </div><div class="modal-footer"><button type="submit" class="btn btn-primary"><?php echo _lang['save_changes']; ?></button></div>
+                      </form></div></div>
+                    </div>
+                    <?php endif; ?>
+                                        <?php if ($isAdmin): ?><div class="modal fade" id="editUser<?php echo (int)$u['user_id']; ?>" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><form method="post"><div class="modal-header"><h5 class="modal-title"><?php echo _lang['cp_edit_user']; ?></h5><button class="btn-close" type="button" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" name="csrf_token" value="<?php echo cp_e($customerPortalCsrf); ?>"><input type="hidden" name="cp_action" value="user_update"><input type="hidden" name="return_view" value="users"><input type="hidden" name="user_id" value="<?php echo (int)$u['user_id']; ?>"><div class="mb-2"><label class="form-label"><?php echo _lang['name']; ?></label><input class="form-control" name="name" value="<?php echo cp_e($u['name']); ?>" required></div><div class="mb-2"><label class="form-label"><?php echo _lang['email']; ?></label><input class="form-control" type="email" name="email" value="<?php echo cp_e($u['email']); ?>" required></div><div><label class="form-label"><?php echo _lang['mobile']; ?></label><input class="form-control" name="mobile" value="<?php echo cp_e($u['mobile']); ?>"></div>
+<?php if (in_array($u['portal_role'], ['MANAGER','EXPERT'], true)): ?>
+<div class="mt-3"><label class="form-label"><?php echo _lang['role']; ?></label>
+<select class="form-select" name="portal_role" required>
+<option value="MANAGER" <?php echo $u['portal_role']==='MANAGER'?'selected':''; ?>><?php echo _lang['cp_role_manager']; ?></option>
+<option value="EXPERT" <?php echo $u['portal_role']==='EXPERT'?'selected':''; ?>><?php echo _lang['cp_role_expert']; ?></option>
+</select></div>
+<div class="mt-2"><label class="form-label"><?php echo _lang['cp_section']; ?></label>
+<select class="form-select" name="section_id" required>
+<?php foreach ($customerPortalSections as $editSection): if (empty($editSection['is_active'])) continue; ?>
+<option value="<?php echo (int)$editSection['id']; ?>" <?php echo (int)$u['section_id']===(int)$editSection['id']?'selected':''; ?>><?php echo cp_e($editSection['name']); ?></option>
+<?php endforeach; ?>
+</select></div>
+<div class="cp-form-note mt-2">تغییر نقش فقط در همین شرکت انجام می‌شود. هر بخش یک مدیر فعال دارد؛ تغییر نقش مدیر دارای کارشناسان فعال نیازمند تعیین مدیر جایگزین است.</div>
+<?php endif; ?>
+</div><div class="modal-footer"><button class="btn btn-primary"><?php echo _lang['save_changes']; ?></button></div></form></div></div></div><?php endif; ?>
                     <?php if ($canAssignThisExpert): ?><div class="modal fade" id="assignExpert<?php echo (int)$u['user_id']; ?>" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><form method="post"><div class="modal-header"><h5 class="modal-title"><?php echo _lang['cp_assign_expert']; ?></h5><button class="btn-close" type="button" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" name="csrf_token" value="<?php echo cp_e($customerPortalCsrf); ?>"><input type="hidden" name="cp_action" value="assign_expert"><input type="hidden" name="return_view" value="users"><input type="hidden" name="expert_user_id" value="<?php echo (int)$u['user_id']; ?>"><?php if ($isManager): ?><input type="hidden" name="section_id" value="<?php echo (int)$customerPortalContext['section_id']; ?>"><div class="cp-form-note"><?php echo cp_e($customerPortalContext['section_name']); ?></div><?php else: ?><select class="form-select" name="section_id" required><?php foreach ($customerPortalSections as $s): if (!$s['is_active'] || empty($s['manager_user_id'])) continue; ?><option value="<?php echo (int)$s['id']; ?>" <?php echo (int)$u['section_id']===(int)$s['id']?'selected':''; ?>><?php echo cp_e($s['name']); ?></option><?php endforeach; ?></select><?php endif; ?></div><div class="modal-footer"><button class="btn btn-primary"><?php echo _lang['cp_assign']; ?></button></div></form></div></div></div><?php endif; ?>
                     <?php endforeach; ?>
                     </tbody></table></div></div>
+
+                    <?php
+                    // Organizational tree is derived from current scoped sections and users, no extra database table.
+                    $orgSections = [];
+                    foreach ($customerPortalSections as $section) {
+                        if ($isManager && (int)$section['id'] !== (int)$customerPortalContext['section_id']) continue;
+                        $orgSections[(int)$section['id']] = $section;
+                    }
+                    $orgUsers = $customerPortalUsers;
+                    // Manager's user listing contains experts only. Include the signed-in
+                    // manager in the chart without broadening user-management permissions.
+                    if ($isManager && !empty($customerPortalContext['section_id'])) {
+                        $currentManagerId = (int) $customerPortalContext['user_id'];
+                        $managerExistsInChart = false;
+                        foreach ($orgUsers as $chartUser) {
+                            if ((int)$chartUser['user_id'] === $currentManagerId) {
+                                $managerExistsInChart = true;
+                                break;
+                            }
+                        }
+                        if (!$managerExistsInChart) {
+                            $orgUsers[] = [
+                                'user_id' => $currentManagerId,
+                                'name' => (string)($_SESSION['name'] ?? ''),
+                                'portal_role' => 'MANAGER',
+                                'section_id' => (int)$customerPortalContext['section_id'],
+                                'profile_active' => (int)($customerPortalContext['profile_active'] ?? 0),
+                                'status' => (string)($customerPortalContext['user_status'] ?? ''),
+                            ];
+                        }
+                    }
+                    $orgAdmins = array_values(array_filter($orgUsers, static function ($u) { return $u['portal_role'] === 'ADMIN'; }));
+                    $orgUnassigned = array_values(array_filter($orgUsers, static function ($u) { return $u['portal_role'] !== 'ADMIN' && empty($u['section_id']); }));
+                    ?>
+                    <div class="cp-card mt-3 cp-org-chart">
+                        <div class="cp-card-header"><div><h5 class="cp-card-title"><i class="ri-node-tree me-1"></i>چارت سازمانی</h5><div class="cp-muted">ساختار بخش‌ها، مدیران و کارشناسان بر اساس اطلاعات فعلی پرتال</div></div></div>
+                        <div class="cp-card-body">
+                            <?php if ($isAdmin): ?>
+                                <div class="cp-org-top">
+                                    <div class="cp-org-heading">مدیریت شرکت</div>
+                                    <div class="cp-org-people">
+                                        <?php foreach ($orgAdmins as $u): ?><div class="cp-org-person admin"><strong><?php echo cp_e($u['name']); ?></strong><small>ادمین شرکت<?php echo ($u['profile_active'] && $u['status']==='Active') ? '' : ' · غیرفعال'; ?></small></div><?php endforeach; ?>
+                                        <?php if (!$orgAdmins): ?><span class="cp-muted">ادمینی ثبت نشده است.</span><?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            <div class="cp-org-grid">
+                                <?php foreach ($orgSections as $section):
+                                    $sid = (int)$section['id'];
+                                    $managers = array_values(array_filter($orgUsers, static function($u) use ($sid) { return $u['portal_role'] === 'MANAGER' && (int)$u['section_id'] === $sid; }));
+                                    $experts = array_values(array_filter($orgUsers, static function($u) use ($sid) { return $u['portal_role'] === 'EXPERT' && (int)$u['section_id'] === $sid; }));
+                                ?>
+                                    <div class="cp-org-section">
+                                        <div class="cp-org-heading"><i class="ri-building-2-line me-1"></i><?php echo cp_e($section['name']); ?><?php if (!$section['is_active']): ?><small class="ms-2">(غیرفعال)</small><?php endif; ?></div>
+                                        <div class="cp-org-tier">مدیر بخش</div>
+                                        <div class="cp-org-people">
+                                            <?php foreach ($managers as $u): ?><div class="cp-org-person manager"><strong><?php echo cp_e($u['name']); ?></strong><?php if (!$u['profile_active'] || $u['status'] !== 'Active'): ?><small>غیرفعال</small><?php endif; ?></div><?php endforeach; ?>
+                                            <?php if (!$managers): ?><span class="cp-muted">بدون مدیر</span><?php endif; ?>
+                                        </div>
+                                        <div class="cp-org-tier">کارشناسان (<?php echo count($experts); ?>)</div>
+                                        <div class="cp-org-people">
+                                            <?php foreach ($experts as $u): ?><div class="cp-org-person expert"><strong><?php echo cp_e($u['name']); ?></strong><?php if (!$u['profile_active'] || $u['status'] !== 'Active'): ?><small>غیرفعال</small><?php endif; ?></div><?php endforeach; ?>
+                                            <?php if (!$experts): ?><span class="cp-muted">بدون کارشناس</span><?php endif; ?>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                                <?php if (!$orgSections): ?><div class="cp-muted">هنوز بخشی تعریف نشده است.</div><?php endif; ?>
+                            </div>
+                            <?php if ($isAdmin && $orgUnassigned): ?>
+                                <div class="cp-org-unassigned"><div class="cp-org-tier">کاربران فاقد بخش</div><div class="cp-org-people"><?php foreach ($orgUnassigned as $u): ?><div class="cp-org-person"><strong><?php echo cp_e($u['name']); ?></strong><small><?php echo $u['portal_role']==='MANAGER'?'مدیر':'کارشناس'; ?></small></div><?php endforeach; ?></div></div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
 
                 <?php elseif ($customerPortalView === 'drafts'): ?>
                     <div class="cp-card"><div class="cp-card-header"><div><h5 class="cp-card-title"><?php echo _lang['cp_requests']; ?></h5><div class="cp-muted"><?php echo _lang['cp_requests_note']; ?></div></div><?php if (!empty($customerPortalContext['can_create_draft'])): ?><a href="./customer_portal?view=new" class="btn btn-primary btn-sm"><i class="ri-add-line me-1"></i><?php echo _lang['cp_new_request']; ?></a><?php endif; ?></div><div class="cp-card-body">
@@ -626,7 +876,15 @@ $isExpert = $role === \iweb\model\CustomerPortalService::ROLE_EXPERT;
                                 <?php if ($isAdmin): ?>
                                     <div class="col-md-3"><label class="form-label"><?php echo _lang['cp_section']; ?></label><select name="section_id" class="form-select"><option value="0"><?php echo _lang['cp_audit_all_sections']; ?></option><?php foreach ($customerPortalAuditSections as $sec): ?><option value="<?php echo (int)$sec['id']; ?>" <?php echo (int)($auditFilters['section_id'] ?? 0)===(int)$sec['id'] ? 'selected' : ''; ?>><?php echo cp_e($sec['name']); ?></option><?php endforeach; ?></select></div>
                                 <?php endif; ?>
-                                <div class="col-md-3"><label class="form-label"><?php echo _lang['cp_event']; ?></label><input type="text" name="event" maxlength="64" class="form-control" placeholder="USER_CREATED" value="<?php echo cp_e($auditFilters['event'] ?? ''); ?>"></div>
+                                <div class="col-md-3"><label class="form-label"><?php echo _lang['cp_event']; ?></label><select name="event" class="form-select">
+                                    <option value=""><?php echo _lang['cp_audit_all_events']; ?></option>
+                                    <?php foreach (cp_audit_action_codes() as $eventCode): ?>
+                                        <option value="<?php echo cp_e($eventCode); ?>" <?php echo (string)($auditFilters['event'] ?? '') === $eventCode ? 'selected' : ''; ?>><?php echo cp_e(cp_audit_action_label($eventCode)); ?></option>
+                                    <?php endforeach; ?>
+                                    <?php if (!empty($auditFilters['event']) && !in_array((string)$auditFilters['event'], cp_audit_action_codes(), true)): ?>
+                                        <option value="<?php echo cp_e($auditFilters['event']); ?>" selected><?php echo cp_e(cp_audit_action_label($auditFilters['event'])); ?></option>
+                                    <?php endif; ?>
+                                </select></div>
                                 <div class="col-md-2"><label class="form-label"><?php echo _lang['cp_audit_date_from']; ?></label><input type="date" name="date_from" class="form-control" value="<?php echo cp_e($auditFilters['date_from'] ?? ''); ?>"></div>
                                 <div class="col-md-2"><label class="form-label"><?php echo _lang['cp_audit_date_to']; ?></label><input type="date" name="date_to" class="form-control" value="<?php echo cp_e($auditFilters['date_to'] ?? ''); ?>"></div>
                                 <div class="col-md-2 d-flex gap-2"><button class="btn btn-primary flex-fill" type="submit"><?php echo _lang['search']; ?></button><a href="./customer_portal?view=audit" class="btn btn-outline-secondary"><?php echo _lang['cp_audit_clear']; ?></a></div>
@@ -642,10 +900,10 @@ $isExpert = $role === \iweb\model\CustomerPortalService::ROLE_EXPERT;
                             <tr>
                                 <td><?php echo (int)$a['id']; ?></td>
                                 <td><?php echo cp_e(cp_date($a['created_at'],$config)); ?></td>
-                                <td><?php echo cp_e($a['actor_name']); ?><div class="cp-muted"><?php echo cp_e($a['actor_role']); ?></div></td>
+                                <td><?php echo cp_e($a['actor_name']); ?><div class="cp-muted"><?php echo cp_e(cp_audit_actor_role_label($a['actor_role'])); ?></div></td>
                                 <td><?php echo cp_e($a['section_name'] ?: '-'); ?></td>
-                                <td><strong><?php echo cp_e($a['action_type']); ?></strong></td>
-                                <td><?php echo cp_e($a['entity_type']); ?> #<?php echo (int)$a['entity_id']; ?></td>
+                                <td><strong><?php echo cp_e(cp_audit_action_label($a['action_type'])); ?></strong></td>
+                                <td><?php echo cp_e(cp_audit_entity_label($a['entity_type'])); ?> #<?php echo (int)$a['entity_id']; ?></td>
                                 <td>
                                     <?php if (!empty($a['old_data']) || !empty($a['new_data'])): ?>
                                         <details><summary><?php echo _lang['view']; ?></summary>

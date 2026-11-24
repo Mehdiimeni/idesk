@@ -35,6 +35,7 @@ class CustomerPortalService
         'customer_admin_assign_manager_to_section',
         'manager_assign_unassigned_expert',
         'customer_admin_reassign_expert',
+        'manager_finance_access',
     ];
 
     private $conn;
@@ -598,7 +599,7 @@ class CustomerPortalService
         try {
             // Lock the target first; a company/role change racing with this edit must not bypass scope.
             $stmt = $this->conn->prepare("
-                SELECT p.section_id, p.portal_role, u.name, u.email, u.mobile
+                SELECT p.section_id, p.portal_role, p.is_active AS profile_active, u.name, u.email, u.mobile, u.status, u.unit_id, u.rbac_id
                 FROM iweb_customer_portal_user_profiles p
                 INNER JOIN users u ON u.id=p.user_id
                 WHERE p.user_id=? AND p.company_id=?
@@ -631,6 +632,57 @@ class CustomerPortalService
                 throw new RuntimeException('USER_EMAIL_EXISTS');
             }
 
+            // Admin may change MANAGER <-> EXPERT within their own company only.
+            // Portal ADMIN is intentionally immutable in this customer-facing form.
+            $oldRole = strtoupper((string) $target['portal_role']);
+            $requestedRole = strtoupper(trim((string) ($data['portal_role'] ?? $oldRole)));
+            if ($oldRole === self::ROLE_ADMIN) {
+                if ($requestedRole !== self::ROLE_ADMIN) {
+                    throw new RuntimeException('PORTAL_ADMIN_ROLE_CHANGE_DENIED');
+                }
+                $requestedSectionId = null;
+            } else {
+                if (!in_array($requestedRole, [self::ROLE_MANAGER, self::ROLE_EXPERT], true)) {
+                    throw new RuntimeException('INVALID_PORTAL_ROLE');
+                }
+                $requestedSectionId = array_key_exists('section_id', $data)
+                    ? (int) $data['section_id'] : (int) $target['section_id'];
+                if ($requestedSectionId <= 0) {
+                    throw new RuntimeException('SECTION_REQUIRED');
+                }
+                $section = $this->getSectionInCompany($requestedSectionId, $companyId);
+                if (!$section || (int) $section['is_active'] !== 1) {
+                    throw new RuntimeException('SECTION_NOT_ACTIVE');
+                }
+                $oldSectionId = (int) $target['section_id'];
+                $changedAssignment = $requestedRole !== $oldRole || $requestedSectionId !== $oldSectionId;
+                if ($changedAssignment) {
+                    if ($this->countOpenDraftsForOwner($targetUserId) > 0) {
+                        throw new RuntimeException('USER_HAS_OPEN_DRAFTS');
+                    }
+                    if ($oldRole === self::ROLE_MANAGER && $oldSectionId > 0
+                        && (int)$target['profile_active'] === 1 && $target['status'] === 'Active'
+                        && $this->countActiveExperts($oldSectionId) > 0
+                        && $this->countOtherActiveManagers($oldSectionId, $targetUserId) === 0) {
+                        throw new RuntimeException('LAST_MANAGER_WITH_ACTIVE_EXPERTS');
+                    }
+                    if ($requestedRole === self::ROLE_MANAGER
+                        && (int)$target['profile_active'] === 1 && $target['status'] === 'Active') {
+                        $assignedManager = $this->getActiveManagerForSection($requestedSectionId);
+                        if ($assignedManager && (int)$assignedManager['user_id'] !== $targetUserId) {
+                            throw new RuntimeException('SECTION_ALREADY_HAS_MANAGER');
+                        }
+                    }
+                    if ($requestedRole === self::ROLE_EXPERT
+                        && (int)$target['profile_active'] === 1 && $target['status'] === 'Active') {
+                        $assignedManager = $this->getActiveManagerForSection($requestedSectionId);
+                        if (!$assignedManager || (int)$assignedManager['user_id'] === $targetUserId) {
+                            throw new RuntimeException('SECTION_MANAGER_REQUIRED');
+                        }
+                    }
+                }
+            }
+
             $stmt = $this->conn->prepare("UPDATE users SET name=?, email=?, mobile=? WHERE id=?");
             $stmt->bind_param('sssi', $name, $email, $mobile, $targetUserId);
             if (!$stmt->execute()) {
@@ -638,6 +690,63 @@ class CustomerPortalService
                 throw new RuntimeException('USER_UPDATE_FAILED');
             }
             $stmt->close();
+
+            if ($oldRole !== self::ROLE_ADMIN
+                && ($requestedRole !== $oldRole || $requestedSectionId !== (int)$target['section_id'])) {
+                $actorId = (int) $context['user_id'];
+                $stmt = $this->conn->prepare("UPDATE iweb_customer_portal_user_profiles SET portal_role=?, section_id=?, updated_by=? WHERE user_id=? AND company_id=?");
+                $stmt->bind_param('siiii', $requestedRole, $requestedSectionId, $actorId, $targetUserId, $companyId);
+                if (!$stmt->execute()) {
+                    throw new RuntimeException('PORTAL_PROFILE_UPDATE_FAILED');
+                }
+                $stmt->close();
+
+                // Keep the legacy RBAC in sync for accounts created in the portal unit.
+                // Do not alter old unit assignments/RBAC of pre-existing customer accounts.
+                $portalUnitId = (int) ($context['settings']['portal_unit_id'] ?? 0);
+                $newRbacId = (int) ($requestedRole === self::ROLE_MANAGER
+                    ? ($context['settings']['manager_rbac_id'] ?? 0)
+                    : ($context['settings']['expert_rbac_id'] ?? 0));
+                if ($portalUnitId > 0 && (int)$target['unit_id'] === $portalUnitId) {
+                    if ($newRbacId <= 0 || !$this->validateLegacyMapping($companyId, $portalUnitId, $newRbacId)) {
+                        throw new RuntimeException('PORTAL_LEGACY_MAPPING_NOT_CONFIGURED');
+                    }
+                    $stmt = $this->conn->prepare("UPDATE users SET rbac_id=? WHERE id=? AND unit_id=?");
+                    $stmt->bind_param('iii', $newRbacId, $targetUserId, $portalUnitId);
+                    if (!$stmt->execute()) {
+                        throw new RuntimeException('USER_RBAC_UPDATE_FAILED');
+                    }
+                    $stmt->close();
+                }
+                // A newly promoted manager needs the manager workflow permissions.
+                // This applies only to a role promotion; existing manager overrides
+                // are not modified during normal profile edits.
+                if ($requestedRole === self::ROLE_MANAGER && $oldRole !== self::ROLE_MANAGER) {
+                    foreach (['manager_create_expert','manager_create_ticket_with_experts',
+                              'manager_return_ticket_to_expert','manager_assign_unassigned_expert'] as $permissionName) {
+                        $allowed = 1;
+                        $stmt = $this->conn->prepare("INSERT INTO iweb_customer_portal_permissions (company_id,user_id,permission_name,is_allowed) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE is_allowed=1");
+                        $stmt->bind_param('iisi', $companyId, $targetUserId, $permissionName, $allowed);
+                        if (!$stmt->execute()) {
+                            throw new RuntimeException('PORTAL_PERMISSION_UPDATE_FAILED');
+                        }
+                        $stmt->close();
+                    }
+                }
+                // Drop stale manager capabilities when demoting to expert.
+                if ($requestedRole === self::ROLE_EXPERT) {
+                    $stmt = $this->conn->prepare("UPDATE iweb_customer_portal_permissions SET is_allowed=0 WHERE company_id=? AND user_id=? AND permission_name LIKE 'manager_%'");
+                    $stmt->bind_param('ii', $companyId, $targetUserId);
+                    if (!$stmt->execute()) {
+                        throw new RuntimeException('PORTAL_PERMISSION_UPDATE_FAILED');
+                    }
+                    $stmt->close();
+                }
+                $this->auditUser($context, 'PORTAL_USER_ROLE_UPDATED', 'USER', $targetUserId, $targetUserId,
+                    ['portal_role' => $oldRole, 'section_id' => $target['section_id']],
+                    ['portal_role' => $requestedRole, 'section_id' => $requestedSectionId],
+                    $requestedSectionId);
+            }
 
             $this->auditUser($context, 'USER_UPDATED', 'USER', $targetUserId, $targetUserId,
                 ['name' => $target['name'], 'email' => $target['email'], 'mobile' => $target['mobile']],
@@ -1670,41 +1779,72 @@ class CustomerPortalService
         ];
     }
 
-    /** Paged, company-scoped list; never uses a client-submitted company ID. */
-    public function listCompanyTicketsPage(array $context, int $page = 1, int $pageSize = 25): array
+    /** Filtered, company-scoped ticket listing. Company is always derived from server session. */
+    public function listCompanyTicketsPage(array $context, int $page = 1, int $pageSize = 25, array $filters = []): array
     {
         $this->assertRole($context, self::ROLE_ADMIN);
-        $companyId = (int) $context['company_id'];
-        if ($companyId <= 0) {
-            throw new RuntimeException('INVALID_COMPANY');
+        $companyId = (int) ($context['company_id'] ?? 0);
+        if ($companyId <= 0) throw new RuntimeException('INVALID_COMPANY');
+        $pageSize = max(1, min(100, $pageSize));
+        $search = trim((string) ($filters['q'] ?? ''));
+        $search = mb_substr($search, 0, 120, 'UTF-8');
+        $priority = strtolower(trim((string) ($filters['priority'] ?? '')));
+        if (!in_array($priority, ['low','medium','high'], true)) $priority = '';
+        $where = ' WHERE t.company_id = ?';
+        $types = 'i';
+        $params = [$companyId];
+        if ($search !== '') {
+            $where .= ' AND (t.ticket_number LIKE ? OR t.ticket_title LIKE ?)';
+            $types .= 'ss';
+            $like = '%' . $search . '%';
+            $params[] = $like;
+            $params[] = $like;
         }
-        $pageSize = max(1, min(50, $pageSize));
-        $stmt = $this->conn->prepare('SELECT COUNT(*) AS cnt FROM tickets WHERE company_id = ?');
-        $stmt->bind_param('i', $companyId);
+        if ($priority !== '') {
+            $where .= ' AND t.priority = ?';
+            $types .= 's';
+            $params[] = $priority;
+        }
+        $stmt = $this->conn->prepare('SELECT COUNT(*) AS cnt FROM tickets t' . $where);
+        if (!$stmt) throw new RuntimeException('TICKET_QUERY_FAILED');
+        $stmt->bind_param($types, ...$params);
         $stmt->execute();
-        $total = (int) (($stmt->get_result()->fetch_assoc()['cnt'] ?? 0));
+        $total = (int) ($stmt->get_result()->fetch_assoc()['cnt'] ?? 0);
         $stmt->close();
         $pages = max(1, (int) ceil($total / $pageSize));
         $page = max(1, min($page, $pages));
         $offset = ($page - 1) * $pageSize;
-        $stmt = $this->conn->prepare("
-            SELECT t.id AS ticket_id, t.ticket_number, t.ticket_title,
-                   t.creation_date AS ticket_creation_date, t.priority
-            FROM tickets t
-            WHERE t.company_id = ?
-            ORDER BY t.id DESC
-            LIMIT ? OFFSET ?
-        ");
-        $stmt->bind_param('iii', $companyId, $pageSize, $offset);
+        $stmt = $this->conn->prepare('SELECT t.id AS ticket_id, t.ticket_number, t.ticket_title, t.creation_date AS ticket_creation_date, t.priority FROM tickets t' . $where . ' ORDER BY t.id DESC LIMIT ? OFFSET ?');
+        if (!$stmt) throw new RuntimeException('TICKET_QUERY_FAILED');
+        $queryParams = array_merge($params, [$pageSize,$offset]);
+        $stmt->bind_param($types.'ii', ...$queryParams);
         $stmt->execute();
         $result = $stmt->get_result();
         $rows = [];
-        while ($result && ($row = $result->fetch_assoc())) {
-            $rows[] = $row;
-        }
+        while ($result && ($row = $result->fetch_assoc())) $rows[] = $row;
         if ($result) $result->free();
         $stmt->close();
-        return ['rows' => $rows, 'total' => $total, 'page' => $page, 'pages' => $pages];
+        return ['rows'=>$rows,'total'=>$total,'page'=>$page,'pages'=>$pages,'q'=>$search,'priority'=>$priority,'page_size'=>$pageSize];
+    }
+
+    /** Export scoped tickets in chunks to avoid allocating a huge result array. */
+    public function exportCompanyTicketsCsv(array $context, array $filters, $stream): void
+    {
+        $this->assertRole($context, self::ROLE_ADMIN);
+        $page = 1;
+        do {
+            $data = $this->listCompanyTicketsPage($context, $page, 100, $filters);
+            foreach ($data['rows'] as $ticket) {
+                $cells = [(string)($ticket['ticket_number'] ?? ''),(string)($ticket['ticket_title'] ?? ''),(string)($ticket['ticket_creation_date'] ?? ''),(string)($ticket['priority'] ?? '')];
+                foreach ($cells as &$cell) {
+                    // Neutralize formula interpretation in spreadsheet applications.
+                    if (preg_match('/^[\s]*[=+@\-]/u', $cell)) $cell = "'" . $cell;
+                }
+                unset($cell);
+                fputcsv($stream, $cells);
+            }
+            ++$page;
+        } while ($page <= (int)$data['pages']);
     }
 
     /** Read-only company ticket, including legacy and portal-published records.
@@ -2053,6 +2193,12 @@ class CustomerPortalService
             throw new RuntimeException('PERMISSION_ROLE_MISMATCH');
         }
         $companyId = (int) $target['company_id'];
+        // A customer admin cannot grant financial rights outside their own company.
+        $actor = $this->getContext($adminId, $companyId);
+        if (empty($actor['profile_valid']) || (int)($_SESSION['company_id'] ?? 0) !== $companyId || $actor['portal_role'] !== self::ROLE_ADMIN
+            || (int)$actor['company_id'] !== $companyId) {
+            throw new RuntimeException('PORTAL_PERMISSION_DENIED');
+        }
         $currentPermissions = $this->getUserPermissions($targetUserId, $companyId);
         $oldValue = !empty($currentPermissions[$permission]) ? 1 : 0;
         $value = $allowed ? 1 : 0;

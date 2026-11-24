@@ -5,6 +5,25 @@ if (!function_exists('cp_admin_e')) {
         return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
     }
 }
+/** Translate audit identifiers at render time; stored codes remain unchanged. */
+if (!function_exists('cp_admin_audit_action_label')) {
+    function cp_admin_audit_action_label($code): string {
+        $key = 'cp_audit_action_' . strtolower((string)$code);
+        return isset(_lang[$key]) ? (string)_lang[$key] : (string)$code;
+    }
+}
+if (!function_exists('cp_admin_audit_entity_label')) {
+    function cp_admin_audit_entity_label($code): string {
+        $key = 'cp_audit_entity_' . strtolower((string)$code);
+        return isset(_lang[$key]) ? (string)_lang[$key] : (string)$code;
+    }
+}
+if (!function_exists('cp_admin_audit_role_label')) {
+    function cp_admin_audit_role_label($code): string {
+        $key = 'cp_role_' . strtolower((string)$code);
+        return isset(_lang[$key]) ? (string)_lang[$key] : (string)$code;
+    }
+}
 if (!function_exists('cp_admin_msg')) {
     function cp_admin_msg($code): string
     {
@@ -471,7 +490,7 @@ $permissionLabels = [
                     <label class="form-label"><?php echo _lang['role']; ?></label>
                     <select class="form-select" name="audit_role">
                         <option value=""><?php echo _lang['select']; ?></option>
-                        <?php foreach (['ADMIN'=>_lang['cp_role_admin'],'MANAGER'=>_lang['cp_role_manager'],'EXPERT'=>_lang['cp_role_expert'],'INTEK_ADMIN'=>'INTEK Admin'] as $auditRole=>$auditRoleLabel): ?>
+                        <?php foreach (['ADMIN'=>_lang['cp_role_admin'],'MANAGER'=>_lang['cp_role_manager'],'EXPERT'=>_lang['cp_role_expert'],'INTEK_ADMIN'=>(isset(_lang['cp_role_intek_admin']) ? _lang['cp_role_intek_admin'] : 'INTEK Admin')] as $auditRole=>$auditRoleLabel): ?>
                             <option value="<?php echo cp_admin_e($auditRole); ?>" <?php echo strtoupper((string)$cpAuditFilters['role'])===$auditRole?'selected':''; ?>><?php echo cp_admin_e($auditRoleLabel); ?></option>
                         <?php endforeach; ?>
                     </select>
@@ -490,7 +509,7 @@ $permissionLabels = [
                     <select class="form-select" name="audit_action">
                         <option value=""><?php echo _lang['select']; ?></option>
                         <?php foreach ($cpAuditActions as $auditAction): ?>
-                            <option value="<?php echo cp_admin_e($auditAction); ?>" <?php echo (string)$cpAuditFilters['action']===(string)$auditAction?'selected':''; ?>><?php echo cp_admin_e($auditAction); ?></option>
+                            <option value="<?php echo cp_admin_e($auditAction); ?>" <?php echo (string)$cpAuditFilters['action']===(string)$auditAction?'selected':''; ?>><?php echo cp_admin_e(cp_admin_audit_action_label($auditAction)); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -508,10 +527,10 @@ $permissionLabels = [
                             <td><?php echo cp_admin_e($auditRow['company_name'] ?: '#'.$auditRow['company_id']); ?></td>
                             <td><?php echo cp_admin_e($auditRow['section_name'] ?: '-'); ?></td>
                             <td><?php echo cp_admin_e($auditRow['actor_name']); ?><?php if (!empty($auditRow['target_user_name'])): ?><div class="text-muted small">→ <?php echo cp_admin_e($auditRow['target_user_name']); ?></div><?php endif; ?></td>
-                            <td><span class="cp-role"><?php echo cp_admin_e($auditRow['actor_role']); ?></span></td>
-                            <td><strong><?php echo cp_admin_e($auditRow['action_type']); ?></strong></td>
-                            <td><?php echo cp_admin_e($auditRow['entity_type']); ?><?php echo $auditRow['entity_id']!==null?' #'.(int)$auditRow['entity_id']:''; ?></td>
-                            <td><?php if (!empty($auditRow['new_data']) || !empty($auditRow['old_data'])): ?><details><summary><?php echo _lang['view']; ?></summary><?php if (!empty($auditRow['old_data'])): ?><div class="cp-audit-json mt-2"><strong>OLD</strong> <?php echo cp_admin_e($auditRow['old_data']); ?></div><?php endif; ?><?php if (!empty($auditRow['new_data'])): ?><div class="cp-audit-json mt-1"><strong>NEW</strong> <?php echo cp_admin_e($auditRow['new_data']); ?></div><?php endif; ?></details><?php else: ?>-<?php endif; ?></td>
+                            <td><span class="cp-role"><?php echo cp_admin_e(cp_admin_audit_role_label($auditRow['actor_role'])); ?></span></td>
+                            <td><strong><?php echo cp_admin_e(cp_admin_audit_action_label($auditRow['action_type'])); ?></strong></td>
+                            <td><?php echo cp_admin_e(cp_admin_audit_entity_label($auditRow['entity_type'])); ?><?php echo $auditRow['entity_id']!==null?' #'.(int)$auditRow['entity_id']:''; ?></td>
+                            <td><?php if (!empty($auditRow['new_data']) || !empty($auditRow['old_data'])): ?><details><summary><?php echo _lang['view']; ?></summary><?php if (!empty($auditRow['old_data'])): ?><div class="cp-audit-json mt-2"><strong><?php echo cp_admin_e(_lang['cp_audit_before']); ?></strong> <?php echo cp_admin_e($auditRow['old_data']); ?></div><?php endif; ?><?php if (!empty($auditRow['new_data'])): ?><div class="cp-audit-json mt-1"><strong><?php echo cp_admin_e(_lang['cp_audit_after']); ?></strong> <?php echo cp_admin_e($auditRow['new_data']); ?></div><?php endif; ?></details><?php else: ?>-<?php endif; ?></td>
                         </tr>
                     <?php endforeach; ?>
                     <?php if (!$cpAdminAudit): ?><tr><td colspan="9" class="text-center text-muted py-4"><?php echo _lang['cp_admin_no_audit']; ?></td></tr><?php endif; ?>
