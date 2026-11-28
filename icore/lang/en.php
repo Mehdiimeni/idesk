@@ -1549,6 +1549,7 @@ return [
     'cp_perm_manager_create_expert' => 'Manager: create Expert in own section',
     'cp_perm_manager_create_ticket_with_experts' => 'Manager: create ticket while active Experts exist',
     'cp_perm_manager_return_ticket_to_expert' => 'Manager: return ticket to Expert for revision',
+    'cp_perm_manager_view_ipanel_created_company_tickets' => 'Manager: view tickets created by INTEK for this company',
     'cp_perm_customer_admin_assign_manager_to_section' => 'Company Admin: assign Manager to Section',
     'cp_perm_manager_assign_unassigned_expert' => 'Manager: assign unassigned Expert to own section',
     'cp_perm_customer_admin_reassign_expert' => 'Company Admin: reassign Expert between Sections',

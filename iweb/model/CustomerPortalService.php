@@ -31,6 +31,7 @@ class CustomerPortalService
         'customer_admin_create_expert',
         'manager_create_expert',
         'manager_create_ticket_with_experts',
+        'manager_view_ipanel_created_company_tickets',
         'manager_return_ticket_to_expert',
         'customer_admin_assign_manager_to_section',
         'manager_assign_unassigned_expert',
@@ -2176,7 +2177,7 @@ class CustomerPortalService
         return ['units' => $units, 'rbacs' => $rbacs];
     }
 
-    public function setPermissionByAdmin(int $adminId, int $targetUserId, string $permission, bool $allowed): void
+    public function setPermissionByAdmin(int $adminId, int $targetUserId, string $permission, bool $allowed, bool $enforceCustomerAdminScope = false): void
     {
         if (!in_array($permission, self::PERMISSIONS, true)) {
             throw new RuntimeException('INVALID_PORTAL_PERMISSION');
@@ -2193,11 +2194,16 @@ class CustomerPortalService
             throw new RuntimeException('PERMISSION_ROLE_MISMATCH');
         }
         $companyId = (int) $target['company_id'];
-        // A customer admin cannot grant financial rights outside their own company.
-        $actor = $this->getContext($adminId, $companyId);
-        if (empty($actor['profile_valid']) || (int)($_SESSION['company_id'] ?? 0) !== $companyId || $actor['portal_role'] !== self::ROLE_ADMIN
-            || (int)$actor['company_id'] !== $companyId) {
-            throw new RuntimeException('PORTAL_PERMISSION_DENIED');
+        // iPanel admins are authorized by the iPanel controller (edit_operation).
+        // The customer-portal endpoint opts in to strict same-company ADMIN checks.
+        if ($enforceCustomerAdminScope) {
+            $actor = $this->getContext($adminId, $companyId);
+            if (empty($actor['profile_valid'])
+                || (int)($_SESSION['company_id'] ?? 0) !== $companyId
+                || ($actor['portal_role'] ?? '') !== self::ROLE_ADMIN
+                || (int)($actor['company_id'] ?? 0) !== $companyId) {
+                throw new RuntimeException('PORTAL_PERMISSION_DENIED');
+            }
         }
         $currentPermissions = $this->getUserPermissions($targetUserId, $companyId);
         $oldValue = !empty($currentPermissions[$permission]) ? 1 : 0;

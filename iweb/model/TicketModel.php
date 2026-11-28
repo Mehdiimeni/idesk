@@ -306,7 +306,12 @@ class TicketModel
         $userId = (int) ($_SESSION['user_id'] ?? 0);
         $companyId = (int) ($_SESSION['company_id'] ?? 0);
         if ($userId <= 0 || $companyId <= 0) return null;
-        $sql = "SELECT p.section_id FROM iweb_customer_portal_user_profiles p
+        $sql = "SELECT p.section_id,
+                    EXISTS (SELECT 1 FROM iweb_customer_portal_permissions pm
+                            WHERE pm.user_id=p.user_id AND pm.company_id=p.company_id
+                              AND pm.permission_name='manager_view_ipanel_created_company_tickets'
+                              AND pm.is_allowed=1) AS ipanel_company_tickets_allowed
+                FROM iweb_customer_portal_user_profiles p
                 INNER JOIN users u ON u.id=p.user_id AND u.status='Active'
                 INNER JOIN iweb_customer_portal_sections s
                   ON s.id=p.section_id AND s.company_id=p.company_id AND s.is_active=1
@@ -320,7 +325,25 @@ class TicketModel
         $stmt->execute();
         $row = $stmt->get_result()->fetch_assoc();
         $stmt->close();
-        return $row ? ['user_id'=>$userId,'company_id'=>$companyId,'section_id'=>(int)$row['section_id']] : null;
+        return $row ? ['user_id'=>$userId,'company_id'=>$companyId,'section_id'=>(int)$row['section_id'], 'ipanel_company_tickets_allowed'=>((int)$row['ipanel_company_tickets_allowed']===1)] : null;
+    }
+
+    /**
+     * Only tickets created by an INTEK admin (tickets.admin_id) for the exact
+     * current customer company. An explicit MANAGER permission is mandatory.
+     * Never infer the destination from the INTEK admin's unit/company.
+     */
+    private function portalManagerIpPanelCompanyClause(string $alias, array $scope): string
+    {
+        if (empty($scope['ipanel_company_tickets_allowed'])) return '0=1';
+        $companyId = (int) $scope['company_id'];
+        if ($alias === 'tickets') {
+            return "(tickets.admin_id IS NOT NULL AND tickets.company_id = {$companyId})";
+        }
+        return "EXISTS (SELECT 1 FROM tickets ipt
+                       WHERE ipt.id = {$alias}.ticket_id
+                         AND ipt.admin_id IS NOT NULL
+                         AND ipt.company_id = {$companyId})";
     }
 
     /** SQL aliases are internal constants, IDs are cast integers. Also include
@@ -342,7 +365,8 @@ class TicketModel
            OR EXISTS (SELECT 1 FROM iweb_customer_portal_ticket_publish_map pm
                       JOIN iweb_customer_portal_ticket_drafts pd ON pd.id=pm.draft_id
                       WHERE pm.ticket_id={$alias}.ticket_id AND pm.section_id={$sectionId}
-                        AND pd.company_id={$companyId}))";
+                        AND pd.company_id={$companyId})
+           OR " . $this->portalManagerIpPanelCompanyClause($alias, $scope) . ")";
     }
 
     function generateSqlWhereFromSession($company_id = null)
@@ -365,17 +389,23 @@ class TicketModel
             $params = [];
             $types = "";
 
+            $managerScope = $this->portalManagerTicketScope();
             if (!empty($company_id)) {
                 $whereClauses[] = "tuv.company_id = ?";
                 $params[] = (int) $company_id;
                 $types .= "i";
             } else {
-                $whereClauses[] = "tuv.user_id = ?";
+                // A manager with the explicit option can also see INTEK-created
+                // tickets for the current company, even without legacy view_all.
+                $ownerWhere = "tuv.user_id = ?";
+                if ($managerScope && !empty($managerScope['ipanel_company_tickets_allowed'])) {
+                    $ownerWhere = "(" . $ownerWhere . " OR " . $this->portalManagerIpPanelCompanyClause('tuv', $managerScope) . ")";
+                }
+                $whereClauses[] = $ownerWhere;
                 $params[] = (int) $userId;
                 $types .= "i";
             }
 
-            $managerScope = $this->portalManagerTicketScope();
             if ($managerScope) {
                 $whereClauses[] = '1=1 ' . $this->portalManagerTicketClause('tuv', $managerScope);
             }
@@ -476,17 +506,23 @@ class TicketModel
             $params = [];
             $types = "";
 
+            $managerScope = $this->portalManagerTicketScope();
             if (!empty($company_id)) {
                 $whereClauses[] = "tuv.company_id = ?";
                 $params[] = (int) $company_id;
                 $types .= "i";
             } else {
-                $whereClauses[] = "tuv.user_id = ?";
+                // A manager with the explicit option can also see INTEK-created
+                // tickets for the current company, even without legacy view_all.
+                $ownerWhere = "tuv.user_id = ?";
+                if ($managerScope && !empty($managerScope['ipanel_company_tickets_allowed'])) {
+                    $ownerWhere = "(" . $ownerWhere . " OR " . $this->portalManagerIpPanelCompanyClause('tuv', $managerScope) . ")";
+                }
+                $whereClauses[] = $ownerWhere;
                 $params[] = (int) $userId;
                 $types .= "i";
             }
 
-            $managerScope = $this->portalManagerTicketScope();
             if ($managerScope) {
                 $whereClauses[] = '1=1 ' . $this->portalManagerTicketClause('tuv', $managerScope);
             }
@@ -587,17 +623,23 @@ class TicketModel
             $params = [];
             $types = "";
 
+            $managerScope = $this->portalManagerTicketScope();
             if (!empty($company_id)) {
                 $whereClauses[] = "tuv.company_id = ?";
                 $params[] = (int) $company_id;
                 $types .= "i";
             } else {
-                $whereClauses[] = "tuv.user_id = ?";
+                // A manager with the explicit option can also see INTEK-created
+                // tickets for the current company, even without legacy view_all.
+                $ownerWhere = "tuv.user_id = ?";
+                if ($managerScope && !empty($managerScope['ipanel_company_tickets_allowed'])) {
+                    $ownerWhere = "(" . $ownerWhere . " OR " . $this->portalManagerIpPanelCompanyClause('tuv', $managerScope) . ")";
+                }
+                $whereClauses[] = $ownerWhere;
                 $params[] = (int) $userId;
                 $types .= "i";
             }
 
-            $managerScope = $this->portalManagerTicketScope();
             if ($managerScope) {
                 $whereClauses[] = '1=1 ' . $this->portalManagerTicketClause('tuv', $managerScope);
             }
@@ -1092,7 +1134,8 @@ class TicketModel
     ty.type_name, 
     ty.type_group,
     COALESCE(ud.user_id, ad.admin_id) AS user_id, 
-    COALESCE(ud.company_id, ad.company_id) AS company_id,
+    CASE WHEN tickets.admin_id IS NOT NULL THEN tickets.company_id
+         ELSE COALESCE(ud.company_id, tickets.company_id) END AS company_id,
     COALESCE(ud.company_name, ad.company_name) AS company_name,
     last_status.status_name AS last_status_name
 FROM idesk.tickets AS tickets

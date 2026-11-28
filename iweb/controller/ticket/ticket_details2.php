@@ -98,7 +98,7 @@ $showAccounting = $ticketsModel->checkStatusTableStatusArray($ticket_id, $part_n
 
 
 //  just for this company
-if ($ticketDetail['company_id'] != $_SESSION["company_id"] and $ticketDetail['admin_id'] == null) {
+if ((int)($ticketDetail['company_id'] ?? 0) !== (int)($_SESSION['company_id'] ?? 0)) {
     echo "<script>window.location.replace('./');</script>";
     exit();
 }

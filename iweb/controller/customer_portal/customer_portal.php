@@ -182,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (!$ok) throw new RuntimeException('PERMISSION_ROLE_MISMATCH');
                 $customerPortalService->setPermissionByAdmin(
                     (int)$customerPortalContext['user_id'], $managerId,
-                    'manager_finance_access', !empty($_POST['finance_allowed'])
+                    'manager_finance_access', !empty($_POST['finance_allowed']), true
                 );
                 customerPortalRedirect('./customer_portal?view=users', 'success', 'USER_MANAGEMENT_PERMISSION_UPDATED');
                 break;

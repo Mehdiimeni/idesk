@@ -1549,6 +1549,7 @@ return [
     'cp_perm_manager_create_expert' => 'Manager: إنشاء Expert في قسمه',
     'cp_perm_manager_create_ticket_with_experts' => 'Manager: إنشاء تذكرة مع وجود Experts نشطين',
     'cp_perm_manager_return_ticket_to_expert' => 'Manager: إرجاع التذكرة إلى Expert للتعديل',
+    'cp_perm_manager_view_ipanel_created_company_tickets' => 'مدير القسم: عرض التذاكر التي أنشأتها إنتك لهذه الشركة',
     'cp_perm_customer_admin_assign_manager_to_section' => 'مسؤول الشركة: تعيين Manager للقسم',
     'cp_perm_manager_assign_unassigned_expert' => 'Manager: تعيين Expert غير مرتبط إلى قسمه',
     'cp_perm_customer_admin_reassign_expert' => 'مسؤول الشركة: نقل Expert بين الأقسام',

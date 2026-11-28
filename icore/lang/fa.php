@@ -1550,6 +1550,7 @@ return [
     'cp_perm_manager_create_expert' => 'مدیر بخش: ایجاد کارشناس در بخش خود',
     'cp_perm_manager_create_ticket_with_experts' => 'مدیر بخش: ایجاد تیکت با وجود کارشناس فعال',
     'cp_perm_manager_return_ticket_to_expert' => 'مدیر بخش: بازگرداندن تیکت به کارشناس برای اصلاح',
+    'cp_perm_manager_view_ipanel_created_company_tickets' => 'مدیر بخش: مشاهده تیکت‌های ایجادشده توسط اینتک برای همین شرکت',
     'cp_perm_customer_admin_assign_manager_to_section' => 'ادمین شرکت: تخصیص مدیر به بخش',
     'cp_perm_manager_assign_unassigned_expert' => 'مدیر بخش: تخصیص کارشناس بدون بخش به بخش خود',
     'cp_perm_customer_admin_reassign_expert' => 'ادمین شرکت: انتقال کارشناس بین بخش‌ها',
