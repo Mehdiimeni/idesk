@@ -217,9 +217,9 @@ CREATE TABLE IF NOT EXISTS `admin_log` (
   `system_info` tinytext DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4432 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4446 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.admin_log: ~3,522 rows (approximately)
+-- Dumping data for table idesk.admin_log: ~3,536 rows (approximately)
 DELETE FROM `admin_log`;
 INSERT INTO `admin_log` (`id`, `admin_id`, `action`, `local_ip`, `internet_ip`, `system_info`, `timestamp`) VALUES
 	(71, 1, 'logout', '0.0.0.0', '0.0.0.0', NULL, '2024-06-18 07:14:36'),
@@ -4560,7 +4560,21 @@ INSERT INTO `admin_log` (`id`, `admin_id`, `action`, `local_ip`, `internet_ip`, 
 	(4428, 38, 'logout', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 14:09:25'),
 	(4429, 38, 'login', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 14:11:06'),
 	(4430, 38, 'logout', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 16:36:18'),
-	(4431, 38, 'login', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 16:36:56');
+	(4431, 38, 'login', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 16:36:56'),
+	(4432, 42, 'login', '192.168.50.12', '2.176.225.178', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 17:43:13'),
+	(4433, 38, 'logout', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 10:27:46'),
+	(4434, 38, 'login', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 10:33:37'),
+	(4435, 38, 'logout', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 10:36:52'),
+	(4436, 38, 'login', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 10:42:47'),
+	(4437, 38, 'logout', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 10:47:11'),
+	(4438, 38, 'login', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 10:50:35'),
+	(4439, 42, 'login', '192.168.50.12', '192.168.253.70', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 04:29:01'),
+	(4440, 42, 'logout', '192.168.50.12', '192.168.253.70', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 04:29:29'),
+	(4441, 16, 'login', '192.168.50.12', '192.168.253.21', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 05:52:14'),
+	(4442, 38, 'logout', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 06:27:11'),
+	(4443, 38, 'login', '192.168.50.12', '192.168.253.23', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 06:29:36'),
+	(4444, 38, 'login', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 06:35:35'),
+	(4445, 9, 'login', '192.168.50.12', '192.168.253.70', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 07:42:48');
 
 -- Dumping structure for table idesk.admin_remember_tokens
 CREATE TABLE IF NOT EXISTS `admin_remember_tokens` (
@@ -4730,9 +4744,9 @@ CREATE TABLE IF NOT EXISTS `comments` (
   `last_updated_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `ix_comments_part_local` (`part_id`,`local`,`part_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3991 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3996 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.comments: ~4,004 rows (approximately)
+-- Dumping data for table idesk.comments: ~4,009 rows (approximately)
 DELETE FROM `comments`;
 INSERT INTO `comments` (`id`, `user_id`, `admin_id`, `part_id`, `company_id`, `part_name`, `parent_id`, `creator_id`, `comment_text`, `view_from`, `view_to`, `local`, `is_active`, `creation_date`, `last_updated_date`) VALUES
 	(1, NULL, 22, 201, NULL, 'tickets', NULL, NULL, 'با سلام و احترام\r\nانجام گردید', 0, 1, 0, 1, '2024-06-02 12:52:23', '2024-10-13 07:24:16'),
@@ -8692,7 +8706,12 @@ INSERT INTO `comments` (`id`, `user_id`, `admin_id`, `part_id`, `company_id`, `p
 	(3987, NULL, 24, 2131, 2, 'tickets', NULL, NULL, 'در حال انتظار برای ارسال پاسخ مناسب از سامان', 0, 0, 1, 1, '2026-11-23 12:50:21', '2026-11-23 12:50:21'),
 	(3988, 10, NULL, 2265, 4, 'tickets', NULL, NULL, 'اپراتور ایرانسل\r\nپین بیست هزار تومانی حذف\r\nتاپ اپ پنجاه هزار تومنی و زیر پنجاه هزار تومانی به دلیل داشتن مالیلت بر ارزش افزوده حذف\r\n\r\nاپراتور همراه اول\r\nپین بیست هزار تومانی حذف\r\nتاپ اپ زیر پنجاه تومان حذف', 0, 0, 0, 1, '2026-11-24 10:33:42', '2026-11-24 10:33:42'),
 	(3989, NULL, 24, 2267, 2, 'tickets', NULL, NULL, 'با سلام و احترام\r\nدر حال بررسی', 0, 0, 0, 1, '2026-11-24 11:45:01', '2026-11-24 11:45:01'),
-	(3990, NULL, 24, 2267, 2, 'tickets', NULL, NULL, 'در دست بررسی', 0, 0, 1, 1, '2026-11-24 11:59:41', '2026-11-24 11:59:41');
+	(3990, NULL, 24, 2267, 2, 'tickets', NULL, NULL, 'در دست بررسی', 0, 0, 1, 1, '2026-11-24 11:59:41', '2026-11-24 11:59:41'),
+	(3991, NULL, 24, 2251, 2, 'tickets', NULL, NULL, 'با سلام و احترام\r\nدر انتظار پاسخ از نوین و دولوپر پوز', 0, 0, 1, 1, '2026-11-28 05:22:40', '2026-11-28 05:22:40'),
+	(3992, 37, NULL, 1591, 9, 'tickets', NULL, NULL, 'لطفا این تیکت را ببندید', 0, 0, 0, 1, '2026-11-28 06:14:12', '2026-11-28 06:14:12'),
+	(3993, 37, NULL, 1821, 9, 'tickets', NULL, NULL, 'با سلام و احترام، آیا انجام شده است؟؟؟', 0, 0, 0, 1, '2026-11-28 06:15:44', '2026-11-28 06:15:44'),
+	(3994, 45, NULL, 2271, 9, 'tickets', NULL, NULL, 'تایید است', 0, 0, 0, 1, '2026-11-28 07:48:35', '2026-11-28 07:50:36'),
+	(3995, 53, NULL, 2270, 9, 'tickets', NULL, NULL, 'بابت آپدیت شماره شباهای جدید پذیرنده بانک تجارت در پذیرندگی', 0, 0, 0, 1, '2026-11-28 08:14:56', '2026-11-28 08:14:56');
 
 -- Dumping structure for view idesk.company_member_view
 -- Creating temporary table to overcome VIEW dependency errors
@@ -9755,9 +9774,9 @@ CREATE TABLE IF NOT EXISTS `file_manage` (
   `last_updated_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `ix_file_manage_part` (`part_id`,`part_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=1308 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1310 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.file_manage: ~1,275 rows (approximately)
+-- Dumping data for table idesk.file_manage: ~1,277 rows (approximately)
 DELETE FROM `file_manage`;
 INSERT INTO `file_manage` (`id`, `file_name`, `file_path`, `file_title`, `user_id`, `admin_id`, `part_id`, `company_id`, `part_name`, `parent_id`, `rbac_id`, `role_id`, `status`, `local`, `description`, `creation_date`, `last_updated_date`) VALUES
 	(4, 'aa53bcb0c34e7427.PDF', './irepository/tickets/', 'تغییر ساختار شماره شناسه توکنی صادر کننده کارت در سرویس کهربا', 10, NULL, 247, NULL, 'tickets', NULL, NULL, NULL, 'Pending', 0, NULL, '2024-06-18 12:23:55', '2024-06-18 12:23:55'),
@@ -11050,7 +11069,9 @@ INSERT INTO `file_manage` (`id`, `file_name`, `file_path`, `file_title`, `user_i
 	(1304, '7df7e8930c1c5eee.zip', './irepository/tickets/', 'کلیدهای عملیاتی بانک ملی', 54, NULL, 2261, NULL, 'tickets', NULL, NULL, NULL, 'Pending', 0, NULL, '2026-11-22 06:54:08', '2026-11-22 06:54:08'),
 	(1305, '23b170c4a6e26805.docx', './irepository/tickets/', 'مستند روش اجرایی مدیریت کلید سوییچ', NULL, 40, 2070, 2, 'tickets', NULL, NULL, NULL, 'Pending', 0, NULL, '2026-11-22 07:30:26', '2026-11-22 07:30:26'),
 	(1306, 'c2c21f3609b8d079.xlsx', './irepository/tickets/', 'استعلام مانا کارت', 52, NULL, 2262, NULL, 'tickets', NULL, NULL, NULL, 'Pending', 0, NULL, '2026-11-22 08:25:40', '2026-11-22 08:25:40'),
-	(1307, '74c23a90c05b2f63.xlsx', './irepository/tickets/', 'درخواست روت ترمینال انیاک', 31, NULL, 2266, NULL, 'tickets', NULL, NULL, NULL, 'Pending', 0, NULL, '2026-11-23 05:51:19', '2026-11-23 05:51:19');
+	(1307, '74c23a90c05b2f63.xlsx', './irepository/tickets/', 'درخواست روت ترمینال انیاک', 31, NULL, 2266, NULL, 'tickets', NULL, NULL, NULL, 'Pending', 0, NULL, '2026-11-23 05:51:19', '2026-11-23 05:51:19'),
+	(1308, 'b4e89c59009e520f.rar', './irepository/tickets/', 'شباهای بانک تجارت', 53, NULL, 2270, 9, 'tickets', NULL, NULL, NULL, 'Pending', 0, NULL, '2026-11-25 15:49:45', '2026-11-25 15:51:40'),
+	(1309, '0fccc1abae48248d.xlsx', './irepository/tickets/', 'درخواست روت ترمینال انیاک', 31, NULL, 2272, 8, 'tickets', NULL, NULL, NULL, 'Pending', 0, NULL, '2026-11-28 09:10:20', '2026-11-28 09:10:27');
 
 -- Dumping structure for table idesk.forwards
 CREATE TABLE IF NOT EXISTS `forwards` (
@@ -11073,9 +11094,9 @@ CREATE TABLE IF NOT EXISTS `forwards` (
   PRIMARY KEY (`id`),
   KEY `ix_forwards_element_id` (`section_element_id`,`id`),
   KEY `ix_forwards_element_created` (`section_element_id`,`creation_date`)
-) ENGINE=InnoDB AUTO_INCREMENT=8461 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8470 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.forwards: ~8,223 rows (approximately)
+-- Dumping data for table idesk.forwards: ~8,232 rows (approximately)
 DELETE FROM `forwards`;
 INSERT INTO `forwards` (`id`, `sender_person_id`, `sender_rbac_id`, `sender_type`, `sender_signature`, `section_element_id`, `section_part_name`, `receiver_person_id`, `receiver_rbac_id`, `receiver_type`, `receiver_part_name`, `forwards_description`, `view_from`, `view_to`, `creation_date`, `last_updated_date`) VALUES
 	(7, 16, 16, 'a', 0, 246, 'tickets', 22, NULL, 'a', NULL, '', 1, 0, '2024-06-19 10:40:53', '2024-06-24 06:12:13'),
@@ -19504,7 +19525,16 @@ INSERT INTO `forwards` (`id`, `sender_person_id`, `sender_rbac_id`, `sender_type
 	(8457, 38, 12, 'a', 0, 2266, 'tickets', 39, NULL, 'a', NULL, 'لطفا بررسی ', 0, 0, '2026-11-24 09:11:54', '2026-11-24 09:11:54'),
 	(8458, 38, 12, 'a', 0, 2267, 'tickets', 24, NULL, 'a', NULL, 'لطفا بررسی', 0, 0, '2026-11-24 09:12:23', '2026-11-24 09:12:23'),
 	(8459, 38, 12, 'a', 0, 2268, 'tickets', 39, NULL, 'a', NULL, 'با هماهنگی آقای بهشتی انجام شود', 0, 0, '2026-11-24 09:12:54', '2026-11-24 09:12:54'),
-	(8460, 38, 12, 'a', 0, 2263, 'tickets', 16, NULL, 'a', NULL, 'این موضوع باید سمت پوز های خودشون انجام بشود ', 0, 1, '2026-11-24 09:13:44', '2026-11-24 10:13:57');
+	(8460, 38, 12, 'a', 0, 2263, 'tickets', 16, NULL, 'a', NULL, 'این موضوع باید سمت پوز های خودشون انجام بشود ', 0, 1, '2026-11-24 09:13:44', '2026-11-24 10:13:57'),
+	(8461, 16, 14, 'a', 0, 2269, 'tickets', 9, NULL, 'a', NULL, 'لطفا بررسی شود', 0, 0, '2026-11-25 05:33:42', '2026-11-25 05:33:42'),
+	(8462, 39, 17, 'a', 0, 2266, 'tickets', 38, NULL, 'a', NULL, 'با سلام و احترام، انجام شد.', 0, 0, '2026-11-25 07:11:33', '2026-11-25 07:11:33'),
+	(8463, 39, 17, 'a', 0, 2268, 'tickets', 38, NULL, 'a', NULL, 'با سلام و احترام، انجام شد.', 0, 0, '2026-11-25 07:12:10', '2026-11-25 07:12:10'),
+	(8464, 38, 12, 'a', 0, 1241, 'tickets', 16, NULL, 'a', NULL, 'وضعیت بایگانی', 0, 1, '2026-11-25 07:48:44', '2026-11-25 10:20:43'),
+	(8465, 38, 12, 'a', 0, 2266, 'tickets', 16, NULL, 'a', NULL, 'وضعیت اتمام', 0, 1, '2026-11-25 07:49:25', '2026-11-25 10:20:42'),
+	(8466, 38, 12, 'a', 0, 2268, 'tickets', 16, NULL, 'a', NULL, 'وضعیت اتمام', 0, 1, '2026-11-25 07:50:01', '2026-11-25 10:20:40'),
+	(8467, 38, 12, 'a', 0, 2265, 'tickets', 16, NULL, 'a', NULL, 'انجام شد', 0, 1, '2026-11-25 09:00:55', '2026-11-25 10:20:39'),
+	(8468, 16, 14, 'a', 0, 2270, 'tickets', 9, NULL, 'a', NULL, 'لطفا پیگیری شود.', 0, 0, '2026-11-28 05:55:28', '2026-11-28 05:55:28'),
+	(8469, 16, 14, 'a', 0, 2271, 'tickets', 9, NULL, 'a', NULL, 'لطفا بررسی شود', 0, 0, '2026-11-28 08:08:03', '2026-11-28 08:08:03');
 
 -- Dumping structure for view idesk.general_forward_view
 -- Creating temporary table to overcome VIEW dependency errors
@@ -19633,7 +19663,7 @@ CREATE TABLE IF NOT EXISTS `iweb_customer_portal_company_settings` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_iweb_cp_settings_company` (`company_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Dumping data for table idesk.iweb_customer_portal_company_settings: ~7 rows (approximately)
 DELETE FROM `iweb_customer_portal_company_settings`;
@@ -19659,9 +19689,9 @@ CREATE TABLE IF NOT EXISTS `iweb_customer_portal_permissions` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_iweb_cp_permissions_user_name` (`user_id`,`permission_name`),
   KEY `ix_iweb_cp_permissions_company` (`company_id`,`permission_name`,`is_allowed`)
-) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.iweb_customer_portal_permissions: ~52 rows (approximately)
+-- Dumping data for table idesk.iweb_customer_portal_permissions: ~66 rows (approximately)
 DELETE FROM `iweb_customer_portal_permissions`;
 INSERT INTO `iweb_customer_portal_permissions` (`id`, `company_id`, `user_id`, `permission_name`, `is_allowed`, `granted_by_admin_id`, `created_at`, `updated_at`) VALUES
 	(1, 10, 65, 'customer_admin_create_manager', 1, 38, '2026-11-17 12:44:38', '2026-11-17 12:44:38'),
@@ -19715,7 +19745,21 @@ INSERT INTO `iweb_customer_portal_permissions` (`id`, `company_id`, `user_id`, `
 	(49, 9, 64, 'customer_admin_assign_manager_to_section', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
 	(50, 9, 64, 'customer_admin_create_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
 	(51, 9, 64, 'customer_admin_create_manager', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
-	(52, 9, 64, 'customer_admin_reassign_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54');
+	(52, 9, 64, 'customer_admin_reassign_expert', 1, NULL, '2026-11-24 16:23:54', '2026-11-24 16:23:54'),
+	(69, 4, 10, 'manager_create_ticket_with_experts', 1, 38, '2026-11-25 10:10:30', '2026-11-25 10:10:30'),
+	(70, 4, 10, 'manager_assign_unassigned_expert', 1, 38, '2026-11-25 10:11:07', '2026-11-25 10:11:07'),
+	(71, 4, 41, 'manager_create_expert', 1, NULL, '2026-11-25 10:41:18', '2026-11-25 10:41:18'),
+	(72, 4, 41, 'manager_create_ticket_with_experts', 1, NULL, '2026-11-25 10:41:18', '2026-11-25 10:41:18'),
+	(73, 4, 41, 'manager_return_ticket_to_expert', 0, 38, '2026-11-25 10:41:18', '2026-11-25 10:43:12'),
+	(74, 4, 41, 'manager_assign_unassigned_expert', 1, NULL, '2026-11-25 10:41:18', '2026-11-25 10:41:18'),
+	(76, 10, 57, 'manager_create_ticket_with_experts', 1, 38, '2026-11-25 10:50:53', '2026-11-25 10:50:53'),
+	(77, 10, 56, 'manager_create_ticket_with_experts', 1, 38, '2026-11-25 10:51:03', '2026-11-25 10:51:03'),
+	(78, 10, 56, 'manager_assign_unassigned_expert', 1, 38, '2026-11-25 10:51:24', '2026-11-25 10:51:24'),
+	(79, 9, 37, 'manager_create_ticket_with_experts', 1, 38, '2026-11-25 11:50:30', '2026-11-25 11:50:30'),
+	(80, 8, 31, 'manager_create_ticket_with_experts', 1, 38, '2026-11-28 08:10:51', '2026-11-28 08:10:51'),
+	(81, 8, 31, 'manager_return_ticket_to_expert', 0, 38, '2026-11-28 08:10:58', '2026-11-28 08:11:12'),
+	(82, 8, 31, 'manager_assign_unassigned_expert', 1, 38, '2026-11-28 08:11:06', '2026-11-28 08:11:06'),
+	(84, 9, 37, 'manager_view_ipanel_created_company_tickets', 1, 38, '2026-11-28 08:22:16', '2026-11-28 08:22:16');
 
 -- Dumping structure for table idesk.iweb_customer_portal_sections
 CREATE TABLE IF NOT EXISTS `iweb_customer_portal_sections` (
@@ -19730,13 +19774,21 @@ CREATE TABLE IF NOT EXISTS `iweb_customer_portal_sections` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_iweb_customer_portal_sections_company_name` (`company_id`,`name`),
   KEY `ix_iweb_customer_portal_sections_company_active` (`company_id`,`is_active`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.iweb_customer_portal_sections: ~2 rows (approximately)
+-- Dumping data for table idesk.iweb_customer_portal_sections: ~10 rows (approximately)
 DELETE FROM `iweb_customer_portal_sections`;
 INSERT INTO `iweb_customer_portal_sections` (`id`, `company_id`, `name`, `is_active`, `created_by`, `created_at`, `updated_by`, `updated_at`) VALUES
-	(1, 9, 'بخش ایشو', 1, 64, '2026-11-24 16:23:54', NULL, NULL),
-	(2, 9, 'فنی', 1, 64, '2026-11-24 16:23:54', NULL, NULL);
+	(1, 9, 'توسعه', 1, 64, '2026-11-24 16:23:54', 64, '2026-11-25 11:48:11'),
+	(2, 9, 'فنی', 1, 64, '2026-11-24 16:23:54', NULL, NULL),
+	(4, 4, 'پشتیبانی سوییچ', 1, 59, '2026-11-25 10:28:28', 59, NULL),
+	(5, 4, 'راهبری', 1, 59, '2026-11-25 10:38:46', 59, NULL),
+	(6, 10, 'مانیتورینگ', 1, 65, '2026-11-25 10:47:57', 65, NULL),
+	(7, 10, 'ابزارپذیرش', 1, 65, '2026-11-25 10:48:44', 65, NULL),
+	(8, 10, 'عملیات', 1, 65, '2026-11-25 10:49:15', 65, NULL),
+	(9, 9, 'پشتیبانی سیستم های کاربردی', 1, 64, '2026-11-25 11:46:53', 64, NULL),
+	(10, 5, 'سوئیچ', 1, 60, '2026-11-25 12:01:09', 60, '2026-11-25 12:02:14'),
+	(11, 8, 'سوئیچ', 1, 63, '2026-11-28 08:15:56', 63, NULL);
 
 -- Dumping structure for table idesk.iweb_customer_portal_ticket_audit_logs
 CREATE TABLE IF NOT EXISTS `iweb_customer_portal_ticket_audit_logs` (
@@ -19761,9 +19813,9 @@ CREATE TABLE IF NOT EXISTS `iweb_customer_portal_ticket_audit_logs` (
   KEY `ix_iweb_customer_portal_audit_actor` (`actor_source`,`actor_user_id`,`created_at`),
   KEY `ix_iweb_customer_portal_audit_entity` (`entity_type`,`entity_id`,`created_at`),
   KEY `ix_iweb_customer_portal_audit_action` (`action_type`,`created_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.iweb_customer_portal_ticket_audit_logs: ~17 rows (approximately)
+-- Dumping data for table idesk.iweb_customer_portal_ticket_audit_logs: ~90 rows (approximately)
 DELETE FROM `iweb_customer_portal_ticket_audit_logs`;
 INSERT INTO `iweb_customer_portal_ticket_audit_logs` (`id`, `company_id`, `section_id`, `actor_user_id`, `actor_source`, `actor_role`, `action_type`, `entity_type`, `entity_id`, `target_user_id`, `old_data`, `new_data`, `ip_address`, `user_agent`, `created_at`) VALUES
 	(1, 10, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'PORTAL_SETTINGS_UPDATED', 'COMPANY', 10, NULL, '{"company_id":10,"customer_portal_workflow_enabled":0,"portal_unit_id":null,"admin_rbac_id":null,"manager_rbac_id":null,"expert_rbac_id":null,"draft_aging_days":14}', '{"id":1,"company_id":10,"customer_portal_workflow_enabled":0,"portal_unit_id":null,"admin_rbac_id":null,"manager_rbac_id":null,"expert_rbac_id":null,"draft_aging_days":14,"created_by":38,"created_at":"2026-11-17 13:56:22","updated_by":38,"updated_at":"2026-11-17 13:56:22"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-17 10:26:22'),
@@ -19782,7 +19834,80 @@ INSERT INTO `iweb_customer_portal_ticket_audit_logs` (`id`, `company_id`, `secti
 	(14, 8, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'PORTAL_SETTINGS_UPDATED', 'COMPANY', 8, NULL, '{"id":7,"company_id":8,"customer_portal_workflow_enabled":0,"portal_unit_id":22,"admin_rbac_id":35,"manager_rbac_id":43,"expert_rbac_id":50,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":null,"updated_at":"2026-11-24 19:53:54"}', '{"id":7,"company_id":8,"customer_portal_workflow_enabled":1,"portal_unit_id":22,"admin_rbac_id":35,"manager_rbac_id":43,"expert_rbac_id":50,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:02:08"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-24 16:32:08'),
 	(15, 4, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'PORTAL_SETTINGS_UPDATED', 'COMPANY', 4, NULL, '{"id":3,"company_id":4,"customer_portal_workflow_enabled":0,"portal_unit_id":20,"admin_rbac_id":31,"manager_rbac_id":39,"expert_rbac_id":46,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":null,"updated_at":"2026-11-24 19:53:54"}', '{"id":3,"company_id":4,"customer_portal_workflow_enabled":0,"portal_unit_id":20,"admin_rbac_id":31,"manager_rbac_id":39,"expert_rbac_id":46,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:02:17"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-24 16:32:17'),
 	(16, 4, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'PORTAL_SETTINGS_UPDATED', 'COMPANY', 4, NULL, '{"id":3,"company_id":4,"customer_portal_workflow_enabled":0,"portal_unit_id":20,"admin_rbac_id":31,"manager_rbac_id":39,"expert_rbac_id":46,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:02:17"}', '{"id":3,"company_id":4,"customer_portal_workflow_enabled":1,"portal_unit_id":20,"admin_rbac_id":31,"manager_rbac_id":39,"expert_rbac_id":46,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:02:31"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-24 16:32:31'),
-	(17, 4, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_UPDATED', 'USER', 59, 59, '{"name":"ادمین پرتال پرداخت نوین آرین","email":"admin.pna@intek.ir","mobile":null,"portal_role":"ADMIN","section_id":null,"unit_id":7,"rbac_id":31,"status":"Active"}', '{"name":"ادمین پرتال پرداخت نوین آرین","email":"admin.pna@intek.ir","mobile":"09120000022","portal_role":"ADMIN","section_id":null,"unit_id":7,"rbac_id":31,"status":"Active"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-24 16:34:52');
+	(17, 4, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_UPDATED', 'USER', 59, 59, '{"name":"ادمین پرتال پرداخت نوین آرین","email":"admin.pna@intek.ir","mobile":null,"portal_role":"ADMIN","section_id":null,"unit_id":7,"rbac_id":31,"status":"Active"}', '{"name":"ادمین پرتال پرداخت نوین آرین","email":"admin.pna@intek.ir","mobile":"09120000022","portal_role":"ADMIN","section_id":null,"unit_id":7,"rbac_id":31,"status":"Active"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-24 16:34:52'),
+	(18, 4, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'PORTAL_SETTINGS_UPDATED', 'COMPANY', 4, NULL, '{"id":3,"company_id":4,"customer_portal_workflow_enabled":1,"portal_unit_id":20,"admin_rbac_id":31,"manager_rbac_id":39,"expert_rbac_id":46,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:02:31"}', '{"id":3,"company_id":4,"customer_portal_workflow_enabled":1,"portal_unit_id":20,"admin_rbac_id":31,"manager_rbac_id":39,"expert_rbac_id":46,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:02:31"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:03:49'),
+	(19, 4, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_MANAGEMENT_PERMISSION_GRANTED', 'USER', 10, 10, '{"permission":"manager_create_ticket_with_experts","is_allowed":0}', '{"permission":"manager_create_ticket_with_experts","is_allowed":1}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:10:30'),
+	(20, 4, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_MANAGEMENT_PERMISSION_GRANTED', 'USER', 10, 10, '{"permission":"manager_assign_unassigned_expert","is_allowed":0}', '{"permission":"manager_assign_unassigned_expert","is_allowed":1}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:11:07'),
+	(21, 4, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'PORTAL_SETTINGS_UPDATED', 'COMPANY', 4, NULL, '{"id":3,"company_id":4,"customer_portal_workflow_enabled":1,"portal_unit_id":20,"admin_rbac_id":31,"manager_rbac_id":39,"expert_rbac_id":46,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:02:31"}', '{"id":3,"company_id":4,"customer_portal_workflow_enabled":1,"portal_unit_id":20,"admin_rbac_id":31,"manager_rbac_id":39,"expert_rbac_id":46,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:02:31"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:11:18'),
+	(22, 4, 4, 59, 'USER', 'ADMIN', 'SECTION_CREATED', 'SECTION', 4, NULL, NULL, '{"name":"پشتیبانی سوییچ","is_active":1}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:28:28'),
+	(23, 4, 4, 59, 'USER', 'ADMIN', 'MANAGER_ASSIGNED', 'SECTION', 4, 10, '{"section_id":null}', '{"section_id":4,"manager_user_id":10}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:28:34'),
+	(24, 4, 4, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_UPDATED', 'USER', 54, 54, '{"name":"سارا مهدوی","email":"s.mahdavi@pna.co.ir","mobile":"09125770747","portal_role":"MANAGER","section_id":null,"unit_id":7,"rbac_id":9,"status":"Active"}', '{"name":"سارا مهدوی","email":"s.mahdavi@pna.co.ir","mobile":"09125770747","portal_role":"EXPERT","section_id":4,"unit_id":4,"rbac_id":10,"status":"Active"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:34:58'),
+	(25, 4, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'MANAGER_CHANGED', 'USER', 54, 54, '{"name":"سارا مهدوی","email":"s.mahdavi@pna.co.ir","mobile":"09125770747","portal_role":"MANAGER","section_id":null,"unit_id":7,"rbac_id":9,"status":"Active"}', '{"name":"سارا مهدوی","email":"s.mahdavi@pna.co.ir","mobile":"09125770747","portal_role":"EXPERT","section_id":4,"unit_id":4,"rbac_id":10,"status":"Active"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:34:58'),
+	(26, 4, 4, 38, 'ADMIN', 'INTEK_ADMIN', 'EXPERT_ASSIGNED', 'USER', 54, 54, '{"name":"سارا مهدوی","email":"s.mahdavi@pna.co.ir","mobile":"09125770747","portal_role":"MANAGER","section_id":null,"unit_id":7,"rbac_id":9,"status":"Active"}', '{"name":"سارا مهدوی","email":"s.mahdavi@pna.co.ir","mobile":"09125770747","portal_role":"EXPERT","section_id":4,"unit_id":4,"rbac_id":10,"status":"Active"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:34:58'),
+	(27, 4, 5, 59, 'USER', 'ADMIN', 'SECTION_CREATED', 'SECTION', 5, NULL, NULL, '{"name":"راهبری","is_active":1}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:38:46'),
+	(28, 4, 5, 59, 'USER', 'ADMIN', 'PORTAL_USER_ROLE_UPDATED', 'USER', 41, 41, '{"portal_role":"EXPERT","section_id":null}', '{"portal_role":"MANAGER","section_id":5}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:41:18'),
+	(29, 4, NULL, 59, 'USER', 'ADMIN', 'USER_UPDATED', 'USER', 41, 41, '{"name":"سوده فرمانی","email":"s.farmani@pna.co.ir","mobile":"09126759279"}', '{"name":"سوده فرمانی","email":"s.farmani@pna.co.ir","mobile":"09126759279"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:41:18'),
+	(30, 4, 5, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_MANAGEMENT_PERMISSION_REVOKED', 'USER', 41, 41, '{"permission":"manager_return_ticket_to_expert","is_allowed":1}', '{"permission":"manager_return_ticket_to_expert","is_allowed":0}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:43:12'),
+	(31, 10, 6, 65, 'USER', 'ADMIN', 'SECTION_CREATED', 'SECTION', 6, NULL, NULL, '{"name":"مانیتورینگ","is_active":1}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:47:57'),
+	(32, 10, 6, 65, 'USER', 'ADMIN', 'MANAGER_ASSIGNED', 'SECTION', 6, 56, '{"section_id":null}', '{"section_id":6,"manager_user_id":56}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:48:27'),
+	(33, 10, 7, 65, 'USER', 'ADMIN', 'SECTION_CREATED', 'SECTION', 7, NULL, NULL, '{"name":"ابزارپذیرش","is_active":1}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:48:44'),
+	(34, 10, 7, 65, 'USER', 'ADMIN', 'MANAGER_ASSIGNED', 'SECTION', 7, 57, '{"section_id":null}', '{"section_id":7,"manager_user_id":57}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:48:50'),
+	(35, 10, 8, 65, 'USER', 'ADMIN', 'SECTION_CREATED', 'SECTION', 8, NULL, NULL, '{"name":"عملیات","is_active":1}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:49:15'),
+	(36, 10, 7, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_MANAGEMENT_PERMISSION_GRANTED', 'USER', 57, 57, '{"permission":"manager_create_ticket_with_experts","is_allowed":0}', '{"permission":"manager_create_ticket_with_experts","is_allowed":1}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:50:53'),
+	(37, 10, 6, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_MANAGEMENT_PERMISSION_GRANTED', 'USER', 56, 56, '{"permission":"manager_create_ticket_with_experts","is_allowed":0}', '{"permission":"manager_create_ticket_with_experts","is_allowed":1}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:51:03'),
+	(38, 10, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'PORTAL_SETTINGS_UPDATED', 'COMPANY', 10, NULL, '{"id":1,"company_id":10,"customer_portal_workflow_enabled":1,"portal_unit_id":24,"admin_rbac_id":37,"manager_rbac_id":45,"expert_rbac_id":52,"draft_aging_days":14,"created_by":38,"created_at":"2026-11-17 13:56:22","updated_by":38,"updated_at":"2026-11-24 20:01:41"}', '{"id":1,"company_id":10,"customer_portal_workflow_enabled":1,"portal_unit_id":24,"admin_rbac_id":37,"manager_rbac_id":45,"expert_rbac_id":52,"draft_aging_days":14,"created_by":38,"created_at":"2026-11-17 13:56:22","updated_by":38,"updated_at":"2026-11-24 20:01:41"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:51:06'),
+	(39, 10, 6, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_MANAGEMENT_PERMISSION_GRANTED', 'USER', 56, 56, '{"permission":"manager_assign_unassigned_expert","is_allowed":0}', '{"permission":"manager_assign_unassigned_expert","is_allowed":1}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:51:24'),
+	(40, 10, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'PORTAL_SETTINGS_UPDATED', 'COMPANY', 10, NULL, '{"id":1,"company_id":10,"customer_portal_workflow_enabled":1,"portal_unit_id":24,"admin_rbac_id":37,"manager_rbac_id":45,"expert_rbac_id":52,"draft_aging_days":14,"created_by":38,"created_at":"2026-11-17 13:56:22","updated_by":38,"updated_at":"2026-11-24 20:01:41"}', '{"id":1,"company_id":10,"customer_portal_workflow_enabled":1,"portal_unit_id":24,"admin_rbac_id":37,"manager_rbac_id":45,"expert_rbac_id":52,"draft_aging_days":14,"created_by":38,"created_at":"2026-11-17 13:56:22","updated_by":38,"updated_at":"2026-11-24 20:01:41"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 10:51:28'),
+	(41, 9, 9, 64, 'USER', 'ADMIN', 'SECTION_CREATED', 'SECTION', 9, NULL, NULL, '{"name":"پشتیبانی سیستم های کاربردی","is_active":1}', '192.168.253.23', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:160.0) Gecko/20100101 Firefox/160.0', '2026-11-25 11:46:53'),
+	(42, 9, 9, 64, 'USER', 'ADMIN', 'MANAGER_ASSIGNED', 'SECTION', 9, 45, '{"section_id":null}', '{"section_id":9,"manager_user_id":45}', '192.168.253.23', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:160.0) Gecko/20100101 Firefox/160.0', '2026-11-25 11:47:03'),
+	(43, 9, 9, 64, 'USER', 'ADMIN', 'EXPERT_ASSIGNED', 'USER', 53, 53, '{"section_id":null}', '{"section_id":9}', '192.168.253.23', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:160.0) Gecko/20100101 Firefox/160.0', '2026-11-25 11:47:24'),
+	(44, 9, 9, 64, 'USER', 'ADMIN', 'EXPERT_REASSIGNED', 'USER', 52, 52, '{"section_id":2}', '{"section_id":9}', '192.168.253.23', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:160.0) Gecko/20100101 Firefox/160.0', '2026-11-25 11:47:42'),
+	(45, 9, 1, 64, 'USER', 'ADMIN', 'SECTION_UPDATED', 'SECTION', 1, NULL, '{"name":"بخش ایشو"}', '{"name":"توسعه"}', '192.168.253.23', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:160.0) Gecko/20100101 Firefox/160.0', '2026-11-25 11:48:11'),
+	(46, 9, 2, 64, 'USER', 'ADMIN', 'USER_DEACTIVATED', 'USER', 35, 35, '{"status":"Active","profile_active":0}', '{"status":"Inactive","profile_active":0}', '192.168.253.23', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:160.0) Gecko/20100101 Firefox/160.0', '2026-11-25 11:48:34'),
+	(47, 9, 9, 64, 'USER', 'ADMIN', 'EXPERT_REASSIGNED', 'USER', 43, 43, '{"section_id":1}', '{"section_id":9}', '192.168.253.23', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:160.0) Gecko/20100101 Firefox/160.0', '2026-11-25 11:48:47'),
+	(48, 9, 9, 64, 'USER', 'ADMIN', 'EXPERT_ASSIGNED', 'USER', 44, 44, '{"section_id":null}', '{"section_id":9}', '192.168.253.23', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:160.0) Gecko/20100101 Firefox/160.0', '2026-11-25 11:49:04'),
+	(49, 9, 9, 64, 'USER', 'ADMIN', 'EXPERT_ASSIGNED', 'USER', 51, 51, '{"section_id":null}', '{"section_id":9}', '192.168.253.23', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:160.0) Gecko/20100101 Firefox/160.0', '2026-11-25 11:49:15'),
+	(50, 9, 2, 64, 'USER', 'ADMIN', 'USER_DEACTIVATED', 'USER', 42, 42, '{"status":"Active","profile_active":0}', '{"status":"Inactive","profile_active":0}', '192.168.253.23', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:160.0) Gecko/20100101 Firefox/160.0', '2026-11-25 11:49:29'),
+	(51, 9, 1, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_MANAGEMENT_PERMISSION_GRANTED', 'USER', 37, 37, '{"permission":"manager_create_ticket_with_experts","is_allowed":0}', '{"permission":"manager_create_ticket_with_experts","is_allowed":1}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 11:50:30'),
+	(52, 9, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'PORTAL_SETTINGS_UPDATED', 'COMPANY', 9, NULL, '{"id":8,"company_id":9,"customer_portal_workflow_enabled":1,"portal_unit_id":23,"admin_rbac_id":36,"manager_rbac_id":44,"expert_rbac_id":51,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:01:49"}', '{"id":8,"company_id":9,"customer_portal_workflow_enabled":1,"portal_unit_id":23,"admin_rbac_id":36,"manager_rbac_id":44,"expert_rbac_id":51,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:01:49"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 11:50:33'),
+	(53, 9, 9, 53, 'USER', 'EXPERT', 'TICKET_DRAFT_CREATED', 'DRAFT', 1, NULL, NULL, '{"workflow_status":"EXPERT_DRAFT","title":"بررسی سرویس های استعلامی","type_id":12,"priority":"low","owner_user_id":53}', '95.38.245.186', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36', '2026-11-25 11:54:14'),
+	(54, 9, 9, 53, 'USER', 'EXPERT', 'TICKET_FIRST_VIEWED', 'DRAFT', 1, NULL, NULL, NULL, '95.38.245.186', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36', '2026-11-25 11:54:14'),
+	(55, 9, 9, 53, 'USER', 'EXPERT', 'TICKET_EDITED', 'DRAFT', 1, NULL, '{"title":"بررسی سرویس های استعلامی","description":"با سلام و احترام،\\r\\nبا توجه به برنامه‌ریزی انجام‌شده جهت ارائه سرویس‌های استعلامی از طریق بستر «مگاهاب» شرکت تجارت الکترونیک پارسیان، خواهشمند است اطلاعات کلیه سرویس‌های استعلامی مورد استفاده، از جمله سرویس شاهکار و سایر سرویس‌های مشابه استعلامی را جهت بررسی و انجام اقدامات لازم ارسال فرمایید.\\r\\nلطفا اطلاعات مربوط به هر سرویس شامل نام سرویس، کاربرد، نحوه و آدرس دسترسی فعلی و سایر اطلاعات فنی موردنیاز جهت شناسایی و انتقال سرویس‌ها به بستر مگاهاب را اعلام فرمایید.\\r\\nپیشاپیش از همکاری شما سپاسگزاریم.\\r\\n--------------------------------------------------------------------------------------\\r\\nki.yousefi","type_id":12,"indicator_number":"35439","priority":"low"}', '{"title":"بررسی سرویس های استعلامی","description":"با سلام و احترام،\\r\\nبا توجه به برنامه‌ریزی انجام‌شده جهت ارائه سرویس‌های استعلامی از طریق بستر «مگاهاب» شرکت تجارت الکترونیک پارسیان، خواهشمند است اطلاعات کلیه سرویس‌های استعلامی مورد استفاده، از جمله سرویس شاهکار و سایر سرویس‌های مشابه استعلامی را جهت بررسی و انجام اقدامات لازم ارسال فرمایید.\\r\\nلطفا اطلاعات مربوط به هر سرویس شامل نام سرویس، کاربرد، نحوه و آدرس دسترسی فعلی و سایر اطلاعات فنی موردنیاز جهت شناسایی و انتقال سرویس‌ها به بستر مگاهاب را اعلام فرمایید.\\r\\nپیشاپیش از همکاری شما سپاسگزاریم.\\r\\n--------------------------------------------------------------------------------------\\r\\nki.yousefi","type_id":12,"indicator_number":"35439","priority":"low"}', '95.38.245.186', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36', '2026-11-25 11:55:10'),
+	(56, 5, 10, 60, 'USER', 'ADMIN', 'SECTION_CREATED', 'SECTION', 10, NULL, NULL, '{"name":"سوئیچ","is_active":1}', '46.209.45.245', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.0.0 Safari/537.36', '2026-11-25 12:01:09'),
+	(57, 5, 10, 60, 'USER', 'ADMIN', 'MANAGER_ASSIGNED', 'SECTION', 10, 26, '{"section_id":null}', '{"section_id":10,"manager_user_id":26}', '46.209.45.245', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.0.0 Safari/537.36', '2026-11-25 12:01:43'),
+	(58, 5, 10, 60, 'USER', 'ADMIN', 'SECTION_DEACTIVATED', 'SECTION', 10, NULL, '{"is_active":1}', '{"is_active":0}', '46.209.45.245', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.0.0 Safari/537.36', '2026-11-25 12:02:09'),
+	(59, 5, 10, 60, 'USER', 'ADMIN', 'SECTION_ACTIVATED', 'SECTION', 10, NULL, '{"is_active":0}', '{"is_active":1}', '46.209.45.245', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.0.0 Safari/537.36', '2026-11-25 12:02:14'),
+	(60, 5, 10, 60, 'USER', 'ADMIN', 'SECTION_ACTIVATED', 'SECTION', 10, NULL, '{"is_active":1}', '{"is_active":1}', '46.209.45.245', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.0.0 Safari/537.36', '2026-11-25 12:02:18'),
+	(61, 9, NULL, 64, 'USER', 'ADMIN', 'USER_DEACTIVATED', 'USER', 38, 38, '{"status":"Active","profile_active":0}', '{"status":"Inactive","profile_active":0}', '95.38.245.186', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36', '2026-11-25 12:11:02'),
+	(62, 9, NULL, 64, 'USER', 'ADMIN', 'TICKET_FIRST_VIEWED', 'DRAFT', 1, NULL, NULL, NULL, '95.38.245.186', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36', '2026-11-25 12:15:41'),
+	(63, 9, 1, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_UPDATED', 'USER', 37, 37, '{"name":"مریم خزلی","email":"m.khazali@pec.ir","mobile":"09121005023","portal_role":"MANAGER","section_id":1,"unit_id":15,"rbac_id":24,"status":"Active"}', '{"name":"مریم خزلی","email":"m.khazali@pec.ir","mobile":"09121005023","portal_role":"MANAGER","section_id":1,"unit_id":15,"rbac_id":24,"status":"Active"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-25 12:26:02'),
+	(64, 9, 9, 53, 'USER', 'EXPERT', 'TICKET_DRAFT_CREATED', 'DRAFT', 2, NULL, NULL, '{"workflow_status":"EXPERT_DRAFT","title":"شباهای بانک تجارت","type_id":9,"priority":"low","owner_user_id":53}', '95.38.245.186', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36', '2026-11-25 15:49:45'),
+	(65, 9, 9, 53, 'USER', 'EXPERT', 'FILE_UPLOADED', 'DRAFT', 2, NULL, NULL, '{"file_id":1308,"file_title":"شباهای بانک تجارت"}', '95.38.245.186', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36', '2026-11-25 15:49:45'),
+	(66, 9, 9, 53, 'USER', 'EXPERT', 'TICKET_FIRST_VIEWED', 'DRAFT', 2, NULL, NULL, NULL, '95.38.245.186', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36', '2026-11-25 15:49:46'),
+	(67, 9, 9, 53, 'USER', 'EXPERT', 'TICKET_SENT_TO_MANAGER', 'DRAFT', 2, 45, '{"workflow_status":"EXPERT_DRAFT","owner_user_id":53}', '{"workflow_status":"MANAGER_REVIEW","owner_user_id":45}', '95.38.245.186', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36', '2026-11-25 15:49:55'),
+	(68, 9, 9, 45, 'USER', 'MANAGER', 'TICKET_FIRST_VIEWED', 'DRAFT', 2, NULL, NULL, NULL, '95.38.245.186', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36', '2026-11-25 15:51:36'),
+	(69, 9, 9, 45, 'USER', 'MANAGER', 'TICKET_SENT_TO_INTEK', 'DRAFT', 2, NULL, '{"workflow_status":"MANAGER_REVIEW"}', '{"workflow_status":"SENT_TO_INTEK","ticket_id":2270,"ticket_number":"911612979"}', '95.38.245.186', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36', '2026-11-25 15:51:40'),
+	(70, 9, 1, 37, 'USER', 'MANAGER', 'TICKET_DRAFT_CREATED', 'DRAFT', 3, NULL, NULL, '{"workflow_status":"MANAGER_REVIEW","title":"تستی","type_id":2,"priority":"low","owner_user_id":37}', '95.38.245.186', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36', '2026-11-28 06:33:23'),
+	(71, 9, 1, 37, 'USER', 'MANAGER', 'TICKET_FIRST_VIEWED', 'DRAFT', 3, NULL, NULL, NULL, '95.38.245.186', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36', '2026-11-28 06:33:23'),
+	(72, 9, 9, 45, 'USER', 'MANAGER', 'TICKET_FIRST_VIEWED', 'DRAFT', 1, NULL, NULL, NULL, '95.38.245.186', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36', '2026-11-28 07:47:57'),
+	(73, 9, 9, 45, 'USER', 'MANAGER', 'COMMENT_CREATED', 'DRAFT', 1, NULL, NULL, '{"comment_id":3994}', '95.38.245.186', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36', '2026-11-28 07:48:35'),
+	(74, 9, 9, 53, 'USER', 'EXPERT', 'TICKET_SENT_TO_MANAGER', 'DRAFT', 1, 45, '{"workflow_status":"EXPERT_DRAFT","owner_user_id":53}', '{"workflow_status":"MANAGER_REVIEW","owner_user_id":45}', '95.38.245.186', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36', '2026-11-28 07:50:16'),
+	(75, 9, 9, 45, 'USER', 'MANAGER', 'TICKET_SENT_TO_INTEK', 'DRAFT', 1, NULL, '{"workflow_status":"MANAGER_REVIEW"}', '{"workflow_status":"SENT_TO_INTEK","ticket_id":2271,"ticket_number":"911613297"}', '95.38.245.186', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36', '2026-11-28 07:50:36'),
+	(76, 8, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_MANAGEMENT_PERMISSION_GRANTED', 'USER', 31, 31, '{"permission":"manager_create_ticket_with_experts","is_allowed":0}', '{"permission":"manager_create_ticket_with_experts","is_allowed":1}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-28 08:10:51'),
+	(77, 8, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_MANAGEMENT_PERMISSION_GRANTED', 'USER', 31, 31, '{"permission":"manager_return_ticket_to_expert","is_allowed":0}', '{"permission":"manager_return_ticket_to_expert","is_allowed":1}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-28 08:10:58'),
+	(78, 8, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_MANAGEMENT_PERMISSION_GRANTED', 'USER', 31, 31, '{"permission":"manager_assign_unassigned_expert","is_allowed":0}', '{"permission":"manager_assign_unassigned_expert","is_allowed":1}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-28 08:11:06'),
+	(79, 8, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_MANAGEMENT_PERMISSION_REVOKED', 'USER', 31, 31, '{"permission":"manager_return_ticket_to_expert","is_allowed":1}', '{"permission":"manager_return_ticket_to_expert","is_allowed":0}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-28 08:11:12'),
+	(80, 8, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'PORTAL_SETTINGS_UPDATED', 'COMPANY', 8, NULL, '{"id":7,"company_id":8,"customer_portal_workflow_enabled":1,"portal_unit_id":22,"admin_rbac_id":35,"manager_rbac_id":43,"expert_rbac_id":50,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:02:08"}', '{"id":7,"company_id":8,"customer_portal_workflow_enabled":1,"portal_unit_id":22,"admin_rbac_id":35,"manager_rbac_id":43,"expert_rbac_id":50,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:02:08"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-28 08:11:18'),
+	(81, 8, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_UPDATED', 'USER', 63, 63, '{"name":"ادمین پرتال پرداخت الکترونیک سامان","email":"admin.sep@intek.ir","mobile":null,"portal_role":"ADMIN","section_id":null,"unit_id":11,"rbac_id":35,"status":"Active"}', '{"name":"ادمین پرتال پرداخت الکترونیک سامان","email":"admin.sep@intek.ir","mobile":"091241111111","portal_role":"ADMIN","section_id":null,"unit_id":11,"rbac_id":35,"status":"Active"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-28 08:14:07'),
+	(82, 8, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'PORTAL_SETTINGS_UPDATED', 'COMPANY', 8, NULL, '{"id":7,"company_id":8,"customer_portal_workflow_enabled":1,"portal_unit_id":22,"admin_rbac_id":35,"manager_rbac_id":43,"expert_rbac_id":50,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:02:08"}', '{"id":7,"company_id":8,"customer_portal_workflow_enabled":1,"portal_unit_id":22,"admin_rbac_id":35,"manager_rbac_id":43,"expert_rbac_id":50,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:02:08"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-28 08:14:53'),
+	(83, 8, 11, 63, 'USER', 'ADMIN', 'SECTION_CREATED', 'SECTION', 11, NULL, NULL, '{"name":"سوئیچ","is_active":1}', '192.168.253.23', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:160.0) Gecko/20100101 Firefox/160.0', '2026-11-28 08:15:56'),
+	(84, 8, 11, 63, 'USER', 'ADMIN', 'MANAGER_ASSIGNED', 'SECTION', 11, 31, '{"section_id":null}', '{"section_id":11,"manager_user_id":31}', '192.168.253.23', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:160.0) Gecko/20100101 Firefox/160.0', '2026-11-28 08:16:01'),
+	(85, 9, 1, 38, 'ADMIN', 'INTEK_ADMIN', 'USER_MANAGEMENT_PERMISSION_GRANTED', 'USER', 37, 37, '{"permission":"manager_view_ipanel_created_company_tickets","is_allowed":0}', '{"permission":"manager_view_ipanel_created_company_tickets","is_allowed":1}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-28 08:22:16'),
+	(86, 9, NULL, 38, 'ADMIN', 'INTEK_ADMIN', 'PORTAL_SETTINGS_UPDATED', 'COMPANY', 9, NULL, '{"id":8,"company_id":9,"customer_portal_workflow_enabled":1,"portal_unit_id":23,"admin_rbac_id":36,"manager_rbac_id":44,"expert_rbac_id":51,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:01:49"}', '{"id":8,"company_id":9,"customer_portal_workflow_enabled":1,"portal_unit_id":23,"admin_rbac_id":36,"manager_rbac_id":44,"expert_rbac_id":51,"draft_aging_days":14,"created_by":null,"created_at":"2026-11-24 19:53:54","updated_by":38,"updated_at":"2026-11-24 20:01:49"}', '192.168.50.12', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '2026-11-28 08:22:24'),
+	(87, 8, 11, 31, 'USER', 'MANAGER', 'TICKET_DRAFT_CREATED', 'DRAFT', 4, NULL, NULL, '{"workflow_status":"MANAGER_REVIEW","title":"درخواست روت ترمینال انیاک","type_id":3,"priority":"low","owner_user_id":31}', '95.38.47.36', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0', '2026-11-28 09:10:20'),
+	(88, 8, 11, 31, 'USER', 'MANAGER', 'FILE_UPLOADED', 'DRAFT', 4, NULL, NULL, '{"file_id":1309,"file_title":"درخواست روت ترمینال انیاک"}', '95.38.47.36', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0', '2026-11-28 09:10:20'),
+	(89, 8, 11, 31, 'USER', 'MANAGER', 'TICKET_FIRST_VIEWED', 'DRAFT', 4, NULL, NULL, NULL, '95.38.47.36', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0', '2026-11-28 09:10:20'),
+	(90, 8, 11, 31, 'USER', 'MANAGER', 'TICKET_SENT_TO_INTEK', 'DRAFT', 4, NULL, '{"workflow_status":"MANAGER_REVIEW"}', '{"workflow_status":"SENT_TO_INTEK","ticket_id":2272,"ticket_number":"811613473"}', '95.38.47.36', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0', '2026-11-28 09:10:27');
 
 -- Dumping structure for table idesk.iweb_customer_portal_ticket_drafts
 CREATE TABLE IF NOT EXISTS `iweb_customer_portal_ticket_drafts` (
@@ -19809,10 +19934,15 @@ CREATE TABLE IF NOT EXISTS `iweb_customer_portal_ticket_drafts` (
   KEY `ix_iweb_cp_drafts_section_status` (`section_id`,`workflow_status`,`updated_at`),
   KEY `ix_iweb_cp_drafts_owner_status` (`current_owner_user_id`,`workflow_status`,`updated_at`),
   KEY `ix_iweb_cp_drafts_creator` (`creator_user_id`,`created_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.iweb_customer_portal_ticket_drafts: ~0 rows (approximately)
+-- Dumping data for table idesk.iweb_customer_portal_ticket_drafts: ~4 rows (approximately)
 DELETE FROM `iweb_customer_portal_ticket_drafts`;
+INSERT INTO `iweb_customer_portal_ticket_drafts` (`id`, `company_id`, `section_id`, `creator_user_id`, `current_owner_user_id`, `manager_user_id`, `title`, `description`, `type_id`, `indicator_number`, `priority`, `workflow_status`, `revision_count`, `published_ticket_id`, `created_at`, `updated_at`, `sent_to_intek_at`, `cancelled_at`) VALUES
+	(1, 9, 9, 53, 45, 45, 'بررسی سرویس های استعلامی', 'با سلام و احترام،\r\nبا توجه به برنامه‌ریزی انجام‌شده جهت ارائه سرویس‌های استعلامی از طریق بستر «مگاهاب» شرکت تجارت الکترونیک پارسیان، خواهشمند است اطلاعات کلیه سرویس‌های استعلامی مورد استفاده، از جمله سرویس شاهکار و سایر سرویس‌های مشابه استعلامی را جهت بررسی و انجام اقدامات لازم ارسال فرمایید.\r\nلطفا اطلاعات مربوط به هر سرویس شامل نام سرویس، کاربرد، نحوه و آدرس دسترسی فعلی و سایر اطلاعات فنی موردنیاز جهت شناسایی و انتقال سرویس‌ها به بستر مگاهاب را اعلام فرمایید.\r\nپیشاپیش از همکاری شما سپاسگزاریم.\r\n--------------------------------------------------------------------------------------\r\nki.yousefi', 12, '35439', 'low', 'SENT_TO_INTEK', 0, 2271, '2026-11-25 11:54:14', '2026-11-28 07:50:36', '2026-11-28 07:50:36', NULL),
+	(2, 9, 9, 53, 45, 45, 'شباهای بانک تجارت', 'با سلام و احترام؛\r\nلیست شباهای پایانه های بانک تجارت به پیوست تقدیم حضور می‌گردد.\r\nبا تشکر', 9, '0', 'low', 'SENT_TO_INTEK', 0, 2270, '2026-11-25 15:49:45', '2026-11-25 15:51:40', '2026-11-25 15:51:40', NULL),
+	(3, 9, 1, 37, 37, 37, 'تستی', 'تست', 2, '12', 'low', 'MANAGER_REVIEW', 0, NULL, '2026-11-28 06:33:23', '2026-11-28 06:33:23', NULL, NULL),
+	(4, 8, 11, 31, 31, 31, 'درخواست روت ترمینال انیاک', 'با سلام و احترام\r\nترمینال های فایل پیوست جهت روت انیاک تقدیم حضورتان می شود. خواهشمند است در این خصوص اقدامات لازم را مبذول فرمایید.\r\nبا تشکر', 3, '', 'low', 'SENT_TO_INTEK', 0, 2272, '2026-11-28 09:10:20', '2026-11-28 09:10:27', '2026-11-28 09:10:27', NULL);
 
 -- Dumping structure for table idesk.iweb_customer_portal_ticket_publish_map
 CREATE TABLE IF NOT EXISTS `iweb_customer_portal_ticket_publish_map` (
@@ -19826,10 +19956,14 @@ CREATE TABLE IF NOT EXISTS `iweb_customer_portal_ticket_publish_map` (
   UNIQUE KEY `ux_iweb_cp_publish_draft` (`draft_id`),
   UNIQUE KEY `ux_iweb_cp_publish_ticket` (`ticket_id`),
   KEY `ix_iweb_cp_publish_section_date` (`section_id`,`published_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.iweb_customer_portal_ticket_publish_map: ~0 rows (approximately)
+-- Dumping data for table idesk.iweb_customer_portal_ticket_publish_map: ~3 rows (approximately)
 DELETE FROM `iweb_customer_portal_ticket_publish_map`;
+INSERT INTO `iweb_customer_portal_ticket_publish_map` (`id`, `draft_id`, `ticket_id`, `section_id`, `published_by`, `published_at`) VALUES
+	(1, 2, 2270, 9, 45, '2026-11-25 15:51:40'),
+	(2, 1, 2271, 9, 45, '2026-11-28 07:50:36'),
+	(3, 4, 2272, 11, 31, '2026-11-28 09:10:27');
 
 -- Dumping structure for table idesk.iweb_customer_portal_ticket_views
 CREATE TABLE IF NOT EXISTS `iweb_customer_portal_ticket_views` (
@@ -19842,10 +19976,18 @@ CREATE TABLE IF NOT EXISTS `iweb_customer_portal_ticket_views` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_iweb_customer_portal_ticket_views_draft_user` (`draft_id`,`user_id`),
   KEY `ix_iweb_customer_portal_ticket_views_user_date` (`user_id`,`last_viewed_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.iweb_customer_portal_ticket_views: ~0 rows (approximately)
+-- Dumping data for table idesk.iweb_customer_portal_ticket_views: ~7 rows (approximately)
 DELETE FROM `iweb_customer_portal_ticket_views`;
+INSERT INTO `iweb_customer_portal_ticket_views` (`id`, `draft_id`, `user_id`, `first_viewed_at`, `last_viewed_at`, `view_count`) VALUES
+	(1, 1, 53, '2026-11-25 11:54:14', '2026-11-28 07:50:16', 6),
+	(3, 1, 64, '2026-11-25 12:15:41', '2026-11-25 12:26:47', 3),
+	(6, 2, 53, '2026-11-25 15:49:45', '2026-11-28 05:40:50', 3),
+	(8, 2, 45, '2026-11-25 15:51:36', '2026-11-28 07:48:48', 2),
+	(12, 3, 37, '2026-11-28 06:33:23', '2026-11-28 06:33:41', 3),
+	(15, 1, 45, '2026-11-28 07:47:57', '2026-11-28 07:50:32', 4),
+	(22, 4, 31, '2026-11-28 09:10:20', '2026-11-28 09:10:20', 1);
 
 -- Dumping structure for table idesk.iweb_customer_portal_user_profiles
 CREATE TABLE IF NOT EXISTS `iweb_customer_portal_user_profiles` (
@@ -19870,37 +20012,37 @@ DELETE FROM `iweb_customer_portal_user_profiles`;
 INSERT INTO `iweb_customer_portal_user_profiles` (`id`, `user_id`, `company_id`, `portal_role`, `section_id`, `is_active`, `created_by`, `created_at`, `updated_by`, `updated_at`) VALUES
 	(1, 55, 10, 'ADMIN', NULL, 1, 38, '2026-11-17 12:41:00', 38, NULL),
 	(2, 65, 10, 'ADMIN', NULL, 1, 38, '2026-11-17 12:41:21', 38, NULL),
-	(3, 10, 4, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(3, 10, 4, 'MANAGER', 4, 1, 1, '2026-11-24 16:23:54', 59, '2026-11-25 10:28:34'),
 	(4, 25, 4, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
-	(5, 26, 5, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(5, 26, 5, 'MANAGER', 10, 1, 1, '2026-11-24 16:23:54', 60, '2026-11-25 12:01:43'),
 	(6, 30, 6, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
-	(7, 31, 8, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
-	(8, 35, 9, 'EXPERT', 2, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
-	(9, 37, 9, 'MANAGER', 1, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
-	(10, 38, 9, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(7, 31, 8, 'MANAGER', 11, 1, 1, '2026-11-24 16:23:54', 63, '2026-11-28 08:16:01'),
+	(8, 35, 9, 'EXPERT', 2, 0, 1, '2026-11-24 16:23:54', 64, '2026-11-25 11:48:33'),
+	(9, 37, 9, 'MANAGER', 1, 1, 1, '2026-11-24 16:23:54', 38, '2026-11-25 12:26:02'),
+	(10, 38, 9, 'MANAGER', NULL, 0, 1, '2026-11-24 16:23:54', 64, '2026-11-25 12:11:02'),
 	(11, 39, 4, 'EXPERT', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
 	(12, 40, 4, 'EXPERT', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
-	(13, 41, 4, 'EXPERT', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
-	(14, 42, 9, 'MANAGER', 2, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
-	(15, 43, 9, 'EXPERT', 1, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
-	(16, 44, 9, 'EXPERT', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
-	(17, 45, 9, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(13, 41, 4, 'MANAGER', 5, 1, 1, '2026-11-24 16:23:54', 59, '2026-11-25 10:41:18'),
+	(14, 42, 9, 'MANAGER', 2, 0, 1, '2026-11-24 16:23:54', 64, '2026-11-25 11:49:29'),
+	(15, 43, 9, 'EXPERT', 9, 1, 1, '2026-11-24 16:23:54', 64, '2026-11-25 11:48:47'),
+	(16, 44, 9, 'EXPERT', 9, 1, 1, '2026-11-24 16:23:54', 64, '2026-11-25 11:49:04'),
+	(17, 45, 9, 'MANAGER', 9, 1, 1, '2026-11-24 16:23:54', 64, '2026-11-25 11:47:03'),
 	(18, 46, 7, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
 	(19, 48, 7, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
 	(20, 49, 7, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
 	(21, 50, 7, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
-	(22, 51, 9, 'EXPERT', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
-	(23, 52, 9, 'EXPERT', 2, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
-	(24, 53, 9, 'EXPERT', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
-	(25, 54, 4, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
-	(26, 56, 10, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
-	(27, 57, 10, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(22, 51, 9, 'EXPERT', 9, 1, 1, '2026-11-24 16:23:54', 64, '2026-11-25 11:49:15'),
+	(23, 52, 9, 'EXPERT', 9, 1, 1, '2026-11-24 16:23:54', 64, '2026-11-25 11:47:42'),
+	(24, 53, 9, 'EXPERT', 9, 1, 1, '2026-11-24 16:23:54', 64, '2026-11-25 11:47:24'),
+	(25, 54, 4, 'EXPERT', 4, 1, 1, '2026-11-24 16:23:54', 38, '2026-11-25 10:34:58'),
+	(26, 56, 10, 'MANAGER', 6, 1, 1, '2026-11-24 16:23:54', 65, '2026-11-25 10:48:27'),
+	(27, 57, 10, 'MANAGER', 7, 1, 1, '2026-11-24 16:23:54', 65, '2026-11-25 10:48:50'),
 	(28, 58, 5, 'MANAGER', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
 	(29, 59, 4, 'ADMIN', NULL, 1, 1, '2026-11-24 16:23:54', 38, '2026-11-24 16:34:52'),
 	(30, 60, 5, 'ADMIN', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
 	(31, 61, 6, 'ADMIN', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
 	(32, 62, 7, 'ADMIN', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
-	(33, 63, 8, 'ADMIN', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL),
+	(33, 63, 8, 'ADMIN', NULL, 1, 1, '2026-11-24 16:23:54', 38, '2026-11-28 08:14:07'),
 	(34, 64, 9, 'ADMIN', NULL, 1, 1, '2026-11-24 16:23:54', NULL, NULL);
 
 -- Dumping structure for table idesk.kanban_board
@@ -19998,7 +20140,7 @@ CREATE TABLE IF NOT EXISTS `kanban_board_tags` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.kanban_board_tags: ~22 rows (approximately)
+-- Dumping data for table idesk.kanban_board_tags: ~21 rows (approximately)
 DELETE FROM `kanban_board_tags`;
 INSERT INTO `kanban_board_tags` (`id`, `board_tag`, `admin_id`, `user_id`, `creation_date`, `last_updated_date`) VALUES
 	(10, 'پیگیری نفر ساعت و تنظیم پیش فاکتور ', 16, NULL, '2026-05-09 07:08:25', '2026-06-30 12:17:15'),
@@ -20010,7 +20152,6 @@ INSERT INTO `kanban_board_tags` (`id`, `board_tag`, `admin_id`, `user_id`, `crea
 	(31, 'توسعه اسکریپت', 38, NULL, '2026-05-26 08:37:07', '2026-05-26 08:37:07'),
 	(32, 'پیگیری', 24, NULL, '2026-05-26 11:40:21', '2026-05-26 11:40:21'),
 	(33, 'نگهداری', 38, NULL, '2026-05-30 11:04:57', '2026-05-30 11:04:57'),
-	(34, 'بعدا باید انجام بدی', 27, NULL, '2026-06-30 07:15:00', '2026-06-30 07:15:00'),
 	(36, 'پیگیری تایید پیش فاکتور', 16, NULL, '2026-06-30 11:30:19', '2026-06-30 11:30:19'),
 	(42, 'پارسیان', 24, NULL, '2026-07-18 10:10:00', '2026-07-18 10:10:00'),
 	(43, 'پیگیری انجام و زمان تحویل', 16, NULL, '2026-07-21 08:44:59', '2026-07-21 08:44:59'),
@@ -20041,9 +20182,9 @@ CREATE TABLE IF NOT EXISTS `man_hour` (
   `subject` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `ix_man_hour_part` (`part_id`,`part_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4003 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.man_hour: ~3,955 rows (approximately)
+-- Dumping data for table idesk.man_hour: ~3,957 rows (approximately)
 DELETE FROM `man_hour`;
 INSERT INTO `man_hour` (`id`, `user_id`, `admin_id`, `part_id`, `company_id`, `part_name`, `parent_id`, `man_hour_number`, `set_view`, `creation_date`, `last_updated_date`, `todo`, `subject`) VALUES
 	(2, NULL, 22, 261, NULL, 'tickets', NULL, 1, 0, '2024-07-06 12:26:31', '2024-07-06 12:26:31', 'switch', ''),
@@ -24042,7 +24183,9 @@ INSERT INTO `man_hour` (`id`, `user_id`, `admin_id`, `part_id`, `company_id`, `p
 	(3997, NULL, 9, 277, NULL, 'tickets', NULL, 1, 0, '2026-11-17 12:51:23', '2026-11-17 12:51:23', 'setting_up', 'ghsdg'),
 	(3998, NULL, 27, 2241, NULL, 'tickets', NULL, 0, 0, '2026-11-21 07:57:19', '2026-11-21 07:57:19', 'follow_up', 'اطلاعات کارت تستی'),
 	(3999, NULL, 27, 2200, NULL, 'tickets', NULL, 1, 0, '2026-11-21 08:40:18', '2026-11-21 08:40:18', 'follow_up', 'فرمت کلید مک'),
-	(4000, NULL, 40, 2070, NULL, 'tickets', NULL, 10, 0, '2026-11-22 07:35:27', '2026-11-22 07:35:27', 'switch', 'مستند مدیریت کلید');
+	(4000, NULL, 40, 2070, NULL, 'tickets', NULL, 10, 0, '2026-11-22 07:35:27', '2026-11-22 07:35:27', 'switch', 'مستند مدیریت کلید'),
+	(4001, NULL, 39, 2266, NULL, 'tickets', NULL, 1, 0, '2026-11-25 07:11:09', '2026-11-25 07:11:09', 'setting_up', 'روت ترمینال انیاک'),
+	(4002, NULL, 39, 2268, NULL, 'tickets', NULL, 1, 0, '2026-11-25 07:11:52', '2026-11-25 07:11:52', 'setting_up', 'روت ترمینال ارتباط فردا');
 
 -- Dumping structure for table idesk.marking
 CREATE TABLE IF NOT EXISTS `marking` (
@@ -28006,9 +28149,9 @@ CREATE TABLE IF NOT EXISTS `status` (
   PRIMARY KEY (`id`),
   KEY `ix_status_part_name_id` (`part_id`,`part_name`,`id`),
   KEY `ix_status_part_created` (`part_id`,`creation_date`)
-) ENGINE=InnoDB AUTO_INCREMENT=13837 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13883 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.status: ~13,693 rows (approximately)
+-- Dumping data for table idesk.status: ~13,732 rows (approximately)
 DELETE FROM `status`;
 INSERT INTO `status` (`id`, `part_id`, `status_name`, `part_name`, `user_id`, `admin_id`, `rbac_id`, `view_from`, `view_to`, `creation_date`, `last_updated_date`, `status_description`) VALUES
 	(1, 264, 'condition_pending', 'tickets', NULL, 1, 1, 0, 0, '2024-08-11 07:17:00', '2024-08-11 07:17:00', NULL),
@@ -41727,7 +41870,46 @@ INSERT INTO `status` (`id`, `part_id`, `status_name`, `part_name`, `user_id`, `a
 	(13833, 2267, 'condition_in_progress', 'tickets', NULL, 24, 17, 0, 0, '2026-11-24 10:14:19', '2026-11-24 10:14:19', NULL),
 	(13834, 1218, 'Condition_archive', 'tickets', NULL, 16, 14, 0, 0, '2026-11-24 10:14:34', '2026-11-24 10:14:34', NULL),
 	(13835, 2242, 'condition_in_progress', 'tickets', NULL, 9, 11, 0, 0, '2026-11-24 12:30:08', '2026-11-24 12:30:08', NULL),
-	(13836, 2269, 'condition_pending', 'tickets', 10, NULL, 9, 0, 0, '2026-11-24 13:19:09', '2026-11-24 13:19:09', NULL);
+	(13836, 2269, 'condition_pending', 'tickets', 10, NULL, 9, 0, 0, '2026-11-24 13:19:09', '2026-11-24 13:19:09', NULL),
+	(13837, 2246, 'Condition_reject_test', 'tickets', 58, NULL, 18, 0, 0, '2026-11-25 04:44:23', '2026-11-25 04:44:23', 'با سلام و احترام\nپیرو مذاکره با آقای مقدم مقرر گردید مستند و راهکار اینترچنج جلوگیری از عملکرد آی پی های خارج از کشور ارسال گردد.\nبا سپاس'),
+	(13838, 2269, 'condition_under_review', 'tickets', NULL, 16, 14, 0, 0, '2026-11-25 05:33:05', '2026-11-25 05:33:05', NULL),
+	(13839, 2264, 'condition_in_progress', 'tickets', NULL, 27, 17, 0, 0, '2026-11-25 06:32:56', '2026-11-25 06:32:56', NULL),
+	(13840, 2268, 'condition_in_progress', 'tickets', NULL, 39, 17, 0, 0, '2026-11-25 06:41:28', '2026-11-25 06:41:28', NULL),
+	(13841, 2266, 'condition_in_progress', 'tickets', NULL, 39, 17, 0, 0, '2026-11-25 06:51:52', '2026-11-25 06:51:52', NULL),
+	(13842, 2266, 'Condition_referral_to_manager', 'tickets', NULL, 39, 17, 0, 0, '2026-11-25 07:11:13', '2026-11-25 07:11:13', NULL),
+	(13843, 2268, 'Condition_referral_to_manager', 'tickets', NULL, 39, 17, 0, 0, '2026-11-25 07:11:55', '2026-11-25 07:11:55', NULL),
+	(13844, 1241, 'Condition_archive', 'tickets', NULL, 38, 12, 0, 0, '2026-11-25 07:48:25', '2026-11-25 07:48:25', NULL),
+	(13845, 2266, 'Condition_done', 'tickets', NULL, 38, 12, 0, 0, '2026-11-25 07:49:10', '2026-11-25 07:49:10', NULL),
+	(13846, 2268, 'Condition_done', 'tickets', NULL, 38, 12, 0, 0, '2026-11-25 07:49:46', '2026-11-25 07:49:46', NULL),
+	(13847, 2265, 'Condition_done', 'tickets', NULL, 38, 12, 0, 0, '2026-11-25 09:00:41', '2026-11-25 09:00:41', NULL),
+	(13848, 2265, 'Condition_done', 'tickets', NULL, 16, 14, 0, 0, '2026-11-25 10:20:56', '2026-11-25 10:20:56', NULL),
+	(13849, 2268, 'Condition_done', 'tickets', NULL, 16, 14, 0, 0, '2026-11-25 10:21:00', '2026-11-25 10:21:00', NULL),
+	(13850, 2266, 'Condition_done', 'tickets', NULL, 16, 14, 0, 0, '2026-11-25 10:21:04', '2026-11-25 10:21:04', NULL),
+	(13851, 1241, 'Condition_archive', 'tickets', NULL, 16, 14, 0, 0, '2026-11-25 10:21:17', '2026-11-25 10:21:17', NULL),
+	(13852, 2270, 'condition_pending', 'tickets', 45, NULL, 24, 0, 0, '2026-11-25 15:51:40', '2026-11-25 15:51:40', NULL),
+	(13853, 1789, 'condition_acepted_test_auto', 'tickets', NULL, NULL, 16, 0, 0, '2026-11-26 21:30:00', '2026-11-26 21:30:00', 'Auto status change: condition_done -> condition_acepted_test_auto after 10 days'),
+	(13854, 2089, 'condition_acepted_test_auto', 'tickets', NULL, NULL, 16, 0, 0, '2026-11-26 21:30:00', '2026-11-26 21:30:00', 'Auto status change: condition_done -> condition_acepted_test_auto after 10 days'),
+	(13855, 2235, 'condition_acepted_test_auto', 'tickets', NULL, NULL, 16, 0, 0, '2026-11-26 21:30:00', '2026-11-26 21:30:00', 'Auto status change: condition_done -> condition_acepted_test_auto after 10 days'),
+	(13856, 2237, 'condition_acepted_test_auto', 'tickets', NULL, NULL, 16, 0, 0, '2026-11-26 21:30:00', '2026-11-26 21:30:00', 'Auto status change: condition_done -> condition_acepted_test_auto after 10 days'),
+	(13857, 2239, 'condition_acepted_test_auto', 'tickets', NULL, NULL, 16, 0, 0, '2026-11-26 21:30:00', '2026-11-26 21:30:00', 'Auto status change: condition_done -> condition_acepted_test_auto after 10 days'),
+	(13858, 2244, 'condition_acepted_test_auto', 'tickets', NULL, NULL, 16, 0, 0, '2026-11-26 21:30:00', '2026-11-26 21:30:00', 'Auto status change: condition_done -> condition_acepted_test_auto after 10 days'),
+	(13859, 2248, 'condition_acepted_test_auto', 'tickets', NULL, NULL, 16, 0, 0, '2026-11-26 21:30:00', '2026-11-26 21:30:00', 'Auto status change: condition_done -> condition_acepted_test_auto after 10 days'),
+	(13860, 2074, 'condition_acepted_test_auto', 'tickets', NULL, NULL, 16, 0, 0, '2026-11-27 21:30:00', '2026-11-27 21:30:00', 'Auto status change: condition_done -> condition_acepted_test_auto after 10 days'),
+	(13861, 2101, 'condition_acepted_test_auto', 'tickets', NULL, NULL, 16, 0, 0, '2026-11-27 21:30:00', '2026-11-27 21:30:00', 'Auto status change: condition_done -> condition_acepted_test_auto after 10 days'),
+	(13862, 2177, 'condition_acepted_test_auto', 'tickets', NULL, NULL, 16, 0, 0, '2026-11-27 21:30:00', '2026-11-27 21:30:00', 'Auto status change: condition_done -> condition_acepted_test_auto after 10 days'),
+	(13863, 2194, 'condition_acepted_test_auto', 'tickets', NULL, NULL, 16, 0, 0, '2026-11-27 21:30:00', '2026-11-27 21:30:00', 'Auto status change: condition_done -> condition_acepted_test_auto after 10 days'),
+	(13864, 2223, 'condition_acepted_test_auto', 'tickets', NULL, NULL, 16, 0, 0, '2026-11-27 21:30:00', '2026-11-27 21:30:00', 'Auto status change: condition_done -> condition_acepted_test_auto after 10 days'),
+	(13865, 2243, 'condition_acepted_test_auto', 'tickets', NULL, NULL, 16, 0, 0, '2026-11-27 21:30:00', '2026-11-27 21:30:00', 'Auto status change: condition_done -> condition_acepted_test_auto after 10 days'),
+	(13866, 2245, 'condition_acepted_test_auto', 'tickets', NULL, NULL, 16, 0, 0, '2026-11-27 21:30:00', '2026-11-27 21:30:00', 'Auto status change: condition_done -> condition_acepted_test_auto after 10 days'),
+	(13867, 2247, 'condition_acepted_test_auto', 'tickets', NULL, NULL, 16, 0, 0, '2026-11-27 21:30:00', '2026-11-27 21:30:00', 'Auto status change: condition_done -> condition_acepted_test_auto after 10 days'),
+	(13875, 2270, 'condition_under_review', 'tickets', NULL, 16, 14, 0, 0, '2026-11-28 05:54:39', '2026-11-28 05:54:39', NULL),
+	(13876, 1591, 'Condition_acepted_invoice', 'tickets', 37, NULL, 24, 0, 0, '2026-11-28 06:14:12', '2026-11-28 06:14:12', NULL),
+	(13877, 1915, 'Condition_clearing', 'tickets', 37, NULL, 24, 0, 0, '2026-11-28 06:16:20', '2026-11-28 06:16:20', NULL),
+	(13878, 1932, 'Condition_acepted_invoice', 'tickets', 37, NULL, 24, 0, 0, '2026-11-28 06:17:18', '2026-11-28 06:17:18', NULL),
+	(13879, 2270, 'condition_in_progress', 'tickets', NULL, 9, 11, 0, 0, '2026-11-28 07:44:14', '2026-11-28 07:44:14', NULL),
+	(13880, 2271, 'condition_pending', 'tickets', 45, NULL, 24, 0, 0, '2026-11-28 07:50:36', '2026-11-28 07:50:36', NULL),
+	(13881, 2271, 'condition_under_review', 'tickets', NULL, 16, 14, 0, 0, '2026-11-28 08:07:35', '2026-11-28 08:07:35', NULL),
+	(13882, 2272, 'condition_pending', 'tickets', 31, NULL, 20, 0, 0, '2026-11-28 09:10:27', '2026-11-28 09:10:27', NULL);
 
 -- Dumping structure for view idesk.status_forwards_detailed_view
 -- Creating temporary table to overcome VIEW dependency errors
@@ -41799,10 +41981,12 @@ CREATE TABLE IF NOT EXISTS `tickets` (
   `admin_id` int(11) DEFAULT NULL,
   `company_id` int(11) DEFAULT NULL,
   `indicator_number` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2270 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`id`),
+  KEY `ix_tickets_company_admin_created` (`company_id`,`admin_id`,`creation_date`),
+  KEY `ix_tickets_user_created` (`user_id`,`creation_date`)
+) ENGINE=InnoDB AUTO_INCREMENT=2273 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.tickets: ~2,035 rows (approximately)
+-- Dumping data for table idesk.tickets: ~2,038 rows (approximately)
 DELETE FROM `tickets`;
 INSERT INTO `tickets` (`id`, `ticket_title`, `ticket_description`, `ticket_number`, `type_id`, `user_id`, `status`, `priority`, `mark_id`, `creation_date`, `last_updated_date`, `admin_id`, `company_id`, `indicator_number`) VALUES
 	(1, 'پیاده سازی چند حسابی', 'با سلام \r\nلطفا زمانبندی پیاده سازی را اعلام فرمایید', '202310-1', 1, 10, 'condition_pendency', 'medium', NULL, '2023-10-08 12:40:05', '2024-10-30 07:47:46', NULL, NULL, NULL),
@@ -43011,7 +43195,7 @@ INSERT INTO `tickets` (`id`, `ticket_title`, `ticket_description`, `ticket_numbe
 	(1238, 'جدول جامع کدهای خطا در تراکنش‌های پرداخت', 'با سلام و احترام؛\r\nبا توجه به اهمیت پایش و مدیریت تراکنش‌ها، نیاز است تا فهرست کامل حالت‌های مختلف خطا، شامل خطای پذیرندگی، خطای کاربری، خطای صادرکنندگی و خطای شاپرکی، به همراه Response Code، InternalReasonCode، ExternalReasonCode متناظر هر یک، لطفاً بصورت شفاف، دقیق و در قالب یک جدول جامع جهت بهره‌برداری فنی ارائه گردد.', '202511-1238', 3, 26, 'Condition_final_done', 'high', NULL, '2025-11-16 06:11:30', '2026-02-22 14:03:17', NULL, NULL, NULL),
 	(1239, 'پیاده سازی تراکنش بازگشت ار خرید', 'با سلام و احترام\r\nخواهشمند است تراکنش بازگشت از خرید پیاده سازی گردد.\r\nبا سپاس', '202511-1239', 3, 10, 'condition_in_progress', 'high', NULL, '2025-11-16 07:20:36', '2025-11-16 11:04:42', NULL, NULL, NULL),
 	(1240, 'لیست تمامی کارت ها غیر از کارت های هدیه', 'با سلام و احترام؛\r\nخواهشمند است در خصوص ارسال لیست تمامی کارت ها بغیر از کارت های هدیه با فیلترهای زیر اقدام فرمایید. با سپاس\r\nشماره کارت - نام و نام خانوادگی - کدملی - موبایل - گروه مشتری - نام نمایندگی - تاریخ صدور -  تاریخ انقضا - وضعیت (فعال/غیرفعال)- مسدودی - وضعیت انقضا - الگوی کارت - گروه کارت - نوع کارت', '202511-1240', 8, 52, 'Condition_final_done', 'high', NULL, '2025-11-16 10:19:43', '2026-02-22 13:57:31', NULL, NULL, NULL),
-	(1241, 'برگرداندن خطای 63 به دستگاه کارتخوان در صورت اشتباه بودن مک پیام', 'با سلام \r\nخواهشمند است به در صورت اشتباه بودن مک پیام، خطای 63  به دستگاه کارتخوان ارسال گردد.\r\nبا سپاس', '202511-1241', 3, 10, 'Condition_need_action', 'low', NULL, '2025-11-17 06:03:53', '2025-11-19 06:35:32', NULL, NULL, NULL),
+	(1241, 'برگرداندن خطای 63 به دستگاه کارتخوان در صورت اشتباه بودن مک پیام', 'با سلام \r\nخواهشمند است به در صورت اشتباه بودن مک پیام، خطای 63  به دستگاه کارتخوان ارسال گردد.\r\nبا سپاس', '202511-1241', 3, 10, 'Condition_archive', 'low', NULL, '2025-11-17 06:03:53', '2026-11-25 07:48:25', NULL, NULL, NULL),
 	(1242, 'ایجاد کانال جدید مشابه 4080', 'با سلام \r\nخواهشمند است کانال جدیدی  مشابه کانال 4080\r\nکه شامل فیلد 53 , 32 نیز باشد، ایجاد نمایید.\r\nهدف این است که فیلد 90 پیاده سازی گردد که برای پیاده اسزی این مورد نیاز است در فیلد 32 تراکنش 810 این فیلد به دستگاه کارتخوان ارسال گردد.\r\nبا سپاس\r\n', '202511-1242', 3, 10, 'Condition_final_done', 'high', NULL, '2025-11-17 12:00:05', '2026-02-21 08:35:35', NULL, NULL, NULL),
 	(1243, 'ویرایش رنج کارت ترمینال های پروژه  میکامال', 'با سلام و احترام\r\nخواهمند است برای ترمینال های لیست ضمیمه شده\r\nرنج کارت \r\nاز \r\n5054-1660-1163-0000\r\nتا\r\n5054-1660-1176-0009\r\nویرایش گردد. \r\nدر صورت نیاز به اطلاعات بیشتر با خانم شایان 09301622168 تماس حاصل فرمایید.\r\nبا سپاس', '202511-1243', 3, 10, 'Condition_final_done', 'medium', NULL, '2025-11-17 12:26:09', '2026-02-21 08:35:13', NULL, NULL, NULL),
 	(1244, 'مشاهده تخصیص یک سریال به دو ترمینال مختلف', 'با سلام و احترام\r\nیک سریال به روی دو پایانه مختلف بایند شده است \r\nلطفا بررسسی فرمایید چراکه ارتباط سریال و پایانه بهید یک به یک باشد.\r\nنمونه به پیوست ارسال شده است.\r\n', '202511-1244', 3, 10, 'Condition_regect', 'high', NULL, '2025-11-17 13:27:39', '2025-11-19 06:15:47', NULL, NULL, NULL),
@@ -43353,7 +43537,7 @@ INSERT INTO `tickets` (`id`, `ticket_title`, `ticket_description`, `ticket_numbe
 	(1588, 'درخواست بررسی لاگ اعمال تخفیف', 'با درود؛\r\nخواهشمند است لاگ تراکنش با مرجع زیر را بررسی نمایید.\r\n861338182719\r\nمبلغ کسر شده از مشتری (200)و تسویه با پذیرنده یکی بوده و با مبلغ 220 ساید 1 متغایر می باشد.\r\nتاریخ تراکنش 05.02.21\r\n\r\nمطابق با مستندات ضمیمه رد خصوص  ارائه تخفیف به پذیرنده را اعلام بفرمایید\r\n\r\nبا سپاس', '202605-1588', 1, 31, 'condition_acepted_test_auto', 'low', NULL, '2026-05-13 12:47:21', '2026-06-08 12:39:27', NULL, NULL, ''),
 	(1589, 'خطای 96 روی سوییچ', 'با سلام و احترام\r\nپیرو اطلاع رسانی واحد Noc مبنی بر خطای 96 در ساعت 16:03 تاریخ 1405/02/23 ،خواهشمند است بررسی لازم انجام و نتیجه آن به این شرکت اعلام گردد.\r\nبا تشکر ', '202605-1589', 3, 31, 'condition_acepted_test_auto', 'medium', NULL, '2026-05-13 13:08:00', '2026-06-06 11:05:24', NULL, NULL, ''),
 	(1590, 'عدم مشاهده پایانه بروی بک افیس06136315 ', 'با سلام و احترام\r\nترمینال 06136315  بروی بک افیس اینتک نمایش داده نمیشود\r\nالبته بروی سوئیچ سیپا تراکنش داشته است\r\nو درحال حاضر میخواهد بروی سوئیچ اینتک راه اندازی کند که این امکان وجود ندارد\r\nلطفا بررسی شود.\r\nبا سپاس', '202605-1590', 3, 10, 'condition_acepted_test_auto', 'medium', NULL, '2026-05-13 13:19:00', '2026-06-06 08:25:02', NULL, NULL, ''),
-	(1591, 'بررسی خطای تراکنشی کارتهای گروه ایرانخودرو-اعلام توسط خانم آزاد', 'با سلام و احترام،طی مذکره تلفنی روز گذشته هنگام انجام تراکنش کارتهای صادره ایرانخودرو ، اعلام شد که چند بار سعی در خرید اینترنتی نموده اند اما با خطاهایی ازجمله &quot;خطای سیستمی&quot; و ... مواجه شده اند و عملا تراکنشی انجام نشده ولی از کارت مخزن کسر مبلغ اتفاق افتاده است.عکس و نمونه کارت ها برای آقای صدوقیان ارسال و توضیحات لازم به آقای بهشتی داده شد. نمونه کارت &quot;6221064760137725 بود. در نهایت طی اعلام ایشان این کارت 7 تراکنش موفق داشته است اما زمانیکه ایرانخودرو قصد مشاهده گزارش در فرم 8 داشته ،مشخص شد که فایلهای SFTP ساخته نشده اند.لازم بذکر است قبلا طی ساخت مسیر و فولدر SFTP به اینتک نیز دسترسی این مسیر داده شده است.\r\nخواهشمند است با توجه به حساسیت های ایجاد شده در این پروژه دستور تسریع در رفع مشکل اقدام فرمائید. با سپاس', '202605-1591', 1, 37, 'condition_in_progress', 'medium', NULL, '2026-05-13 13:41:19', '2026-05-16 07:23:44', NULL, NULL, ''),
+	(1591, 'بررسی خطای تراکنشی کارتهای گروه ایرانخودرو-اعلام توسط خانم آزاد', 'با سلام و احترام،طی مذکره تلفنی روز گذشته هنگام انجام تراکنش کارتهای صادره ایرانخودرو ، اعلام شد که چند بار سعی در خرید اینترنتی نموده اند اما با خطاهایی ازجمله &quot;خطای سیستمی&quot; و ... مواجه شده اند و عملا تراکنشی انجام نشده ولی از کارت مخزن کسر مبلغ اتفاق افتاده است.عکس و نمونه کارت ها برای آقای صدوقیان ارسال و توضیحات لازم به آقای بهشتی داده شد. نمونه کارت &quot;6221064760137725 بود. در نهایت طی اعلام ایشان این کارت 7 تراکنش موفق داشته است اما زمانیکه ایرانخودرو قصد مشاهده گزارش در فرم 8 داشته ،مشخص شد که فایلهای SFTP ساخته نشده اند.لازم بذکر است قبلا طی ساخت مسیر و فولدر SFTP به اینتک نیز دسترسی این مسیر داده شده است.\r\nخواهشمند است با توجه به حساسیت های ایجاد شده در این پروژه دستور تسریع در رفع مشکل اقدام فرمائید. با سپاس', '202605-1591', 1, 37, 'Condition_acepted_invoice', 'medium', NULL, '2026-05-13 13:41:19', '2026-11-28 06:14:12', NULL, NULL, ''),
 	(1592, 'انقضا کلید عمومی شرکت پرداخت نوین آرین 051', 'با سلام و احترام\r\n\r\nبا توجه به اعلام شاپرک در خصوص  منقضی شدن کلید عمومی سوییچ (051) در تاریخ 15/04/1405، مقتضی است کلید عمومی جدید را تولید و تا تاریخ 02/03/1405 ارسال نمایید.\r\n \r\n با تشکر', '202605-1592', 3, 10, 'Condition_duplicate', 'high', NULL, '2026-05-16 06:39:52', '2026-06-10 07:30:38', NULL, NULL, ''),
 	(1593, 'درخواست روت ترمینال انیاک', 'جناب آقای پهلوان\r\nبا سلام و احترام\r\nترمینال های فایل پیوست جهت روت انیاک تقدیم حضورتان می شود. خواهشمند است در این خصوص اقدامات لازم را مبذول فرمایید.\r\nبا تشکر', '202605-1593', 3, 31, 'condition_acepted_test_auto', 'low', NULL, '2026-05-16 06:46:58', '2026-06-06 11:05:24', NULL, NULL, ''),
 	(1594, 'عدم امکان حذف نقش از کاربر ', 'با سلام\r\nنیاز به تغییر نقش کاربر میباشد ولی هنگام حذف نقش قبلی اروی مشاهده میشود  که متن آن قابل مشاهده نیست \r\nخواهشمند است بررسی و رفع گردد.\r\nباسپاس', '202605-1594', 1, 10, 'condition_acepted_test_auto', 'medium', NULL, '2026-05-16 10:02:38', '2026-06-08 08:19:05', NULL, NULL, ''),
@@ -43547,7 +43731,7 @@ INSERT INTO `tickets` (`id`, `ticket_title`, `ticket_description`, `ticket_numbe
 	(1786, 'پیاده سازی منوی تخصیص مارکت به شماره کارت', 'باسلام و احترام\r\nخواهشمند است بر روی بک آفیس صادرکنندگی ،  منوی تخصیص مارکت به شماره کارت پیاده سازی گردد.\r\nباسپاس', '407482259', 2, 25, 'condition_in_progress', 'high', NULL, '2026-07-01 09:47:21', '2026-07-01 10:35:57', NULL, 4, ''),
 	(1787, 'فعال سازی ترمینال های لیست پیوست', 'فعال سازی ترمینال های لیست پیوست', '407482519', 3, 10, 'condition_acepted_test_auto', 'low', NULL, '2026-07-02 09:45:22', '2026-07-18 07:07:43', NULL, 4, ''),
 	(1788, 'موارد ممیزی 1405', 'با سلام \r\nطبق ممیزی انجام شده، الزامات شاپرک در حوزه سوئیچ و دیتابیس و  همچنینی نتیجه ممیزی به پیوست خدمتتان ارسال می گردد\r\nسیگنالینگ سوئیچ و دیتا مدل پایگاه داده \r\nمستند کانال ها \r\nو مستندات مرتبط با دیتابیس نیاز  به بروز رسانی دارد\r\nبا سپاس', '407482864', 3, 10, 'condition_acepted_test_auto', 'high', NULL, '2026-07-02 10:51:54', '2026-08-08 12:03:06', NULL, 4, ''),
-	(1789, 'پروتکل و کانفیگ های لازم جهت اتصال کلوزلوپ برای سایر بانک', 'با سلام و احترام\r\nخواهمشند است پروتکل و کانفیگ های لازم جهت اتصال کلوزلوپ تراکنش های شرکت پرداخت نوین برای بانک های \r\nمهر ایران\r\nتوسعه تعاون\r\nپست بانک\r\nکشاورزی\r\nرسالت\r\nرفاه \r\nو غیره\r\n ارسال گردد.\r\nبا تشکر', '407483045', 3, 10, 'Condition_done', 'high', NULL, '2026-07-04 10:27:06', '2026-11-16 08:29:34', NULL, 4, ''),
+	(1789, 'پروتکل و کانفیگ های لازم جهت اتصال کلوزلوپ برای سایر بانک', 'با سلام و احترام\r\nخواهمشند است پروتکل و کانفیگ های لازم جهت اتصال کلوزلوپ تراکنش های شرکت پرداخت نوین برای بانک های \r\nمهر ایران\r\nتوسعه تعاون\r\nپست بانک\r\nکشاورزی\r\nرسالت\r\nرفاه \r\nو غیره\r\n ارسال گردد.\r\nبا تشکر', '407483045', 3, 10, 'condition_acepted_test_auto', 'high', NULL, '2026-07-04 10:27:06', '2026-11-26 21:30:00', NULL, 4, ''),
 	(1790, 'دریافت دسترسی تغییر روت تراکنش از اینتک به توسن و برعکس', 'با سلام و احترام\r\nخواهشمند است دسترسی تغییر روت تراکنش از اینتک به توسن و برعکس به پرداخت نوین اعطا گردد\r\nبا سپاس', '407483330', 1, 10, 'condition_acepted_test_auto', 'medium', NULL, '2026-07-07 09:39:21', '2026-07-25 07:17:20', NULL, 4, ''),
 	(1791, ' دسترسی های نیازمند به اصلاح - بسیار مهم', 'با سلام \r\nدسترسی موجود در فایل ضمیمه از لحاظ امنیتی (ارتباط مستقیم از DMZ zone به  high security Zone می باشد) مورد تایید نبوده و بایددر اسرع وقت اصلاح گردد\r\n در چند روز آینده  جهت ممیزی شاپرک این دسترسی ها حذف خواهند ش حذف خواهند شد.\r\nبا سپاس\r\n', '407483697', 3, 10, 'Condition_archive', 'high', NULL, '2026-07-07 10:03:03', '2026-07-29 08:04:52', NULL, 4, ''),
 	(1792, 'افزودن کد پردازش 45000 ', 'با سلام و احترام\r\nدر راستای فروش بسته اینترنتی خواهشمند است کد پردازش 45000 به سرویس های استعلامی افزوده گردد.\r\nلازم بذکر است لاگ خطا ضمیمه گردید.\r\n\r\n[7/8/2026 8:38:00 AM]\r\n {13947402}\r\n# BEGIN  [Acquirer]  [ISOServiceBroker] 000019\r\n [ISOServiceBroker] Remote Address  []\r\nAcquirer -&gt; (0).  [IsReady]\r\nAcquirer -&gt; (1).  [IsDuplicate]\r\n [IsDuplicate] MID  [-8099932589486402927]\r\nAcquirer -&gt; (2).  [Preparing TP...]\r\n [PrepareTP] Destination:  [LB_UpLink_GW_041] Broker: Acquirer\r\n [ChannelHelper] Setting  [BIT 32] to Destination Channel Info IIN  [581672041]\r\n [GetChannelInfo] Destination: Connector(Shaparak2Channel_041)(28)  (3).  [Preparing Request...]\r\n [PrepareRequest] DynamicPOSChannel =&gt; 581672041,0100 EMV Field No  [59]\r\n [PrepareRequest] SwitchInfo Found for SwitchCode  [20]  [581672041] Fetched Switch Code  [20]\r\n [PrepareRequest] Terminal: 13947402 | 0100(450000) 000019\r\nAcquirer -&gt; (4).  [Fetching Terminal Info...]\r\n [FetchTerminalInfo] SwitchCode: 20 Terminal: 13947402\r\n [ShadowRepository] # First Requested  [VwAcqTerminal]\r\n~ VwAcqTerminal SQL Command Duration  [1.1525 ms]\r\nAcquirer -&gt; (5).  [Saving...]\r\n [Save] Data Service  [ISOMessageData]\r\n [ISOMessageData] ClientIP:\r\nAcquirer -&gt; (6).  [Checking FIT...]\r\nAcquirer -&gt; (7).  [QOS Check...]\r\nAcquirer -&gt; (8).  [Tagging Message...]\r\nAcquirer -&gt; (9).  [Permission Check...]\r\n [ShadowRepository] # First Requested  [AcqTerminalCapability]\r\n~ AcqTerminalCapability SQL Command Duration  [1.0982 ms]\r\nAcquirer -&gt; (10).  [Collaborator Validate...]\r\n [CollaboratorValidate] # FestivalEntryPoint\r\n [CollaboratorValidate] # TerminalMessageCollaborator\r\n [CollaboratorValidate] # Shaparak_V2_Collaborator\r\n [Shaparak_V2_Collaborator]  [ValidateRequest] IP  [127.0.0.1] Network Type p1]\r\n [CollaboratorValidate] # SepShaparakCollaborator\r\n [ShaparakCollaborator]  [ValidateRequest] # Checking for Consumer QR Based on  []\r\n [CollaboratorValidate] # TMSCollaborator\r\nAcquirer -&gt; (11).  [Saving...]\r\n [Save] Data Service  [ISOMessageData]\r\nAcquirer -&gt; (12).  [COMMIT]\r\n [DDC]  [Save] Insert Into Database  [SwTxn\r\n~ SwTxn SQL Command Duration  [1.2883 ms]\r\n [ISOMessageData]  [Persist] Txn Id: 164304703474\r\n [DDC]  [Save] New Audit  [1]  [SwTxnAdditional]\r\n    [RECORD] (AdditionalData1, AdditionalData2, AdditionalData3, SwTxnID, CreatedOn, )\r\nAcquirer -&gt; (13).  [ACID Start...]\r\n [ISOServiceBroker] ACIDStart...\r\nAcquirer -&gt; (14).  [Processing Request...]\r\n [InternetPackageListTP] #481068\r\n*********    [AuthorizeTransaction]    []***********\r\n [ISOChannelBrokerValidator]  [_getChannelInfo] Channel ID will be fetched using ConnectorBroker Info  [3]\r\n [ValidateSend] DefaultValidatorGroupID: 7 MessageValidatorGroupID: 7 AdvanceMessagingEnabled: False\r\n [CurrencyValidator] TransactionCurrency =  [364] SettCurrency =  [364] CardCurrency = [364]\r\n [CurrencyValidator] Supported Transaction Currenies Are  [364]\r\n [CurrencyValidator] Supported Settlement Currenies Are  [364]\r\n [CurrencyValidator] Supported CardHolder Currenies Are  [364]\r\n [CurrencyValidator] {Settlement Rate BIT 9}  [1]\r\n [CurrencyValidator] {Settlement Rate BIT 10}  [1]\r\n [SendValidator] # B2S.Core.MessageValidator.ISO8583.NewShaparak2.SettlementInfoOutgoinValidator\r\n [AuthorizeTransaction]  [Sent]:False  [TxnType]: 0  [IsFinancial]: False\r\nObject reference not set to an instance of an object.\r\n   at B2S.Core.MessageValidator.ISO8583.NewShaparak2.SettlementInfoOutgoinValidator.Validate(ISOBrokerMessage message, Event ev) in D:\\BProjects\\B2S 5.011\\Dynamics_SEP\\B2S.Core.MessageValidator\\ISO8583\\NewShaparak2\\SettlementInfoOutgoinValidator.cs:line 52\r\n   at B2S.Dynamic.ServiceBroker.ISO8583.ChannelBroker.ISOChannelBrokerValidator.ValidateSend(ISOChannelBroker broker, ISOBrokerMessage message1, Event ev) in D:\\BProjects\\B2S 5.011\\Dynamics\\B2S.Core.ServiceBroker\\ISO8583\\ChannelBroker\\ISOChannelBrokerValidator.cs:line 438\r\n   at B2S.Core.ChannelBroker.ISO8583.ISOChannelBroker.ValidateSend(ISOBrokerMessage message1, Event ev) in D:\\BProjects\\B2S 5.011\\Core\\B2S.Core.ChannelBroker\\ISO8583\\ISOChannelBroker.cs:line 404\r\n   at B2S.Dynamic.ServiceBroker.ISO8583.ISOTP.AuthorizeTransaction(ISOBrokerMessage message, Event ev, Boolean TxnBased) in D:\\BProjects\\B2S 5.011\\Dynamics\\B2S.Core.ServiceBroker\\ISO8583\\ISOTP.cs:line 566\r\n   at B2S.Dynamic.Base.ISOTPBase`1.AuthorizeTransaction(ISOBrokerMessage message, Event ev, Boolean TxnBased) in D:\\BProjects\\B2S 5.011\\Dynamics\\B2S.Dynamic.Base\\ISOTPBase.cs:line 115\r\n   at B2S.Dynamic.Acquirer.Terminal.InternetPackageListTP.ProcessRequest(ISOBrokerMessage message, Event ev) in D:\\BProjects\\B2S 5.011\\Dynamics_SEP\\B2S.Dynamic.Acquirer\\Terminal\\InternetPackageListTP.cs:line 30\r\n   at B2S.Dynamic.ServiceBroker.ISO8583.ISOServiceBroker.ProcessRequest(ISOBrokerMessage msg, Event ev) in D:\\BProjects\\B2S 5.011\\Dynamics\\B2S.Core.ServiceBroker\\ISO8583\\ISOServiceBroker.cs:line 107\r\n [BuildInvalidMessage] BIT 62 Set # 0000100-091000000000000000000000000000000000000000000000000000000000000\r\n [BuildInvalidMessage] MTI:  [0110]\r\n [SaveOnException] Saving...\r\n [Save] Data Service  [ISOMessageData]\r\n [SaveOnException] COMMIT\r\n [DDC]  [Save] New Audit  [1]  [SwTxn]\r\n    [RECORD] (TxnType, AggRRN, DestFunctionCode, ResponseCode, InternalReasonCode, ExternalReasonCode, RespTime, SendTime, )\r\n [ISOMessageData]  [Persist] Txn Id: 164304703474\r\n [BTS] #ROLLBACK...\r\n [TCMP]  [Transaction] Next State is  [ROLLINGBACK]\r\n [TCMP]  [Transaction] ALLROLLEDBACK (ROLLINGBACK) =&gt; {ROLLBACK}\r\n [BTS] Execute: SUCCESS\r\n [BTS] PersistAll...\r\n [TEM] PersistAll B2S.Data.Models.Generated.Main.SwTxn ID [164304703474]\r\n    [Table]  [B2S.Data.Models.Generated.Main.SwTxn]\r\n       [SET] (TxnType = 0, AggRRN = 863019317612, DestFunctionCode = 270, ResponseCode = 96, InternalReasonCode = 91, ExternalReasonCode = 0, RespTime = 2026/07/08 05:08:00.043, SendTime = 2026/07/08 05:08:00.043, )\r\n [DP]  [Persist] Update Record  [164304703474]\r\n~ SwTxn SQL Command Duration  [40.8064 ms]\r\n [TEM] Checkpoint.\r\n [CheckPoint] # B2S.Data.Models.Generated.Main.SwTxn\r\n [TEC]  [Checkpoint] No ChangeTracking Flag.\r\n [TEM] PersistAll B2S.Data.Models.Generated.Main.SwTxnAdditional ID [164304703474]\r\n    [Table]  [B2S.Data.Models.Generated.Main.SwTxnAdditional]\r\n       [SET] (AdditionalData1 = ##, AdditionalData2 = , AdditionalData3 = , SwTxnID = 164304703474, CreatedOn = 2026/07/08 08:38:00.043, )\r\n [DP]  [Persist] InsertOrUpdate Record  [164304703474]\r\n~ EXISTS SQL Command Duration  [0.8191 ms]\r\n~ SwTxnAdditional SQL Command Duration  [0.5483 ms]\r\n [TEM] Checkpoint.\r\n [CheckPoint] # B2S.Data.Models.Generated.Main.SwTxnAdditional\r\n [TEC]  [Checkpoint] No ChangeTracking Flag.\r\n [BTS] Complete Transaction...\r\n [ISOMessageData] RspCode:  [96] Reason:  [91]\r\n [DDC]  [Save] New Audit  [2]  [SwTxn]\r\n    [RECORD] (ResponseCode, InternalReasonCode, AcidState, )\r\n [TEM] Persist SwTxn ID [164304703474]\r\n    [Table]  [B2S.Data.Models.Generated.Main.SwTxn]\r\n       [SET] (AcidState = 2, )\r\n~ SwTxn SQL Command Duration  [0.761 ms]\r\n [CheckPoint] # B2S.Data.Models.Generated.Main.SwTxn\r\n [TEC]  [Checkpoint] No ChangeTracking Flag.\r\n [BTS] {Done.}\r\n [B2S.Data.Models.Generated.Main.SwTxn]\r\n   [Persistence] B2S.Core.Transaction.DataContext.Persistable.DeterministicPersistable\r\n    [ID] 164304703474\r\n    [CHANGES]\r\n     #1 ({TxnType}:  [0], {AggRRN}:  [863019317612], {DestFunctionCode}:  [270], {ResponseCode}:  [96], {InternalReasonCode}:  [91], {ExternalReasonCode}:  [0], {RespTime}:  [2026/07/08 05:08:00.043], {SendTime}:  [2026/07/08 05:08:00.043], )\r\n     #2 ({ResponseCode}:  [96], {InternalReasonCode}:  [91], {AcidState}:  [2], )\r\n    [CHECKPOINT]\r\n    [AUDIT CHECKPOINT] ()\r\n---------------------------------\r\n [B2S.Data.Models.Generated.Main.SwTxnAdditional]\r\n   [Persistence] B2S.Core.Transaction.DataContext.Persistable.DeterministicPersistable\r\n    [ID] 164304703474\r\n    [CHANGES]\r\n     #1 ({AdditionalData1}:  [##], {AdditionalData2}:  [], {AdditionalData3}:  [], {SwTxnID}:  [164304703474], {CreatedOn}:  [2026/07/08 08:38:00.043], )\r\n    [CHECKPOINT]\r\n    [AUDIT CHECKPOINT] ()\r\n---------------------------------\r\n\r\n [HandleException] Rollback Result:  [SUCCESS]\r\n [HandleException] Sending Response...\r\n [SendBackResponse] None Interchange Mode Message.\r\n [ISOChannelBrokerValidator]  [_getChannelInfo] Channel ID will be fetched using ConnectorBroker Info  [3]\r\n [ValidateSend] DefaultValidatorGroupID: 2 MessageValidatorGroupID: 2 AdvanceMessagingEnabled: True\r\n [CurrencyValidator] {Using TrAmount as Transaction Amount}  [00 IRR]\r\n [SendValidator] # B2S.Core.MessageValidator.ISO8583.SEP.POSOutgoingValidator\r\n [POSOutgoingValidator] Setting Bank Name...\r\n [POSOutgoingValidator] Setting BIT(46)\r\n [ShadowRepository] # First Requested  [VwAcqTerminalParam]\r\n~ VwAcqTerminalParam SQL Command Duration  [0.6275 ms]\r\n [SendValidator] # B2S.Core.MessageValidator.ISO8583.SEP.PGOutgoingValidator\r\n [FieldSelector] SetFields GroupId: 0\r\n [FieldSelector] Setting Bit 100 Using SwitchInfo  [581672041]\r\n [FieldSelector]  [0] Unset Fields for  [ChannelID]: 1 Removing: 25,64,100,50,9,46, [MAC]\r\n [DynamicSecurityProvider GETKEY] # Current Working Key must be used.\r\n [DynamicSecurityProvider GETKEY]  [Financial]  [ChannelID]: 1 BCD BuildMAC  [KEYID]: 33121608  [Session Key ID]: -1\r\n [DynamicSecurityProvider BuildMAC] Using Current Keys\r\n [SecurityProviderBase AddMac] CALCULATED MAC: C24114CFBA2B2775 Method:  [ENTIREMESSAGE] BCD\r\n [SecurityProviderBase AddMac] Prepared Message Set.\r\n [SendBackResponse] Response Sent.\r\n~ Response Time  [52 ms]\r\n [GLManager] UnRigster Called for TxnID  [164304703474]\r\n [BTS] # End...\r\n    [PE] # COMPLETE(NONE) ...\r\n    [PE] Next State is  [DB_SAVING]\r\n     [PhantomLog]  [persistInDB]  [SwTxn]  [164304703474] Data Movement...\r\n     [PhantomLog]  [persistInDB]  [SwTxn]  [164304703474] Moved To Db with Id  [164304703474]\r\n     [PhantomLog]  [persistInDB]  [SwTxnAdditional]  [164304703474] Data Movement...\r\n     [PhantomLog]  [persistInDB]  [SwTxnAdditional]  [164304703474] Moved To Db with Id  [164304703474]\r\n     [PhantomLog]  [persistInDB] No Reverse is Allowed in Future, No Log Persist Required.\r\n    [PE] # DB_SAVED(DB_SAVING) ...\r\n    [PE] Next State is  [DB]\r\n [BLM] Remove Log  [01000000190708083759139474021007]\r\n [BLM] Log Removed From Memory.\r\n [GLManager] UnRigster Called for TxnID  [164304703474]\r\n [BTS]  [End] Removing Process Id 2469\r\n~ Process Time  [52 ms]\r\n~ Connector Time  [0 ms]\r\n~ Sql Command Time  [47.773 ms]\r\n~ Sql Connection Time  [0.000 ms]\r\n~ ShadowDB Command Time  [3.830 ms]\r\n~ PhantomDB Command Time  [0.000 ms]\r\n\r\n--------------------------------------------------------------------------------------------------', '807483886', 3, 31, 'condition_acepted_test_auto', 'medium', NULL, '2026-07-08 05:17:51', '2026-09-16 13:00:52', NULL, 8, ''),
@@ -43673,7 +43857,7 @@ INSERT INTO `tickets` (`id`, `ticket_title`, `ticket_description`, `ticket_numbe
 	(1912, 'درخواست حذف شبا از مدل تسهیم با شناسه 15065 و عنوان تسهیم داینامیک 99390422', 'توضیحات تیکت:\r\nبا سلام واحترام\r\nباتوجه به خطای موجود خواهشمند است شماره شبا های ذیل از سویچ اینتک حذف گردد.\r\nپایانه:99390422\r\nشماره پذیرنده:4383055987\r\nشناسه ملی: 14014955620\r\n\r\nشماره شبا:\r\nIR600160000000000541419968\r\nIR340160000000001112743646\r\nIR030160000000001114597680\r\nIR190160000000001109276651\r\nIR520160000000001070374498\r\nباتشکر\r\n\r\nشماره تیکت: SR494981\r\nدرخواست دهنده: mojtaba babaee\r\n', '908516284', 4, 52, 'Condition_final_done', 'low', NULL, '2026-08-23 10:13:31', '2026-10-10 12:10:44', NULL, 9, 'SR494981'),
 	(1913, 'درخواست حذف شبا از مدل تسهیم با شناسه 13499 و عنوان تسهیم داینامیک 98733906 دايناميک رسايي', 'توضیحات تیکت:\r\nباسلام و احترام\r\nبه استحضار می رساند شبا های موجود در فایل پیوست در سامانه تاپیار حذف شده ولی در اینتک مشاهده میگردد\r\nلذا با توجه به حذف شدن این شبا ها در تاپیار و عدم امکان حذف آنها در اینتک توسط اینجانب لطفا اقدامات لازم جهت حذف شباهای موجود در فایل پیوست در اینتک را مبذول فرمایید\r\nشماره پایانه : 98733906\r\nشماره مشتری  : 4381650623\r\nکد ملی : 0012174068\r\n\r\n\r\nشماره تیکت: SR494734\r\nدرخواست دهنده: armin jabari', '908516548', 4, 52, 'Condition_final_done', 'low', NULL, '2026-08-23 10:18:46', '2026-10-10 12:11:29', NULL, 9, 'SR494734'),
 	(1914, 'روت ترمینال ارتباط فردا', 'باسلام واحترام\r\nفایل روت ترمینال ارتباط فردا پیوست گردید\r\nلطفا دستورات لازم را مبذول فرمایید.\r\nسپاس', '808516888', 3, 31, 'Condition_final_done', 'low', NULL, '2026-08-23 11:19:32', '2026-08-24 16:07:17', NULL, 8, ''),
-	(1915, 'درخواست بررسی خطای سرویس رونوشت پارسی کارت ', 'با سلام و احترام، \r\nتصویر خطا به پیوست ارائه می گردد. لطفا بررسی فرمائید. با سپاس', '908517145', 1, 37, 'condition_under_review', 'medium', NULL, '2026-08-24 07:44:12', '2026-08-24 07:50:59', NULL, 9, 'اعلام در واتساپ-آقای جهانگیر'),
+	(1915, 'درخواست بررسی خطای سرویس رونوشت پارسی کارت ', 'با سلام و احترام، \r\nتصویر خطا به پیوست ارائه می گردد. لطفا بررسی فرمائید. با سپاس', '908517145', 1, 37, 'Condition_clearing', 'medium', NULL, '2026-08-24 07:44:12', '2026-11-28 06:16:20', NULL, 9, 'اعلام در واتساپ-آقای جهانگیر'),
 	(1916, 'تغییر وضعیت تقاضا  13003178', 'تغییر وضعیت تقاضا  13003178 به مرحله تخصیص پیمانکار چاپ', '908517335', 4, 52, 'Condition_final_done', 'low', NULL, '2026-08-24 10:52:22', '2026-10-10 12:10:40', NULL, 9, ''),
 	(1917, 'تغییر تاریخ انقضا کارت ها', 'با سلام و احترام\r\nبه استحضار می رساند درخواست تمدید اعتبار کارت ها به مدت سه سال شمسی در پیوست ارسال می گردد.\r\nخواهشمند است در فرایند تمدید کارت ها، صرفا سال تولید انقضا سه سال افزایش یافته و ماه و روز تاریخ انقضا بدون هیچ گونه تغییری حفظ گردد.\r\n با سپاس', '408517623', 1, 54, 'condition_acepted_test_auto', 'high', NULL, '2026-08-24 12:10:01', '2026-09-06 05:16:20', NULL, 4, ''),
 	(1918, 'اعمال محدودیت مبلغ خرید', 'با سلام و احترام،\r\nلازم است بر روی سوئیچ برای تعدادی از ترمینال های رفاه پردیس محدودیت مبلغ تراکنش خرید  2000 تا 2310 ریال اعمال گردد . لیست ترمینال ها به پیوست ارسال میگردد.\r\nلذا خواشهمند است دستورات لازم را مبذول نمایید.\r\nبا تشکر.', '508517970', 3, 26, 'condition_acepted_test_auto', 'low', NULL, '2026-08-24 12:39:32', '2026-09-13 05:22:21', NULL, 5, ''),
@@ -43690,7 +43874,7 @@ INSERT INTO `tickets` (`id`, `ticket_title`, `ticket_description`, `ticket_numbe
 	(1929, 'گزارش شارژ کارت', 'باسلام و احترام\r\nخواهشمند است :\r\n گزارش شارژ کارت مرداد ماه از اول مرداد ماه تا 31 مرداد ارسال گردد. گزارش شامل فیلدهای ذیل باشد: نوع کارت، گروه کارت، شماره کارت،نام نمایندگی، مبلغ شارژ، تاریخ شارژ، ابزار شارژ\r\nباسپاس', '408520811', 1, 54, 'condition_acepted_test_auto', 'high', NULL, '2026-08-26 09:56:44', '2026-09-06 05:16:20', NULL, 4, ''),
 	(1930, 'حذف کردن شناسه شارژ کارت 16958', 'با سلام و احترام\r\nلطفا نسبت به حذف شناسه شارژ 16958که در مسیر کارت-&gt; شارژ کارت قرار دارد اقدام فرمایید.\r\nبا سپاس', '408521187', 1, 54, 'condition_acepted_test_auto', 'high', NULL, '2026-08-26 11:39:02', '2026-09-12 04:03:12', NULL, 4, ''),
 	(1931, 'درخواست راه اندازی کانال سوییچ  بر روی نود 11 - 172.31.14.11', 'با سلام و احترام\r\nخواهشمند است جهت راه اندازی کانال پشتیبان تراکنش دستگاه های تجمیع کننده کردو ، کانال جدیدی بر روی سرور 14.11 تعریف شود.\r\nپورت های مانند 5004 و 5005 و 5007 و 5008\r\nبا سپاس', '808521462', 3, 31, 'condition_acepted_invoice_auto', 'low', NULL, '2026-08-26 11:48:24', '2026-09-20 08:52:38', NULL, 8, ''),
-	(1932, 'درخواست بررسی خطای نوبیتکس', 'سلام و صبح بخیر.\r\nنوبیتکس حدود دو هفته است با مشکل فعالسازی و تغییر رمز مواجه شده.\r\nآقای جهانگیر بررسی کردن میگن برای فعال سازی ، این سرویس OTP خطا میده.\r\nالبته خطای رمز هم در حال بررسی توسط آقای جهانگیر هست .\r\nامروز اعلام کردن در صدور هم خطا دارند . بنظر میرسد سرویس هاشون مشکل کلی پیدا کرده است.\r\nخیییلی فورسه لطفا بررسی کنید.', '908521681', 8, 37, 'condition_in_progress', 'medium', NULL, '2026-08-29 06:30:44', '2026-08-29 08:22:56', NULL, 9, 'اعلام در تلگرام'),
+	(1932, 'درخواست بررسی خطای نوبیتکس', 'سلام و صبح بخیر.\r\nنوبیتکس حدود دو هفته است با مشکل فعالسازی و تغییر رمز مواجه شده.\r\nآقای جهانگیر بررسی کردن میگن برای فعال سازی ، این سرویس OTP خطا میده.\r\nالبته خطای رمز هم در حال بررسی توسط آقای جهانگیر هست .\r\nامروز اعلام کردن در صدور هم خطا دارند . بنظر میرسد سرویس هاشون مشکل کلی پیدا کرده است.\r\nخیییلی فورسه لطفا بررسی کنید.', '908521681', 8, 37, 'Condition_acepted_invoice', 'medium', NULL, '2026-08-29 06:30:44', '2026-11-28 06:17:18', NULL, 9, 'اعلام در تلگرام'),
 	(1933, 'پر شدن فضای درایو C سرور 80.30', 'با سلام و احترام\r\nمطابق اعلام واحد ناک به آقای پرویزی در خصوص پر شدن درایو C، خواهشمند است بقید فوریت انجام پذیرد.\r\nبا تشکر', '808521961', 8, 31, 'condition_acepted_test_auto', 'high', NULL, '2026-08-29 08:15:41', '2026-09-13 08:55:59', NULL, 8, ''),
 	(1934, 'خطا در سرور در زمان تغییر سقف مبلغ تراکنش', 'با سلام و احترام\r\nدر منوی &quot;پذیرندگی&quot; و بخش &quot;پذیرندگان&quot;  در بک آفیس، امکان تغییر سقف مبلغ تراکنش پایانه 011580066 وجود ندارد و هنگام ثبت تغییرات، خطای &quot;خطا در سرور&quot; نمایش داده می شود.\r\nخواهشمند است موضوع بررسی و نسبت به رفع مشکل اقدام فرمایید.\r\nبا سپاس\r\n', '408522224', 3, 54, 'condition_in_progress', 'high', NULL, '2026-08-29 12:14:27', '2026-09-05 07:08:16', NULL, 4, ''),
 	(1935, 'درخواست فعالسازی مانا کارت', 'شماره کارت \r\n6221064102460017\r\n\r\nدرخواست دهنده: خانم صلح جو\r\nتلفنی', '908522537', 4, 52, 'Condition_final_done', 'low', NULL, '2026-08-31 05:54:54', '2026-10-10 12:10:28', NULL, 9, ''),
@@ -43832,7 +44016,7 @@ INSERT INTO `tickets` (`id`, `ticket_title`, `ticket_description`, `ticket_numbe
 	(2071, 'درخواست ارائه معماری مانیتورینگ تراکنش‌ها', 'با سلام و احترام\r\n\r\nمستند مانیتورینگ ارائه‌شده توسط شرکت اینتک مورد بررسی قرار گرفت. با توجه به بررسی انجام‌شده، معماری سیستم مانیتورینگ تراکنش‌ها مطابق با الزامات موردنظر در مستند ارائه‌شده وجود نداشته و به‌صورت شفاف تشریح نشده است.\r\n\r\nلذا خواهشمند است شرکت اینتک نسبت به ارائه و تکمیل معماری مانیتورینگ تراکنش‌ها اقدام نماید.\r\n\r\nلازم است در معماری ارائه‌شده، حداقل موارد زیر به‌صورت شفاف مشخص گردد:\r\n\r\nمعماری کلی سیستم مانیتورینگ تراکنش‌ها\r\nاجزای تشکیل‌دهنده سیستم مانیتورینگ و وظایف هر یک از اجزا\r\nنحوه دریافت و جمع‌آوری اطلاعات تراکنش‌ها\r\nنحوه انتقال و پردازش اطلاعات تراکنش‌ها\r\nارتباط سیستم مانیتورینگ با سوئیچ، پایگاه داده و سایر سامانه‌های مرتبط\r\nنحوه مانیتورینگ وضعیت و نتیجه تراکنش‌ها\r\nنحوه شناسایی و اعلام خطاها و تراکنش‌های ناموفق\r\nنحوه ارائه هشدارها (Alert) و گزارش‌های مرتبط\r\nدیاگرام کامل ارتباطات اجزای معماری مانیتورینگ\r\n\r\nخواهشمند است مستند معماری مذکور به‌صورت کامل و قابل استناد ارائه و در مستندات سامانه لحاظ گردد.', '510559284', 3, 26, 'condition_in_progress', 'high', NULL, '2026-10-03 11:21:25', '2026-10-06 06:36:15', NULL, 5, ''),
 	(2072, 'عدم امکان منفی شدن صندوق ها', 'باسلام و احترام\r\nخواهشمند است بر روی کلیه صندوق ها بجز صندوق NovinFundService ، منفی شدن صندوق ها امکان پذیر نباشد.\r\nباسپاس\r\n\r\n', '410559491', 1, 25, 'condition_in_progress', 'high', NULL, '2026-10-03 12:10:16', '2026-10-03 12:18:48', NULL, 4, ''),
 	(2073, 'ارسال پیامک برگشت', 'باسلام و احترام\r\nخواهشمند است متن ذیل برای شماره موبایل های درخواست شارژ کارت با شناسه   17326  ارسال گردد.\r\n\r\nبر روی متن ذیل مبلغ ، تاریخ ، ساعت و شماره کارت مربوط به درخواست شارژ مذکور ارسال گردد.\r\n&quot;\r\nبابت سند اصلاح واریز روز خاص\r\nپرداخت نوین\r\n627412-**-4474\r\n-5,000,000\r\n05/07/09 10:28:54\r\nمانده: 23,846,466\r\n&quot;\r\nباسپاس', '410559789', 1, 25, 'condition_under_review', 'high', NULL, '2026-10-03 12:50:24', '2026-10-03 13:28:09', NULL, 4, ''),
-	(2074, 'مستند فنی سوئیچ', '1- نمودار ارتباط پایانه‌ها با سوئیچ و اجزای مرتبط در مستند کاملا ناواضح است نمودار واضح اراپه شود.\r\n3-در مستند • سرور Interchange برای تراکنشهای بدون حضور کار یعنی چه ؟\r\n\r\n۴- این جدول ترمینال و ID چیست ؟\r\n\r\n۵- در بررسی مجاز بودن تراکنش - کلا به مباحث امنیتی - کلید و و غیره اشاره نشده است\r\n۶-در لیست ماژولها - ماژولهای نامرتبط با رفاه وجود دارد . غلط املایی زیاد داریم - توضیحات فارسی و انگلیسی ( البته هیچ توضیحی وجود ندارد فقط اسامی لاتین فارسی شده اند. وظیفه ماژول وابستگی اش به ماژول دیگر - خروجی ووردی ) باید اراپه شود.\r\n۷- ANSI X9.19 یک استانداردِ پیاده‌سازی است. نه یک الگوریتم این بخش اصلاح گردد.\r\n\r\n۸- بخشی با عنوان تعاریف باید کلی توضیحات داشته باشه و اصطلاحات رو کامل توضیح بده .\r\n12- در بخش مدیریت گزارشات باید دقیقا لیست شودکه در پورتال چه گزارشی داریم.\r\n13- و از همه مهمتر چگونگی پردازش تراکنش بسیار بسیار ناواضح و خلاصه مطرح شده است که فرایند و استپ های آن باید کاملا مشخص بشن.', '510560045', 3, 26, 'Condition_done', 'high', NULL, '2026-10-03 12:58:24', '2026-11-17 07:41:33', NULL, 5, ''),
+	(2074, 'مستند فنی سوئیچ', '1- نمودار ارتباط پایانه‌ها با سوئیچ و اجزای مرتبط در مستند کاملا ناواضح است نمودار واضح اراپه شود.\r\n3-در مستند • سرور Interchange برای تراکنشهای بدون حضور کار یعنی چه ؟\r\n\r\n۴- این جدول ترمینال و ID چیست ؟\r\n\r\n۵- در بررسی مجاز بودن تراکنش - کلا به مباحث امنیتی - کلید و و غیره اشاره نشده است\r\n۶-در لیست ماژولها - ماژولهای نامرتبط با رفاه وجود دارد . غلط املایی زیاد داریم - توضیحات فارسی و انگلیسی ( البته هیچ توضیحی وجود ندارد فقط اسامی لاتین فارسی شده اند. وظیفه ماژول وابستگی اش به ماژول دیگر - خروجی ووردی ) باید اراپه شود.\r\n۷- ANSI X9.19 یک استانداردِ پیاده‌سازی است. نه یک الگوریتم این بخش اصلاح گردد.\r\n\r\n۸- بخشی با عنوان تعاریف باید کلی توضیحات داشته باشه و اصطلاحات رو کامل توضیح بده .\r\n12- در بخش مدیریت گزارشات باید دقیقا لیست شودکه در پورتال چه گزارشی داریم.\r\n13- و از همه مهمتر چگونگی پردازش تراکنش بسیار بسیار ناواضح و خلاصه مطرح شده است که فرایند و استپ های آن باید کاملا مشخص بشن.', '510560045', 3, 26, 'condition_acepted_test_auto', 'high', NULL, '2026-10-03 12:58:24', '2026-11-27 21:30:00', NULL, 5, ''),
 	(2075, 'فیلد 53 جدید', 'با سلام\r\nخواهشمند است فیلد 53 جدید با اطلاعات ضمیمه شده ارائه گردد.', '410560320', 1, 10, 'condition_acepted_test_auto', 'high', NULL, '2026-10-04 09:03:37', '2026-10-16 21:30:00', NULL, 4, ''),
 	(2076, 'خطای قبض و شارژ', 'با سلام و احترام\r\n\r\nدر تراکنش‌های **قبض شارژ** در برخی از ترمینال‌ها خطای **«پایانه مجاز نمی‌باشد»** رخ می‌دهد.\r\n\r\nلازم به ذکر است وضعیت **ISType** ترمینال‌های مذکور، هم در **سوئیچ رفاه‌پی** و هم در **سوئیچ پرداخت نوین** فعال می‌باشد.\r\n\r\nخواهشمند است موضوع بررسی و علت بروز خطای مذکور اعلام گردد.\r\n\r\n**نمونه ترمینال‌ها:**\r\n\r\n* 70084746\r\n* 70077307\r\n\r\nبا تشکر\r\n', '510560591', 4, 26, 'Condition_archive', 'high', NULL, '2026-10-04 11:57:39', '2026-11-16 08:49:02', NULL, 5, ''),
 	(2077, ' لیست کلی  تمامی تگهای استفاده شده و همچنین تگهای خالی در سوئیچ ', 'با سلام و احترام\r\nخواهشمند است لیست کلی تمامی تگهای استفاده شده و همچنین تگهای خالی را در سوئیچ را ارسال فرمایید.\r\nبا سپاس', '410560811', 3, 10, 'condition_acepted_test_auto', 'medium', NULL, '2026-10-05 06:01:19', '2026-10-20 21:30:00', NULL, 4, ''),
@@ -43847,7 +44031,7 @@ INSERT INTO `tickets` (`id`, `ticket_title`, `ticket_description`, `ticket_numbe
 	(2086, 'اجباری بودن استعلام شاهکار در هنگام ویرایش تلفن - درخواست مجدد', 'با سلام و احترام؛\r\nپیرو تیکت 905448745 ، &quot;اجباری بودن استعلام شاهکار در هنگام ویرایش تلفن&quot; توسط اینتک انجام شده بود ولی مجددا غیرفعال شده است.\r\n\r\nشرح درخواست:\r\nبا سلام و احترام؛ به استحضار می‌رساند در فرآیند ویرایش شماره همراه در سامانه اینتک دارندگی، انجام استعلام شاهکار مجدد اختیاری شده است و امکان غیرفعال کردن (برداشتن تیک) این استعلام ایجاد شده است(مطابق فایل پیوست). لذا خواهشمند است دستور فرمایید امکان برداشتن تیک استعلام شاهکار مطابق ماه های گذشته اجباری گردد تا از سوء استفاده های احتمالی جلوگیری شود. با تشکر\r\n\r\nدرخواست دهنده: میثم تاجیک محمدی\r\nنامه: 6418 ', '910563246', 12, 52, 'condition_acepted_test_auto', 'low', NULL, '2026-10-07 06:12:19', '2026-10-27 21:30:00', NULL, 9, '6418 '),
 	(2087, 'کلید بانک شهر برای پروژه PlanB ', 'با سلام و احترام\r\nکلید بانک شهر برای پروژه PlanB  به پیوست ارسال گردید.\r\nبا سپاس', '410563549', 3, 54, 'condition_acepted_test_auto', 'low', NULL, '2026-10-07 07:51:48', '2026-11-14 21:30:00', NULL, 4, ''),
 	(2088, 'روت ترمینال ارتباط فردا', 'باسلام و احترام\r\nروت ترمینال ارتباط فردا پیوست گردید\r\nلطفا دستورات لازم را میذول فرمایید\r\nباتشکر', '810563865', 3, 31, 'condition_acepted_test_auto', 'low', NULL, '2026-10-07 07:56:18', '2026-10-21 21:30:00', NULL, 8, ''),
-	(2089, 'جدول رسوب (DepositMoneyPerMonth)', 'با سلام و احترام؛\r\nخواهشمند است رکوردهای جدول DepositMoneyPerMonth برای ماه شهریور مجددا درج شود و جاب پرکردن جدول، دوم هر ماه اجرا شود', '910564079', 4, 52, 'Condition_done', 'low', NULL, '2026-10-07 11:36:36', '2026-11-16 08:28:51', NULL, 9, ''),
+	(2089, 'جدول رسوب (DepositMoneyPerMonth)', 'با سلام و احترام؛\r\nخواهشمند است رکوردهای جدول DepositMoneyPerMonth برای ماه شهریور مجددا درج شود و جاب پرکردن جدول، دوم هر ماه اجرا شود', '910564079', 4, 52, 'condition_acepted_test_auto', 'low', NULL, '2026-10-07 11:36:36', '2026-11-26 21:30:00', NULL, 9, ''),
 	(2090, 'مشکلات مرتبط با بک افیس  پذیرندگی - جهت رفع', 'با سلام\r\nمشکلات مرتبط  با بک افیس  پذیرندگی به پیوست خدمتتان ارسال میگردد\r\nخواهشمند است بررسی  و رفع گردد.\r\nدر صورت هرگونه سوال با خانم شایان تماس حاصل فرمایید.\r\n09301622168', '410564334', 1, 10, 'condition_under_review', 'medium', NULL, '2026-10-07 11:40:50', '2026-10-07 12:39:40', NULL, 4, ''),
 	(2091, 'تولید فرم 9 به تاریخ 17/07/1405 و بررسی مغایرت', 'با سلام و احترام\r\nمطابق صحبت تلفنی با شما، سند بچ و کلیه تراکنش های موفق به تاریخ 17/07/1405 در مسیر درایو E سرور 172.31.50.132 سرور جاپ سرور به نام SEP_14050717.zip قرار داده شده است\r\n\r\nخواهشمند است دستور فرمایید در خصوص تولید فرم تراکنش های موفق مساعدت گردد\r\n\r\nطبق بررسی همکاران واحد مغایرت چند نمونه تراکنش که در زیر آورده شده است رسید ناموفق دارند اما 220 برای شاپرک ارسال شده است\r\n\r\nطبق بررسی انجام شده، برخی از تراکنش های روز گذشته که در بازه زمانی اختلال سوئیچ انجام شده ، با وجود رسید ناموفق و صدور 420 سمت 1، دارای 220 سمت 2 سوئیچ هستند\r\nمراتب جهت اطلاع و پیگیری به حضور ارسال می گردد.\r\nنمونه مرجع :\r\n865774251194\r\n865774256078\r\n', '810564635', 3, 31, 'condition_in_progress', 'medium', NULL, '2026-10-10 05:51:24', '2026-10-10 12:09:57', NULL, 8, ''),
 	(2092, 'خطای 99', 'با سلام و احترام\r\nترمینال 12221895\r\nنسخه جدید  نصب شده\r\nتراکنش های 100و 800 موفق ولی تراکنش 200 خرید انجام شده پاسخ 99 دریافت کرده علت چیست ؟\r\nاین مورد چندین بار شماهده شده است \r\nلطفا بررسی و در اسرع وقت علت عنوان شود\r\nبا سپاس', '410564885', 3, 10, 'condition_acepted_test_auto', 'high', NULL, '2026-10-10 07:01:14', '2026-10-24 21:30:00', NULL, 4, ''),
@@ -43859,7 +44043,7 @@ INSERT INTO `tickets` (`id`, `ticket_title`, `ticket_description`, `ticket_numbe
 	(2098, 'بررسی سرویس دریافت صورتحساب و موجودی حساب', 'باسلام و احترام؛\r\nطبق بررسی انجام‌شده فراخوانی سرویس زیر از سمت اپلیکیشن تاپ با خطای Timeout مواجه می‌شود و پاسخ دریافت نمی‌گردد\r\nhttps://boiss.pec.ir/ApiServices/api/cardServices//TurnOver2\r\nلطفا بررسی و اعلام نظر فرمایید.\r\nبا تشکر\r\n----------------------------------------------------------------------------\r\nki.yousefi\r\nindc num: 25476', '910566515', 12, 53, 'condition_in_progress', 'medium', NULL, '2026-10-10 11:47:43', '2026-10-13 11:19:14', NULL, 9, '25476'),
 	(2099, 'کنترل شناسه قبوض موبایل', 'با درود و احترام\r\nپیرو اعلام شرکت همراه اول کلیه شناسه قبوض ایجاد شده توسط این سازمان 13 رقمی بوده و می بایست تمامی قبوض این سازمان حائز این شرایط باشند.\r\nلذا خواهشمند است کلیه قبوض کد خدمت 5 (همراه اول) در صورت ارسال به سوییچ به نحوی که کمتر از 13 کارکتر باشند ریجکت گردد.\r\nمواردی که از سمت چپ با صفر پر می شوند نیز باید ریجکت گردد.\r\nصحیح: 1234567891234\r\n  غلط: 0123456789123\r\nبا سپاس', '1010566784', 3, 55, 'condition_in_progress', 'medium', NULL, '2026-10-10 11:59:38', '2026-10-13 10:49:16', NULL, 10, ''),
 	(2100, 'پایش MongoDB', 'با سلام و احترام\r\nخواهشمند است جهت پایش دیتابیس mongo یک اکانت با دسترسی زیر ساخته به همراه پورت دیتابیس اعلام گردد.\r\nhttps://git.zabbix.com/projects/AP/repos/mongodb/browse\r\n\r\nبا تشکر', '1010567056', 9, 56, 'condition_in_progress', 'low', NULL, '2026-10-10 13:00:02', '2026-10-13 10:47:57', NULL, 10, ''),
-	(2101, 'تراکنش 200 بدون تاییده 200 یا 420 تسویه شده با پذیرنده ', 'با سلام و احترام\r\nتراکنش 200  (IPG) بدون تاییده 200 یا 420 \r\nولی  با پذیرنده تسویه شده است\r\nلطفا بررسی شود چرا تسویه با پذیرنده صورت گرفته؟', '410567328', 3, 10, 'Condition_done', 'medium', NULL, '2026-10-10 13:29:24', '2026-11-17 08:55:23', NULL, 4, ''),
+	(2101, 'تراکنش 200 بدون تاییده 200 یا 420 تسویه شده با پذیرنده ', 'با سلام و احترام\r\nتراکنش 200  (IPG) بدون تاییده 200 یا 420 \r\nولی  با پذیرنده تسویه شده است\r\nلطفا بررسی شود چرا تسویه با پذیرنده صورت گرفته؟', '410567328', 3, 10, 'condition_acepted_test_auto', 'medium', NULL, '2026-10-10 13:29:24', '2026-11-27 21:30:00', NULL, 4, ''),
 	(2102, 'خطای 34 _ شناسه رونوشت 2671', 'باسلام و احترام\r\nبه استحضار می رساند شناسه رونوشت 2671 در تاریخ 14050711 ( تاریخی که سوییچ کارت مشکل داشت  ) ثبت شده است.\r\n10 عدد کارت موجود در شناسه رونوشت مذکور، با خطای 34 مواجه می گردد.\r\n\r\nنمونه کارتی که در تاریخ 19 و 18 مهر خطای 34 دریافت کرده است، جهت بررسی حضور محترمتان ارسال می گردد.\r\n6274-1244-9209-9456\r\n\r\nباسپاس', '410567543', 1, 25, 'condition_acepted_test_auto', 'high', NULL, '2026-10-11 07:17:04', '2026-10-22 21:30:00', NULL, 4, ''),
 	(2103, 'افزایش سقف تراکنش تا تاریخ 1405/07/19', 'با سلام و احترام\r\nخواهشمند است جهت بروز رسانی سقف های تراکنش ها ترمینال ها جدید از 2 میلیارد به 4 میلیارد ریال تغییر داده شود خواهشمند است هر هفته یکبار بروز رسانی گردد.\r\nبا تشکر', '510567836', 4, 26, 'condition_acepted_test_auto', 'high', NULL, '2026-10-11 10:40:42', '2026-10-27 21:30:00', NULL, 5, ''),
 	(2104, 'عدم فعال شدن مدل تسیهم در سوییچ اینتک', 'با سلام و احترام\r\nترمینال های که در سوییچ سپ درای تسهیم هستند در سوییچ اینتک تسهیم فعال نمی باشد و تراکنش با حساب اصلی پذیرنده تسویه می شود خواهشمند است بررسی نمایید.\r\nنمونه ترمینال:\r\n14968446\r\n15820701\r\n15820682\r\n15821169\r\n15820687\r\n15821171\r\n15817894\r\n15817898\r\n15817896\r\n15817899\r\n15006597\r\nبا تشکر', '810568149', 3, 31, 'condition_acepted_test_auto', 'low', NULL, '2026-10-12 08:54:36', '2026-10-27 21:30:00', NULL, 8, ''),
@@ -43935,7 +44119,7 @@ INSERT INTO `tickets` (`id`, `ticket_title`, `ticket_description`, `ticket_numbe
 	(2174, 'بررسی گزارش رسوب برای کاربر حامی عدالت', 'با سلام و احترام؛\r\nپیرو درخواست شرکت حامی عدالت در خصوص اعطای دسترسی به گزارش سود ناشی از رسوب در سامانه اینتک به کاربر f.mirzaie@hami، خواهشمند است در خصوص بررسی محدود بودن گزارش به کارت های حامی (براساس کارت های آن سازمان در منوی &quot;تخصیص گروه کارت&quot;) اقدام فرمایید.\r\nشایان ذکر است دسترسی testpouya با تخصیص گروه کارت &quot;مددجویان زندان-فارس2&quot; ایجاد شده است تا در خصوص محدودیت خروجی تنها برای کارت های &quot;مددجویان زندان-فارس2&quot; اطمینان حاصل گردد ولی گزارش با صرف زمان بالا خروجی نمی دهد و امکان تست وجود ندارد.', '910587061', 12, 52, 'condition_in_progress', 'low', NULL, '2026-10-26 07:44:42', '2026-11-02 13:13:17', NULL, 9, ''),
 	(2175, ' نیازمندی معماری مانیتورینگ', 'با سلام و احترام\r\nپیرو بند 5 صورت جلسه مورخه 3/8/1405 نیازمندی معماری مانیتورینگ به شرح ذیل به حضور ارائه می گردد:\r\n\r\nبا توجه به بخش‌های مختلف مستند، معماری و الزامات ساختاری سامانه مانیتورینگ باید دارای ویژگی‌های زیر باشد:\r\nبخش اول طبق مستند الزام شاپرک :\r\n۱. معماری چندسایتی (دو سایت اصلی و پشتیبان)\r\nشرکت ارائه‌دهنده خدمات پرداخت (PSP) موظف است مستندات فنی و اجرایی سامانه مانیتورینگ را به‌صورت یکپارچه برای هر دو سایت (اصلی و پشتیبان) تدوین کند.\r\nاین سامانه باید در سایت پشتیبان نیز مانیتورینگ زیرساخت‌ها، لینک‌های ارتباطی و سرویس‌ها را به صورت فعال داشته باشد (بخش‌های 5-5 و 5-6، صفحات ۱۱ تا ۱۳).\r\n۲. بخش‌های کلیدی مستند معماری مانیتورینگ (طبق بند 5-4-8، صفحه ۱۱)\r\nطبق الزامات شاپرک، مستند معماری سامانه مانیتورینگ باید حداقل شامل موارد زیر باشد:\r\n\r\nمعماری و اجزای سامانه مانیتورینگ (شامل ابزارها، پلتفرم‌ها و سازوکارهای پایش).\r\nمشخصات زیرساختی سامانه مانیتورینگ (سرورها، شبکه و بستر جمع‌آوری داده‌ها).\r\nراهنمای استفاده و بهره‌برداری.\r\nفهرست اقلام و سرویس‌های تحت پایش\r\n\r\nبخش دوم اجزای فنی دیاگرام :\r\n\r\nالف) لایه ورود (Entry Layer)\r\nDNS/Load Balancer: نقطه ورود ترافیک که درخواست‌ها را بین سرورها توزیع می‌کند.\r\nWAF / Firewall: دیواره آتش برای جلوگیری از حملات قبل از رسیدن به اپلیکیشن.\r\nب) لایه سرویس (Application Layer)\r\nMicroservices / API Gateways: جایی که منطق تجاری (Business Logic) سیستم اجرا می‌شود. اینجا باید مشخص کنید کدام سرویس با کدام سرویس در ارتباط است (مثلاً سرویس تراکنش با سرویس کیف پول).\r\nMessage Broker (اختیاری اما مهم): برای ارتباط غیرهمزمان (Asynchronous) بین سرویس‌ها (مثل Kafka برای سیستم‌های پرداخت).\r\nج) لایه داده (Data Layer)\r\nDatabase (RDBMS/NoSQL): پایگاه داده‌های اصلی.\r\nCaching (Redis/Memcached): برای افزایش سرعت دسترسی به داده‌های پرکاربرد و کاهش فشار روی دیتابیس.\r\nData Storage: محل ذخیره فایل‌ها یا لاگ‌های حجیم.\r\nد) لایه مانیتورینگ و مدیریت (Monitoring/Ops Layer) - مهم برای پروژه شما\r\nدر دیاگرام معماری خود حتماً باید این لایه را به صورت یک لایه موازی که تمام اجزای بالا را پایش می‌کند، نشان دهید:\r\n\r\nData Collection (Agents): ایجنت‌های نصب شده روی سرورها که داده جمع می‌کنند.\r\nTime-series Database (مثل Prometheus/InfluxDB): برای ذخیره متریک‌های عملکردی.\r\nVisualization (مثل Grafana/Kibana): داشبوردهای مدیریتی که وضعیت را به اپراتور نشان می‌دهند.\r\nAlert Manager: موتوری که قوانین آستانه (Threshold) را بررسی و هشدار ارسال می‌کند.\r\nه) لایه زیرساخت و شبکه (Infrastructure Layer)\r\nVirtualization/Cloud/Containers: (مثل Docker/Kubernetes) که نشان می‌دهد سرویس‌ها کجا اجرا می‌شوند.\r\nNetwork Segments: تفکیک شبکه داخلی، شبکه مدیریت و شبکه عمومی.\r\nپیشنهاد برای رسم دیاگرام (مراحل پیشنهادی)\r\nنمای بالا (High-Level Diagram): ابتدا جریان ترافیک را از کاربر تا دیتابیس رسم کنید.\r\nنمای ارتباطی (Component Diagram): مشخص کنید کدام سرویس‌ها از طریق REST یا gRPC یا Queue با هم صحبت می‌کنند.\r\nنمای زیرساختی (Deployment Diagram): نشان دهید هر سرویس روی کدام سرور یا کانتینر قرار دارد و ارتباطات شبکه بین سایت اصلی و پشتیبان چگونه است', '510587323', 1, 26, 'condition_in_progress', 'high', NULL, '2026-10-26 08:06:47', '2026-10-26 10:42:44', NULL, 5, ''),
 	(2176, 'ارسال دستورالعمل رنگ‌بندی و دسته‌بندی کدهای پاسخ (Response Codes) جهت اعمال در سامانه مانیتورینگ لحظه‌ای تراکنش‌ها', 'با سلام و احترام،\r\n\r\nپیرو جلسه و توافقات انجام‌شده مورخ 3/8/1405 به‌منظور بهبود،\r\nو ارتقای دقت پایش لحظه‌ای تراکنش‌ها، بدین‌وسیله مستند «دسته‌بندی خطاهای سوئیچ پرداخت در مانیتورینگ لحظه‌ای تراکنش» (شامل هدف، دامنه کاربرد، مسئولیت‌ها و تعاریف رنگ‌بندی کدهای پاسخ) خدمتتان ارسال می‌گردد.\r\n\r\nخواهشمند است دستور فرمایید تیم فنی آن شرکت نسبت به موارد زیر اقدام نمایند:\r\n\r\nبررسی و انطباق کامل داشبورد مانیتورینگ لحظه‌ای تراکنش‌ها با ساختار رنگ‌بندی و تعاریف تعیین‌شده در مستند پیوست (شامل تفکیک رنگ‌های سبز، قرمز، نارنجی، زرد و بنفش متناسب با ماهیت خطاها).\r\nاعمال کدهای پاسخ (Response Code و Internal Reason Code) مطابق جدول ارائه‌شده جهت شناسایی سریع‌تری تراکنش‌های موفق، خطاهای کسب‌وکار، خطاهای صادرکننده/کارت، خطاهای سوئیچ و موارد مشکوک به تقلب.\r\nپیشاپیش از همکاری و حسن توجه شما سپاسگزاریم و آماده دریافت بازخورد یا گزارش پیاده‌سازی از سوی آن تیم محترم هستیم.', '510587580', 1, 26, 'condition_in_progress', 'high', NULL, '2026-10-26 08:08:32', '2026-10-27 06:19:14', NULL, 5, ''),
-	(2177, 'الزام شاپرک', 'با سلام و احترام\r\nمستند الزامات شاپرک بپیوست ارسال می گردد.\r\nبا تشکر', '510587893', 1, 26, 'Condition_done', 'high', NULL, '2026-10-26 08:20:03', '2026-11-17 08:56:40', NULL, 5, ''),
+	(2177, 'الزام شاپرک', 'با سلام و احترام\r\nمستند الزامات شاپرک بپیوست ارسال می گردد.\r\nبا تشکر', '510587893', 1, 26, 'condition_acepted_test_auto', 'high', NULL, '2026-10-26 08:20:03', '2026-11-27 21:30:00', NULL, 5, ''),
 	(2178, '14050804 -- مارکت هدایای موردی سان ', 'باسلام و احترام\r\nشماره کارت های فایل پیوست به مارکت : &quot;هدایای موردی سان &quot; روی هر دو سوییچ سیپا و اینتک تخصیص داده شود.\r\n\r\nباسپاس', '410588189', 1, 25, 'condition_acepted_test_auto', 'high', NULL, '2026-10-26 10:24:09', '2026-11-06 21:30:00', NULL, 4, ''),
 	(2179, 'صدور کارت_ خروجی افراد تکراری', '\r\nباسلام و احترام \r\nبر روی منوی  صدور کارت، پس از  آپلودفایل صدور ، برای اشخاصی که از قبل بر روی سوییچ برایشان کارت صادر شده باشد رکوردهای زرد رنگ مبنی بر تکراری بودن افراد نمایش داده می شود.\r\nخواهشمند است همانند خطای سرویس شاهکار در زمان صدور کارت برای این نوع خطاها نیز امکان دریافت فایل پیاده سازی گردد.\r\nباسپاس', '410588375', 1, 25, 'condition_under_review', 'medium', NULL, '2026-10-26 12:16:52', '2026-10-26 12:21:34', NULL, 4, ''),
 	(2180, 'پروژه - نمادپی _ خطای 96', 'با سلام و احترام\r\nشماره کارت های ذیل که مربوط به پروژه والد فرزند می باشند، خطای سیستمی 96 دریافت می کنند.\r\n6274124492207950\r\nباسپاس', '410588688', 1, 25, 'condition_acepted_test_auto', 'high', NULL, '2026-10-27 05:05:02', '2026-11-19 21:30:00', NULL, 4, ''),
@@ -43952,7 +44136,7 @@ INSERT INTO `tickets` (`id`, `ticket_title`, `ticket_description`, `ticket_numbe
 	(2191, 'خطا در تراکنش QR Consumer', 'با سلام\r\nمطابق لاگ پیوست تراکنش های QR-Consumer با خطای 96 مواجه می گردد.خواهشمند است بررسی نمایید.', '810591613', 3, 31, 'Condition_regect', 'low', NULL, '2026-10-28 11:49:52', '2026-11-17 05:34:58', NULL, 8, ''),
 	(2192, 'مشکل در نرم افزار تاپ برای فعالسازی کارتهای خرید و مگا 2', 'شرح درخواست:\r\n\r\nباسلام و احترام به اطلاع میرساند دارنده شماره کارت 6221064011962772 با شماره موبایل 09133139618 از طریق اپلیکیشن تاپ اقدام به فعالسازی کارت خود نموده که با خطا مواجه شده است و امکان فعالسازی کارت را ندارد.\r\n\r\n\r\nخطای اعلام شده از سوی تابان آتی پرداز:\r\n{&quot;CardsResult&quot;:null,&quot;ProcessErrors&quot;:[{&quot;CardNumbers&quot;:&quot;622106******2772&quot;,&quot;Error&quot;:&quot;وضعیت درخواست نا معتبر است.&quot;}],&quot;IsSuccess&quot;:false,&quot;ErrorCode&quot;:4,&quot;Message&quot;:null}\r\n\r\nدرخواست دهنده: لیلا سوزانی\r\nنامه: 27725', '910591814', 12, 52, 'condition_in_progress', 'low', NULL, '2026-10-31 08:19:34', '2026-11-02 13:18:49', NULL, 9, '27725 '),
 	(2193, 'پیگیری بندهای صورتجلسه مورخ 1405/08/03', 'با سلام و عرض ادب\r\nاحتراما پیرو جلسه مورخ 1405/08/03 مقرر گردید موراد ذیل طبق زمانبندی مشخص شده ارائه گردد.\r\n\r\n1- مستند مانیتورینگ(دارای آستانه و شاخص ها) 1405/08/05\r\n2- مستند مدیریت کانال، دیاگرام های استفاده شده استاندارد 1405/08/06\r\n3- معماری مانیتورینگ 1405/08/05\r\n4- مستند راهنمای تراکنش های سوئیچ 1405/08/05\r\n5- ارائه توضیحات تکمیلی در خصوص تراکنش های در صف (تعریف دقیق موجود در مانیتورینگ) 1405/08/09\r\n6- زمانبندی پیاده سازی تغییرات در شخصی سازی مانیتورینگ (رنگبندی تراکنش های لحظه ای-سمعی بصری) 1405/08/06\r\n7- افزوده شده لیست خطاها جهت پایش خطاهای پر تکرار 1405/08/05\r\n8- تفکیک نمودار تراکنش ها با توجه به نوع تراکنش به مانیتورینگ رفاه 1405/08/05\r\n9- زمانبندی افزوده شدن متوسط زمان پاسخ دهی (متوسط زمان پاسخ بین ابزار پذیرش تا سوئیچ) 1405/08/05\r\n10- تفکیک تراکنش ها بر اساس بانک صادرکننده 1405/08/05\r\n\r\nبا سپاس\r\n', '510592145', 8, 58, 'condition_in_progress', 'medium', NULL, '2026-10-31 08:53:39', '2026-11-08 12:16:18', NULL, 5, ''),
-	(2194, 'ارائه الگوریتم تولید شماره مرجع در سوئیچ پذیرندگی', 'با سلام و عرض ادب\r\nاحتراما خواهشمند است با توجه به پروژه پیاده سازی شرکت نرم افزاری جهت ارتباط با شرکت فارا نیازمند نوع الگوریتم تولید شماره مرجع در سوئیچ پذیرندگی جهت ارائه به شرکت نرم افزاری همکار می باشیم.\r\nخواهشمند است در این خصوص رهنمود فرمایید.\r\nبا سپاس', '510592436', 3, 58, 'Condition_done', 'high', NULL, '2026-10-31 08:59:09', '2026-11-17 05:36:00', NULL, 5, ''),
+	(2194, 'ارائه الگوریتم تولید شماره مرجع در سوئیچ پذیرندگی', 'با سلام و عرض ادب\r\nاحتراما خواهشمند است با توجه به پروژه پیاده سازی شرکت نرم افزاری جهت ارتباط با شرکت فارا نیازمند نوع الگوریتم تولید شماره مرجع در سوئیچ پذیرندگی جهت ارائه به شرکت نرم افزاری همکار می باشیم.\r\nخواهشمند است در این خصوص رهنمود فرمایید.\r\nبا سپاس', '510592436', 3, 58, 'condition_acepted_test_auto', 'high', NULL, '2026-10-31 08:59:09', '2026-11-27 21:30:00', NULL, 5, ''),
 	(2195, 'انتخاب هم زمان 2 نمایندگی _ گزارش تراکنش و شارژ', 'باسلام و احترام\r\nخواهشمند است در منوی گزارش تراکنش و شارژ در قسمت انتخاب نمایندگی ( فایل پیوست )نام کاربری r.shojazadeh بتواند در صورت نیاز &quot; هر دو نمایندگی &quot; را انتخاب نماید.\r\nباسپاس\r\n', '410592731', 1, 25, 'condition_under_review', 'high', NULL, '2026-10-31 10:11:54', '2026-10-31 10:24:21', NULL, 4, ''),
 	(2196, 'غیرفعال سازی  فیلترهای گروه کارت و الگوی کارت_ نمایندگی ها', 'باسلام و احترام\r\nخواهشمند است  بر روی منوی گزارش شارژ و تراکنش _ نمایندگی های فایل پیوست _ ، فیلترهای گروه کارت و الگوی کارت غیرفعال گردد\r\n\r\nباسپاس', '410592945', 1, 25, 'condition_under_review', 'high', NULL, '2026-10-31 10:15:40', '2026-10-31 10:24:23', NULL, 4, ''),
 	(2197, '-21793-اصلاح نام حساب در سوییچ پذیرندگی اینتک', 'با توجه به عملیاتی شـدن پروژه چنـدشـبایی براي کارتخوان در سوییـچ اینتک،طی بررسـی به عمل آآمـده نام شـبا (نام حساب) ثبت شـده درجـدول حساب سوییـچ اینتک، با نام پذیرنده ثبت شده است و در زمان دریافت شـبا توسـط کـارتخوان از سوییـچ اینتک نام حساب ها قابل شـناسایی نمیباشـد. لطفا دسـتورات لازم جهت ثبت عنوان فارسـی و انگلیسی حساب پذیرنده ها با عنوان بانک مورد نظرمانند &quot;بانک پارسیان&quot; و &quot;Parsian_BK&quot;درسوییچ اینتک ثبت شود.\r\nلازم به ذکر است تا این تاریخ عنوان حساب هاي سوییچ اینتک به صورت دستی به روز رسانی شده است', '211593241', 2, NULL, 'condition_under_review', 'medium', NULL, '2026-11-01 06:13:14', '2026-11-09 06:29:31', 16, 9, 'CR507596'),
@@ -43981,7 +44165,7 @@ INSERT INTO `tickets` (`id`, `ticket_title`, `ticket_description`, `ticket_numbe
 	(2220, 'خطای 19 در کانال تستی', 'با سلام و احترام\r\nترمینال زیر در کانال تستی خطای 19 دریافت میکند.\r\n12221892\r\nلطفا در اولویت بررسی قرار گیرد.\r\nبا سپاس', '411599473', 3, 54, 'condition_acepted_test_auto', 'high', NULL, '2026-11-07 08:01:56', '2026-11-19 21:30:00', NULL, 4, ''),
 	(2221, ' قالب گزارش های شناسه تولید کننده برنامک تلفن همراه', 'با سلام \r\nآیا تغییرات در خصوص  قالب گزارش های شناسه تولید کننده برنامک تلفن همراه ایجاد شده است؟', '411599770', 1, 10, 'condition_under_review', 'high', NULL, '2026-11-07 08:36:21', '2026-11-07 08:58:13', NULL, 4, ''),
 	(2222, 'سقف مبلغ تسهیم - مهم ', 'با سلام و احترام\r\nخواهشمند است تمامی ترمینال های دارای تسهیم حداکثر مبلغ تسهیم به  9,999,999,999  ریال تغییر و از این پس این عدد به صورت اتوماتیک لحاظ گردد\r\nتاکید میشود :\r\n1- برای ترمینال های دارای تسهیم \r\n2- دقت شود در حداقل یا حداکثر سقف یا کف سایر ترمینال ها خللی ایجاد نشود\r\n', '411599971', 3, 10, 'condition_in_progress', 'high', NULL, '2026-11-07 09:37:13', '2026-11-08 08:05:40', NULL, 4, ''),
-	(2223, 'کلیدهای بانک ملی جهت تست پروژه PlanB', 'با سلام و احترام\r\nکلیدهای بانک ملی جهت تست پروژه PlanB به پیوست ارسال گردید.\r\nبا سپاس', '411600253', 3, 54, 'Condition_done', 'low', NULL, '2026-11-07 13:14:12', '2026-11-17 05:36:42', NULL, 4, ''),
+	(2223, 'کلیدهای بانک ملی جهت تست پروژه PlanB', 'با سلام و احترام\r\nکلیدهای بانک ملی جهت تست پروژه PlanB به پیوست ارسال گردید.\r\nبا سپاس', '411600253', 3, 54, 'condition_acepted_test_auto', 'low', NULL, '2026-11-07 13:14:12', '2026-11-27 21:30:00', NULL, 4, ''),
 	(2224, 'درخواست روت ترمینال انیاک', '\r\nبا سلام و احترام\r\nترمینال های فایل پیوست جهت روت انیاک تقدیم حضورتان می شود. خواهشمند است در این خصوص اقدامات لازم را مبذول فرمایید.\r\nبا تشکر\r\nترمینال\r\n15915339\r\n15915341\r\n15921570\r\n15921571\r\n15921574\r\n15923976\r\n15924044\r\n15924059\r\n', '811600513', 3, 31, 'condition_acepted_test_auto', 'low', NULL, '2026-11-08 04:43:27', '2026-11-20 21:30:00', NULL, 8, ''),
 	(2225, 'روت ترمینال ارتباط فردا', 'باسلام و احترام\r\nفایل روت ترمینال ارتباط فردا پیوست شد\r\nلطفا اقدامات لازم را مبذول فرمایید\r\nبا تشکر\r\n\r\nشماره ترمینال\r\n15864154 \r\n15862514 \r\n', '811600836', 3, 31, 'condition_acepted_test_auto', 'low', NULL, '2026-11-08 07:42:19', '2026-11-20 21:30:00', NULL, 8, ''),
 	(2226, 'درخواست بررسی و رفع مغایرت در تعریف شبای دوم در سامانه بک‌آفیس', 'با سلام و احترام،\r\n\r\nخواهشمند است به‌منظور تسهیل فرآیندهای عملیاتی در سامانه بک‌آفیس، امکان تعریف شبای دوم برای پذیرنده در سامانه فراهم گردد.\r\n\r\nدر همین راستا، پس از تعریف شبای دوم در سامانه با پیگیری و همکاری جناب آقای افشار، هنگام انجام تراکنش با خطای زیر مواجه شدیم:\r\n70125602\r\n- **خطای دریافتی:** 12 – تراکنش نامعتبر\r\n- **InternalReasonCode:** 22\r\n- **شرح خطا:** مجموع مبالغ ریز با مبلغ سرجمع همخوانی ندارد.\r\n\r\nبا توجه به موارد فوق، خواهشمند است موضوع از نظر نحوه محاسبه و تطبیق مبالغ تراکنش پس از تعریف شبای دوم بررسی و اقدامات لازم جهت رفع مغایرت و برقراری امکان انجام صحیح تراکنش‌ها صورت پذیرد.\r\n\r\n سپاس', '511601076', 4, 26, 'condition_acepted_test_auto', 'high', NULL, '2026-11-08 11:16:15', '2026-11-20 21:30:00', NULL, 5, ''),
@@ -43993,20 +44177,20 @@ INSERT INTO `tickets` (`id`, `ticket_title`, `ticket_description`, `ticket_numbe
 	(2232, 'دریافت خطای وضعیت درخواست نا معتبر است در سرویس ActivationListWithControl', 'با سلام و احترام؛\r\nبه استحضار می‌رساند سرویس ActivationListWithControl از طریق فراخوانی با آدرس http://172.25.1.51:555/Pec/api/Issuer/ActivationListWithControl همراه با خطای وضعیت درخواست نا معتبر است با ارور کد 4 مواجه می‌شود که همین ارور کد را قبلا بر روی سرویس CardValidation نیز داشتیم و مورد برطرف شد، لطفا این سرویس را با این شماره کارت 6221064011962772 و شماره همراه 09133139618 بررسی بفرمایید، لاگ دریافتی همراه با پارامتر های:\r\n{&quot;CardsResult&quot;:null,&quot;ProcessErrors&quot;:[{&quot;CardNumbers&quot;:&quot;622106******2772&quot;,&quot;Error&quot;:&quot;وضعیت درخواست نا معتبر است.&quot;}],&quot;IsSuccess&quot;:false,&quot;ErrorCode&quot;:4,&quot;Message&quot;:null}\r\nقابل مشاهده می‌باشد.\r\nبا تشکر\r\n', '911602673', 2, 53, 'condition_in_progress', 'high', NULL, '2026-11-09 17:21:49', '2026-11-10 08:21:16', NULL, 9, '27725'),
 	(2233, 'درج علت خارجی تراکنش در خروجی اکسل سوییچ اینتک', 'با سلام و احترام\r\nخواهشمند است در سوییچ اینتک فرم گزارشات تراکنش و کل در خروجی اکسل یک ستون اضافه شود و علت خارجی در آن درج شود.\r\n\r\nhttp://172.31.14.60/Backoffice/B2SMain/SWTransactions/Transaction_AllReport.aspx\r\nبا تشکر', '811602915', 12, 31, 'condition_under_review', 'low', NULL, '2026-11-10 05:45:46', '2026-11-10 06:22:54', NULL, 8, ''),
 	(2234, 'عدم اعمال ویرایش در سرویس چند حسابی اینتک(multi-account)', '\r\nسرویس اینتک تغییرات را به درستی اعمال نمیکند، با وجود اینکه پاسخ موفق میدهد. موضوع به آقای محمدی اطلاع داده شد.\r\n\r\nورودی ست کردن\r\n\r\ncurl -X &#039;POST&#039; \\\r\n  &#039;http://172.25.1.59:7080/api/switchs/3/terminals/45125783/multi-account&#039; \\\r\n  -H &#039;accept: /&#039; \\\r\n  -H &#039;Content-Type: application/json&#039; \\\r\n  -d &#039;{\r\n  &quot;multiAccounts&quot;: [\r\n   \r\n\r\n{       &quot;iban&quot;: &quot;IR090700010001102685891001&quot;,       &quot;priority&quot;: 1     }\r\n,\r\n\r\n{       &quot;iban&quot;: &quot;IR390120000000001666352500&quot;,       &quot;priority&quot;: 4     }\r\n,\r\n\r\n{       &quot;iban&quot;: &quot;IR390590023500301294384001&quot;,       &quot;priority&quot;: 2     }\r\n,\r\n\r\n{       &quot;iban&quot;: &quot;IR890540213630101675482601&quot;,       &quot;priority&quot;: 3     }\r\n  ]\r\n}&#039;\r\n\r\nخروجی موفق میدهد\r\n\r\n{   &quot;success&quot;: true,   &quot;data&quot;: 45125783 }\r\nامادر زمان گت کردن اعمال نشده\r\n\r\ncurl -X &#039;GET&#039; \\\r\n  &#039;http://172.25.1.59:7080/api/switchs/3/terminals/45125783/multi-account&#039; \\\r\n  -H &#039;accept: /&#039;\r\n  \r\n  \r\n  \r\n  {\r\n  &quot;success&quot;: true,\r\n  &quot;data&quot;: [\r\n   \r\n\r\n{       &quot;iban&quot;: &quot;IR890540213630101675482601&quot;,       &quot;accountNumber&quot;: &quot;0101675482601&quot;,       &quot;title&quot;: &quot;حساب بانک پارسیان&quot;,       &quot;priority&quot;: 1,       &quot;isActive&quot;: true     }\r\n,\r\n   \r\n\r\n{       &quot;iban&quot;: &quot;IR090700010001102685891001&quot;,       &quot;accountNumber&quot;: null,       &quot;title&quot;: &quot;بانک قرض‌الحسنه رسالت&quot;,       &quot;priority&quot;: 2,       &quot;isActive&quot;: true     }\r\n,\r\n   \r\n\r\n{       &quot;iban&quot;: &quot;IR390120000000001666352500&quot;,       &quot;accountNumber&quot;: null,       &quot;title&quot;: &quot;بانک ملت&quot;,       &quot;priority&quot;: 3,       &quot;isActive&quot;: true     }\r\n,\r\n   \r\n\r\n{       &quot;iban&quot;: &quot;IR390590023500301294384001&quot;,       &quot;accountNumber&quot;: null,       &quot;title&quot;: &quot;بانک سینا&quot;,       &quot;priority&quot;: 4,       &quot;isActive&quot;: true     }\r\n  ]\r\n}', '911603269', 2, 37, 'condition_in_progress', 'medium', NULL, '2026-11-10 06:06:59', '2026-11-14 10:52:50', NULL, 9, 'BOD-7694'),
-	(2235, 'مغایرت تراکنش', 'با سلام و احترام\r\nخواهشمند است بصورت فورس تراکنش مذکور بررسی گردد و شرح تراکنش (وضعیت 200 و 220 و 420) مشخص و اطلاع رسانی گردد.\r\nبا سپاس', '511603581', 3, 58, 'Condition_done', 'high', NULL, '2026-11-10 10:18:32', '2026-11-16 08:46:51', NULL, 5, ''),
+	(2235, 'مغایرت تراکنش', 'با سلام و احترام\r\nخواهشمند است بصورت فورس تراکنش مذکور بررسی گردد و شرح تراکنش (وضعیت 200 و 220 و 420) مشخص و اطلاع رسانی گردد.\r\nبا سپاس', '511603581', 3, 58, 'condition_acepted_test_auto', 'high', NULL, '2026-11-10 10:18:32', '2026-11-26 21:30:00', NULL, 5, ''),
 	(2236, 'بروز رسانی همه سرور های ویندوزی اینتک و رفاه در تاریخ 24 و 25 آبان ماه ', 'بروز رسانی همه سرور های ویندوزی اینتک و رفاه در تاریخ 24   از ساعت 22 الی 6 صبح  25 آبان ماه', '411603721', 3, 10, 'condition_under_review', 'medium', NULL, '2026-11-10 11:53:44', '2026-11-10 12:03:05', NULL, 4, ''),
-	(2237, 'درخواست انتقال شارژ پین رایتل از مخزن سوییچ مهرانا به مخزن بانک تجارت', 'درخواست انتقال شارژ پین رایتل از مخزن سوییچ مهرانا به مخزن بانک تجارت مطابق فایل پیوست\r\n\r\nدرخواست دهنده : حسین خدایی مهر\r\nنامه: 33061', '911604040', 12, 52, 'Condition_done', 'low', NULL, '2026-11-11 05:48:27', '2026-11-16 06:05:47', NULL, 9, '33061 '),
+	(2237, 'درخواست انتقال شارژ پین رایتل از مخزن سوییچ مهرانا به مخزن بانک تجارت', 'درخواست انتقال شارژ پین رایتل از مخزن سوییچ مهرانا به مخزن بانک تجارت مطابق فایل پیوست\r\n\r\nدرخواست دهنده : حسین خدایی مهر\r\nنامه: 33061', '911604040', 12, 52, 'condition_acepted_test_auto', 'low', NULL, '2026-11-11 05:48:27', '2026-11-26 21:30:00', NULL, 9, '33061 '),
 	(2238, 'جایگزین سرور و تغییر سرور 172.31.7.10 با سرور جدید', 'با درود\r\nتغییر سرور 7.10\r\nمطابق با قدیمی بودن سیستم عامل سرور 172.31.70.10، سروری جایگزین به آدرس 172.31.7.15 ارائه گریده است که از طریق محیط جاپ سرور دسترسی به آن مقدور است خواهشمند است دستور فرمایید سرور فوق مهیا گردیده تا بعد از آماده شدن و دریافت زمان تغییرات با آیپی 2 سرور تغییر یابد\r\n\r\nدسترسی های اخذ شده شامل موارد زیر است، در صورتی که نیازمندی بابت دسترسی وجود دارد موارد در قالب ایمیل ارسال گردد با تشکر\r\n\r\nIP مبدا\r\n172.31.7.13,172.31.7.15\r\nIP مقصد\r\n172.31.80.30,172.31.80.35,172.31.80.80,172.31.80.51\r\nپورت\r\n6985\r\n\r\nIP مبدا\r\n172.31.7.13,172.31.7.15\r\nIP مقصد\r\n172.31.80.40,172.31.80.14,172.31.80.13,172.31.80.20\r\nپورت\r\n6985\r\n\r\nIP مبدا\r\n172.31.7.13,172.31.7.15\r\nIP مقصد\r\n172.31.29.71,172.31.29.72,172.31.29.73\r\nپورت\r\n27017\r\n\r\nIP مبدا\r\n172.31.50.132,172.31.50.139\r\nIP مقصد\r\n172.31.7.13,172.31.7.15\r\nپورت\r\n3389,1700,7215,7213\r\n\r\n', '811604393', 3, 31, 'condition_in_progress', 'low', NULL, '2026-11-11 08:02:58', '2026-11-14 06:14:30', NULL, 8, ''),
-	(2239, 'روت ارتباط فردا', 'باسلام و احترام\r\nفایل روت ترمینال ارتباط فردا پیوست شد\r\nاقدامات لازم را مبذول فرمایید\r\nشماره ترمینال\r\n50291342\r\n\r\nباتشکر', '811604580', 1, 31, 'Condition_done', 'low', NULL, '2026-11-11 08:29:09', '2026-11-14 07:00:58', NULL, 8, ''),
+	(2239, 'روت ارتباط فردا', 'باسلام و احترام\r\nفایل روت ترمینال ارتباط فردا پیوست شد\r\nاقدامات لازم را مبذول فرمایید\r\nشماره ترمینال\r\n50291342\r\n\r\nباتشکر', '811604580', 1, 31, 'condition_acepted_test_auto', 'low', NULL, '2026-11-11 08:29:09', '2026-11-26 21:30:00', NULL, 8, ''),
 	(2240, ' پیاده سازی Central Pcpos', 'با سلام \r\nخواهشمند است  پیاده سازی  Central Pcpos صورت پذیرد \r\nسناریو به پیوست ارسال میگردد', '411604815', 11, 10, 'condition_in_progress', 'medium', NULL, '2026-11-11 09:31:48', '2026-11-14 10:44:35', NULL, 4, ''),
 	(2241, 'اطلاعات کارت تستی بانک های تجارت و ملی و کشاورزی', 'با سلام و احترام\r\nاطلاعات کارت تستی بانک های تجارت و ملی و کشاورزی به پیوست ارسال گردید.\r\nبا سپاس', '411605111', 3, 54, 'Condition_done', 'low', NULL, '2026-11-14 06:24:12', '2026-11-21 11:22:02', NULL, 4, ''),
 	(2242, 'عدم نمایش سرجمع فروش شارژ روز جاری', 'باسلام\r\nاحتراما درگزارش&quot; اینتک پذیرندگی/گزارشات/ سرجمع فروش شارژ&quot; چنانچه تاریخ تراکنش را روز جاري قرارداده وگزارش بگیریم هیـچ خروجی‌ای نمـایش نمی‌دهـد. درواقع تـا پایان روز امکان مشـخص نمودن شارژ فروش رفته\r\nروزجاري وجود ندارد. از این رو درخواست میشود نسبت به رفع مشکل فوق دستور مقتضی صادر فرمایید.\r\nبا تشکر\r\n---------------------------------------------------------------\r\nki.yousefi\r\nindc. num= 33043', '911605368', 4, 53, 'condition_in_progress', 'medium', NULL, '2026-11-14 06:24:47', '2026-11-24 12:30:08', NULL, 9, '33043'),
-	(2243, 'ارتقاء نسخه Mongo DB', 'با سلام و احترام\r\nخواهشمند است با قید فوریت و با توجه به الزامات شاپرک ورژن نسخه مونگو بررسی و در صورت قدیمی بودن یا عدم انطباق با ورژن مذکور بروزرسانی گردد.\r\nبا سپاس', '511605632', 8, 58, 'Condition_done', 'high', NULL, '2026-11-14 07:18:08', '2026-11-17 05:39:15', NULL, 5, ''),
-	(2244, 'خطای 96 برای PLANB بانک اقتصاد نوین', 'با سلام و احترام\r\nدر تراکنش های مربوط به پروژه PlanB برای بانک اقتصاد نوین در 220 ساید 2 خطای 96 دریافت میکنیم. نکته مهم اینکه 220 ما به دست بانک نمی رسد، در لاگ ها نیز مشاهده نشده است.\r\nنمومنه RRN: 519264640051\r\n\r\nبا سپاس', '411605979', 3, 54, 'Condition_done', 'high', NULL, '2026-11-14 08:19:25', '2026-11-16 08:28:08', NULL, 4, ''),
-	(2245, 'روت ترمینال ارتباط فردا', 'باسلام و احترام\r\nروت ترمینال ارتباط فردا پیوست گردید\r\nلطفا اقدامات لازم را مبذول فرمایید\r\nباتشکر', '811606283', 3, 31, 'Condition_done', 'low', NULL, '2026-11-14 12:37:24', '2026-11-17 05:40:24', NULL, 8, ''),
-	(2246, 'فرآیند جلوگیری از دستگاه های خارج از کشور', 'با سلام و احترام\r\nخواهشمند است در خصوص سازوکار سوئیچ جهت جلوگیری از اتصال دستگاه های خارج از کشور و ارسال تراکنش های مذکور مستند مربوطه ارائه گردد.\r\nبا سپاس', '511606413', 3, 58, 'Condition_done', 'medium', NULL, '2026-11-15 07:25:52', '2026-11-21 11:23:05', NULL, 5, ''),
-	(2247, 'روت ترمینال ارتباط فردا', 'باسلام و احترام\r\nروت ترمینال ارتباط فردا پیوست گردید\r\nلطفا اقدامات لازم را میذول فرمایید\r\nبا تشکر', '811606727', 3, 31, 'Condition_done', 'low', NULL, '2026-11-15 07:41:08', '2026-11-17 05:40:55', NULL, 8, ''),
-	(2248, 'درخواست فیلد 53', 'با سلام\r\nاحتراما خواهشمند است فیلد 53 با کلید و اطلاعات زیر، جهت تراکنش های RKI  تهیه گردد:\r\nF119E5E65B617FFB5E2\r\nKCV:12F7C7\r\nIP: 087.107.134.151\r\nPORT:10010\r\nبا سپاس \r\n\r\n', '411607063', 3, 54, 'Condition_done', 'high', NULL, '2026-11-15 08:06:05', '2026-11-16 07:30:55', NULL, 4, ''),
+	(2243, 'ارتقاء نسخه Mongo DB', 'با سلام و احترام\r\nخواهشمند است با قید فوریت و با توجه به الزامات شاپرک ورژن نسخه مونگو بررسی و در صورت قدیمی بودن یا عدم انطباق با ورژن مذکور بروزرسانی گردد.\r\nبا سپاس', '511605632', 8, 58, 'condition_acepted_test_auto', 'high', NULL, '2026-11-14 07:18:08', '2026-11-27 21:30:00', NULL, 5, ''),
+	(2244, 'خطای 96 برای PLANB بانک اقتصاد نوین', 'با سلام و احترام\r\nدر تراکنش های مربوط به پروژه PlanB برای بانک اقتصاد نوین در 220 ساید 2 خطای 96 دریافت میکنیم. نکته مهم اینکه 220 ما به دست بانک نمی رسد، در لاگ ها نیز مشاهده نشده است.\r\nنمومنه RRN: 519264640051\r\n\r\nبا سپاس', '411605979', 3, 54, 'condition_acepted_test_auto', 'high', NULL, '2026-11-14 08:19:25', '2026-11-26 21:30:00', NULL, 4, ''),
+	(2245, 'روت ترمینال ارتباط فردا', 'باسلام و احترام\r\nروت ترمینال ارتباط فردا پیوست گردید\r\nلطفا اقدامات لازم را مبذول فرمایید\r\nباتشکر', '811606283', 3, 31, 'condition_acepted_test_auto', 'low', NULL, '2026-11-14 12:37:24', '2026-11-27 21:30:00', NULL, 8, ''),
+	(2246, 'فرآیند جلوگیری از دستگاه های خارج از کشور', 'با سلام و احترام\r\nخواهشمند است در خصوص سازوکار سوئیچ جهت جلوگیری از اتصال دستگاه های خارج از کشور و ارسال تراکنش های مذکور مستند مربوطه ارائه گردد.\r\nبا سپاس', '511606413', 3, 58, 'Condition_reject_test', 'medium', NULL, '2026-11-15 07:25:52', '2026-11-25 04:44:23', NULL, 5, ''),
+	(2247, 'روت ترمینال ارتباط فردا', 'باسلام و احترام\r\nروت ترمینال ارتباط فردا پیوست گردید\r\nلطفا اقدامات لازم را میذول فرمایید\r\nبا تشکر', '811606727', 3, 31, 'condition_acepted_test_auto', 'low', NULL, '2026-11-15 07:41:08', '2026-11-27 21:30:00', NULL, 8, ''),
+	(2248, 'درخواست فیلد 53', 'با سلام\r\nاحتراما خواهشمند است فیلد 53 با کلید و اطلاعات زیر، جهت تراکنش های RKI  تهیه گردد:\r\nF119E5E65B617FFB5E2\r\nKCV:12F7C7\r\nIP: 087.107.134.151\r\nPORT:10010\r\nبا سپاس \r\n\r\n', '411607063', 3, 54, 'condition_acepted_test_auto', 'high', NULL, '2026-11-15 08:06:05', '2026-11-26 21:30:00', NULL, 4, ''),
 	(2249, ' استعلام مانا کارت', 'با سلام و احترام؛\r\nخواهشمند است در خصوص تایید استعلام مانا کارت ذیل اقدام فرمایید. با سپاس\r\n\r\nکارت                               	کدملی	              موبایل\r\n6221064000648622	       3251071297	09183140271\r\n\r\nدرخواست دهنده : سوزانی', '911607234', 12, 52, 'condition_under_review', 'low', NULL, '2026-11-16 11:12:37', '2026-11-16 11:39:44', NULL, 9, ''),
 	(2250, 'درخواست روت ترمینال انیاک', 'با سلام و احترام\r\nترمینال های فایل پیوست جهت روت انیاک تقدیم حضورتان می شود. خواهشمند است در این خصوص اقدامات لازم را مبذول فرمایید.\r\nبا تشکر', '811607550', 3, 31, 'Condition_referral_to_manager', 'low', NULL, '2026-11-16 12:31:01', '2026-11-17 11:49:27', NULL, 8, ''),
 	(2251, 'آپدیت کانال 5050 مشابه کانال 4080', 'با سلام\r\nخواهشمند  است نسخه/ تنظیمات  کانال 4080  بروی کانال   5050  نیز قرار گیرد و  همچنین کلید ضمیمه بروی کانال قرار گیرد.\r\nاین کانال جهت پروژه Soft Pos  می باشد.\r\nبا سپاس\r\n', '411607857', 11, 10, 'Condition_in_progress', 'high', NULL, '2026-11-16 13:20:16', '2026-11-17 07:27:47', NULL, 4, ''),
@@ -44022,12 +44206,15 @@ INSERT INTO `tickets` (`id`, `ticket_title`, `ticket_description`, `ticket_numbe
 	(2261, 'کلیدهای عملیاتی بانک ملی', 'با سلام و احترام\r\nکلیدهای عملیاتی بانک ملی جهت پروژه PlanB به پیوست ارسال گردید.\r\nبا سپاس', '411610556', 3, 54, 'condition_in_progress', 'low', NULL, '2026-11-22 06:54:08', '2026-11-22 11:44:47', NULL, 4, ''),
 	(2262, 'استعلام مانا کارت', 'با سلام و احترام؛\r\nخواهشمند است در خصوص تایید استعلام مانا کارت های فایل پیوست اقدام فرمایید. با سپاس\r\nدرخواست دهنده: سوزانی\r\n\r\nقبلا با تغییر اطلاعات، استعلام مانا بصورت خودکار موفق می شد ولی الان می بایست طی تیکت موارد به اینتک اعلام گردد. خواهشمند است بررسی و در صورت امکان، پروسه اصلاح گردد. با سپاس', '911610785', 12, 52, 'condition_under_review', 'low', NULL, '2026-11-22 08:25:40', '2026-11-22 08:30:11', NULL, 9, ''),
 	(2263, ' افزایش تعداد ارقام رمز پین شارژ (از ۱۶ به ۱۷ رقم) و شماره سریال (از ۱۲ به ۱۳ رقم)', '\r\nبا سلام\r\nبا توجه به اعلام اپراتور ایرانسل مبنی بر افزایش تعداد ارقام رمز پین شارژ (از ۱۶ به ۱۷ رقم) و شماره سریال (از ۱۲ به ۱۳ رقم)، لازم است زیرساخت‌ها و سامانه‌های مرتبط از منظر این تغییر بررسی شوند.', '411611018', 3, 10, 'Condition_done', 'high', NULL, '2026-11-22 10:39:14', '2026-11-22 10:49:38', NULL, 4, ''),
-	(2264, 'مانور شاپرک جهت پروژه PlanB', 'با سلام و احترام\r\nپیرو هماهنگی های انجام شده با همکاران، روز شنبه مانور بانک های مهر، شهر، رفاه، سامان، رسالت، پاسارگاد و کارآفرین در محیط عملیاتی برگذار خواهد شد. \r\nلطفا تمهیدات و هماهنگی های لازم انجام شود تا از پایداری ارتباطات در طول مانور اطمینان حاصل شود.\r\nبا سپاس', '411611310', 3, 54, 'condition_under_review', 'low', NULL, '2026-11-22 11:50:40', '2026-11-22 11:55:40', NULL, 4, ''),
-	(2265, 'حداقل مبلغ شارژ مستقیم (Top-Up) ۵۰,۰۰۰ - جهت اعلام به سوئیچ در خصوص نمودار تراکنش های شارژ', 'با سلام و احترام\r\nپیرو اعلام اپراتور همراه اول، به اطلاع می‌رساند از ساعت ۰۰:۰۰ بامداد روز چهارشنبه ۰۴ / ۰۹/ ۱۴۰۵، تغییرات زیر در سرویس شارژ اعمال خواهد شد:\r\n۱. حداقل مبلغ شارژ مستقیم (Top-Up) ۵۰,۰۰۰ تومان خواهد بود.\r\n۲. توزیع پین شارژ ۲۰,۰۰۰ تومانی نیز متوقف خواهد شد.\r\nنکته: پین‌شارژهای ۲۰,۰۰۰ تومانیِ فروخته‌شده و موجود در بازار، تا اتمام تاریخ انقضا همچنان قابل استفاده خواهند بود.\r\n', '411611669', 3, 10, 'condition_under_review', 'high', NULL, '2026-11-22 13:19:38', '2026-11-22 13:27:39', NULL, 4, ''),
-	(2266, 'درخواست روت ترمینال انیاک', 'با سلام و احترام\r\nترمینال های فایل پیوست جهت روت انیاک تقدیم حضورتان می شود. خواهشمند است در این خصوص اقدامات لازم را مبذول فرمایید.\r\nبا تشکر', '811611846', 3, 31, 'condition_under_review', 'low', NULL, '2026-11-23 05:51:19', '2026-11-23 06:20:15', NULL, 8, ''),
+	(2264, 'مانور شاپرک جهت پروژه PlanB', 'با سلام و احترام\r\nپیرو هماهنگی های انجام شده با همکاران، روز شنبه مانور بانک های مهر، شهر، رفاه، سامان، رسالت، پاسارگاد و کارآفرین در محیط عملیاتی برگذار خواهد شد. \r\nلطفا تمهیدات و هماهنگی های لازم انجام شود تا از پایداری ارتباطات در طول مانور اطمینان حاصل شود.\r\nبا سپاس', '411611310', 3, 54, 'condition_in_progress', 'low', NULL, '2026-11-22 11:50:40', '2026-11-25 06:32:56', NULL, 4, ''),
+	(2265, 'حداقل مبلغ شارژ مستقیم (Top-Up) ۵۰,۰۰۰ - جهت اعلام به سوئیچ در خصوص نمودار تراکنش های شارژ', 'با سلام و احترام\r\nپیرو اعلام اپراتور همراه اول، به اطلاع می‌رساند از ساعت ۰۰:۰۰ بامداد روز چهارشنبه ۰۴ / ۰۹/ ۱۴۰۵، تغییرات زیر در سرویس شارژ اعمال خواهد شد:\r\n۱. حداقل مبلغ شارژ مستقیم (Top-Up) ۵۰,۰۰۰ تومان خواهد بود.\r\n۲. توزیع پین شارژ ۲۰,۰۰۰ تومانی نیز متوقف خواهد شد.\r\nنکته: پین‌شارژهای ۲۰,۰۰۰ تومانیِ فروخته‌شده و موجود در بازار، تا اتمام تاریخ انقضا همچنان قابل استفاده خواهند بود.\r\n', '411611669', 3, 10, 'Condition_done', 'high', NULL, '2026-11-22 13:19:38', '2026-11-25 09:00:41', NULL, 4, ''),
+	(2266, 'درخواست روت ترمینال انیاک', 'با سلام و احترام\r\nترمینال های فایل پیوست جهت روت انیاک تقدیم حضورتان می شود. خواهشمند است در این خصوص اقدامات لازم را مبذول فرمایید.\r\nبا تشکر', '811611846', 3, 31, 'Condition_done', 'low', NULL, '2026-11-23 05:51:19', '2026-11-25 07:49:10', NULL, 8, ''),
 	(2267, 'تعیین و تکلیف سرور های بلا استفاده شرکت اینتک', 'با درود\r\nخواهشمند است در صورتی که هر یک از سرور های زیر مورد نیاز نیست اعلام شود سرور های حذف شوند\r\nبا سپاس\r\nINTK-DMZ	172.31.7.30	WINDOWS (win-x86-64)\r\nINTK-INTCG	172.31.29.24	WINDOWS (win-x86-64)\r\nSEP4-ACQTEST	172.31.29.16	WINDOWS (win-x86-64)\r\nSEP4-DMZ1	172.31.7.14	WINDOWS (win-x86-64)\r\nSEP4-NCC	172.31.14.13	WINDOWS (win-x86-64)\r\n', '811612163', 3, 31, 'condition_in_progress', 'medium', NULL, '2026-11-23 07:13:41', '2026-11-24 10:14:19', NULL, 8, ''),
-	(2268, 'روت ترمینال ارتباط فردا', '\r\nباسلام و احترام\r\nروت ترمینال ارتباط فردا \r\nلطفا اقدامات لازم را مبذول فرمایید\r\nباتشکر\r\n\r\nشماره ترمینال\r\n15950156 \r\n', '811612420', 3, 31, 'condition_under_review', 'low', NULL, '2026-11-23 12:22:52', '2026-11-23 12:49:44', NULL, 8, ''),
-	(2269, 'ایجاد منوی بایگانی در بک افیس ', 'با سلام و احترام\r\nبا توجه به عدم امکان مشاهده تراکنش های از تاریخ  یک ماه قبل \r\nخواهشمند است منوی بایگانی در بک افیس ایجاد گردد.\r\nبا سپاس', '411612694', 1, 10, 'condition_pending', 'medium', NULL, '2026-11-24 13:19:09', '2026-11-24 13:19:09', NULL, 4, '');
+	(2268, 'روت ترمینال ارتباط فردا', '\r\nباسلام و احترام\r\nروت ترمینال ارتباط فردا \r\nلطفا اقدامات لازم را مبذول فرمایید\r\nباتشکر\r\n\r\nشماره ترمینال\r\n15950156 \r\n', '811612420', 3, 31, 'Condition_done', 'low', NULL, '2026-11-23 12:22:52', '2026-11-25 07:49:46', NULL, 8, ''),
+	(2269, 'ایجاد منوی بایگانی در بک افیس ', 'با سلام و احترام\r\nبا توجه به عدم امکان مشاهده تراکنش های از تاریخ  یک ماه قبل \r\nخواهشمند است منوی بایگانی در بک افیس ایجاد گردد.\r\nبا سپاس', '411612694', 1, 10, 'condition_under_review', 'medium', NULL, '2026-11-24 13:19:09', '2026-11-25 05:33:05', NULL, 4, ''),
+	(2270, 'شباهای بانک تجارت', 'با سلام و احترام؛\r\nلیست شباهای پایانه های بانک تجارت به پیوست تقدیم حضور می‌گردد.\r\nبا تشکر', '911612979', 9, 53, 'condition_in_progress', 'low', NULL, '2026-11-25 15:51:40', '2026-11-28 07:44:14', NULL, 9, '0'),
+	(2271, 'بررسی سرویس های استعلامی', 'با سلام و احترام،\r\nبا توجه به برنامه‌ریزی انجام‌شده جهت ارائه سرویس‌های استعلامی از طریق بستر «مگاهاب» شرکت تجارت الکترونیک پارسیان، خواهشمند است اطلاعات کلیه سرویس‌های استعلامی مورد استفاده، از جمله سرویس شاهکار و سایر سرویس‌های مشابه استعلامی را جهت بررسی و انجام اقدامات لازم ارسال فرمایید.\r\nلطفا اطلاعات مربوط به هر سرویس شامل نام سرویس، کاربرد، نحوه و آدرس دسترسی فعلی و سایر اطلاعات فنی موردنیاز جهت شناسایی و انتقال سرویس‌ها به بستر مگاهاب را اعلام فرمایید.\r\nپیشاپیش از همکاری شما سپاسگزاریم.\r\n--------------------------------------------------------------------------------------\r\nki.yousefi', '911613297', 12, 53, 'condition_under_review', 'low', NULL, '2026-11-28 07:50:36', '2026-11-28 08:07:35', NULL, 9, '35439'),
+	(2272, 'درخواست روت ترمینال انیاک', 'با سلام و احترام\r\nترمینال های فایل پیوست جهت روت انیاک تقدیم حضورتان می شود. خواهشمند است در این خصوص اقدامات لازم را مبذول فرمایید.\r\nبا تشکر', '811613473', 3, 31, 'condition_pending', 'low', NULL, '2026-11-28 09:10:27', '2026-11-28 09:10:27', NULL, 8, '');
 
 -- Dumping structure for view idesk.tickets_sla_view
 -- Creating temporary table to overcome VIEW dependency errors
@@ -44206,14 +44393,14 @@ INSERT INTO `users` (`id`, `email`, `mobile`, `password`, `name`, `role`, `statu
 	(30, 'mohammadi@tourismbank.ir', '09121111111', '$2y$10$rwRhjoyYc.6XYr8P5mY3xu5t9k83hOXslC7FAtb3oq.fZ7c8CHzrC', 'خانم محمدی', 'all', 'Active', '2024-08-14 11:46:55', '2024-10-20 08:19:06', 9, 19),
 	(31, 'a.abedi@sep.ir', '09125113520', '$2y$10$LYK1noMI1Yke26sGmxbt5OwjAqjEHeFONHoraq6Oh1rtuwkHleMrO', 'امیر عابدی', 'all', 'Active', '2024-09-22 11:22:12', '2024-10-20 08:19:15', 11, 20),
 	(34, 'a.azadfallah@sabinarya.com', '09124380079', '$2y$10$3urfk8fMSXgWmciqeT33fOsmmXugGNeuGLy6tnFv68q5ZWb4qMfkK', 'ابوالفضل آزاد فلاح', 'all', 'Inactive', '2024-10-07 12:17:01', '2025-05-20 05:58:22', 13, 23),
-	(35, 'm.alipour@pec.ir', '09126081055', '$2y$10$COXs7eHtvpyde5bVR4BJ0O5.h2UN6gJwuA6J2vhAYIxVZZ8UDSf.W', 'مرضیه علی پور', 'all', 'Active', '2024-11-10 11:07:42', '2024-11-10 11:07:42', 15, 24),
+	(35, 'm.alipour@pec.ir', '09126081055', '$2y$10$COXs7eHtvpyde5bVR4BJ0O5.h2UN6gJwuA6J2vhAYIxVZZ8UDSf.W', 'مرضیه علی پور', 'all', 'Inactive', '2024-11-10 11:07:42', '2026-11-25 11:48:33', 15, 24),
 	(36, 'a.baktash@pec.ir', '09124370726', '$2y$10$p8FV1RY9zoRq9wrpZYJp.eKQcsOaIMAjBEuG7janIwZDjSH6CJhEm', 'آرام بکتاش', 'all', 'Inactive', '2024-11-10 11:09:22', '2025-10-27 11:40:58', 15, 25),
-	(37, 'm.khazali@pec.ir', '09121005023', '$2y$10$PTCpCkpuTpVwMRta2Jxi/ufck7wVBZrw3FJcslvIP1i4mudzOUh2G', 'مریم خزلی', 'all', 'Active', '2024-11-10 11:11:49', '2025-08-06 07:42:13', 15, 24),
-	(38, 'h.samadi@pec.ir', '09127218465', '$2y$10$eVQrcRlWbueArZ1bL717Du.hZxZyTFE34LAPMp2K.pPWS2cT7Aj/y', 'حامد صمدی', 'all', 'Active', '2024-11-10 11:12:58', '2024-11-10 11:12:58', 15, 24),
+	(37, 'm.khazali@pec.ir', '09121005023', '$2y$10$68ogbJHRo9gGn5D.vkG8C.b3ytskyEnQEcScTE8hl3MScEaYxKKta', 'مریم خزلی', 'all', 'Active', '2024-11-10 11:11:49', '2026-11-25 12:26:02', 15, 24),
+	(38, 'h.samadi@pec.ir', '09127218465', '$2y$10$eVQrcRlWbueArZ1bL717Du.hZxZyTFE34LAPMp2K.pPWS2cT7Aj/y', 'حامد صمدی', 'all', 'Inactive', '2024-11-10 11:12:58', '2026-11-25 12:11:02', 15, 24),
 	(39, 'm.jahangiri@pna.co.ir', '09127971899', '$2y$10$D058iRKW3j87Ri.egMwWc.Jfw7GhNy7tzpa1DNiVvzFSMGlYufN92', 'مهدی جهانگیری', 'all', 'Active', '2024-11-26 11:30:23', '2024-11-26 11:30:23', 4, 10),
 	(40, 'rostamani@pna.co.ir', '09121933882', '$2y$10$QtH2kQo.ohi92.2JIvMaeeswsONFIC7O8i9SGfzLf0.Wxpc4oLmtu', 'مهدی رستمانی', 'all', 'Active', '2024-11-26 11:32:42', '2024-12-04 04:50:49', 4, 10),
 	(41, 's.farmani@pna.co.ir', '09126759279', '$2y$10$cnlwIq6UHk7VziWo0e1i1utEZYeHAgbIa2HKb.NeHx87Td5Rznyyu', 'سوده فرمانی', 'all', 'Active', '2024-11-26 11:34:33', '2024-11-26 11:34:33', 4, 10),
-	(42, 'a.tafazoli@pec.ir', '09199099767', '$2y$10$K3pEy0MCqnsn4/Oe9JfqgeEXuX.jqc9PLgEqqRCr5KmUSs2C35rwO', 'عباس تفضلی', 'all', 'Active', '2024-12-04 04:52:23', '2024-12-04 04:52:23', 15, 24),
+	(42, 'a.tafazoli@pec.ir', '09199099767', '$2y$10$K3pEy0MCqnsn4/Oe9JfqgeEXuX.jqc9PLgEqqRCr5KmUSs2C35rwO', 'عباس تفضلی', 'all', 'Inactive', '2024-12-04 04:52:23', '2026-11-25 11:49:29', 15, 24),
 	(43, 'm.taghipoor@pec.ir', '09120262156', '$2y$10$XAdwFagWDH.67UNxjCrISeU4.FuubfxL4MSlPCggWJbKuhiwmxwYy', 'محسن تقی پور', 'all', 'Active', '2025-01-11 09:14:31', '2025-01-11 09:14:31', 15, 25),
 	(44, 'm.dabaghian@pec.ir', '09127993274', '$2y$10$CZJwTD/XjXIxESrV21FCv..0QtYtAYacJRnTUf9p2yE1o3Y1UBAJ6', 'مائده دباغیان', 'all', 'Active', '2025-01-11 09:15:41', '2025-01-11 09:15:41', 15, 25),
 	(45, 'n.torbatifard@pec.ir', '09126213052', '$2y$10$DzYwndKXn4Bhj.XRtlOZ3.8LOiy5zgpGWRia7WBV8dpE/6huu3mYG', 'تربتی فرد', 'all', 'Active', '2025-03-08 10:45:03', '2025-03-08 10:45:03', 15, 24),
@@ -44224,7 +44411,7 @@ INSERT INTO `users` (`id`, `email`, `mobile`, `password`, `name`, `role`, `statu
 	(51, 's.salimi@pec.ir', '09106707477', '$2y$10$irI.lUFvYGeubsOl4YkJ5uu8p8o3FTc550dydwc0DgTz.4GFu2eqe', 'سحر سلیمی', 'all', 'Active', '2025-08-05 10:43:33', '2025-08-05 10:43:33', 15, 25),
 	(52, 'p.atefi@pec.ir', '09123351486', '$2y$10$9KzipRUlLhU9jVf1wyqaYuKjr1/MAZtvs52vbyIBRiAxKKee2TXfi', 'پویا عاطفی', 'all', 'Active', '2025-09-09 10:05:08', '2025-11-01 08:06:14', 15, 24),
 	(53, 'ki.yousefi@Pec.ir', '09128043902', '$2y$10$Qt7D9XXnZSRoyKb3Z/vGMeG2af2MCKj0zBuyAg76YtwuOWuCv.sbK', 'کیارش یوسفی', 'all', 'Active', '2026-02-08 12:47:44', '2026-02-08 12:47:44', 15, 25),
-	(54, 's.mahdavi@pna.co.ir', '09125770747', '$2y$10$kLPCqaY0me7lV.dY6z2YAey/rBQUOz4tik411WzkdwPoGqtdGLw16', 'سارا مهدوی', 'all', 'Active', '2026-08-15 08:22:26', '2026-08-15 08:22:26', 7, 9),
+	(54, 's.mahdavi@pna.co.ir', '09125770747', '$2y$10$kLPCqaY0me7lV.dY6z2YAey/rBQUOz4tik411WzkdwPoGqtdGLw16', 'سارا مهدوی', 'all', 'Active', '2026-08-15 08:22:26', '2026-11-25 10:34:58', 4, 10),
 	(55, 's.hashemi@irankish.com', '09354400533', '$2y$10$XE7fRfH3FDR8dZFDOyYJEuhRo7Pd6ymR3Tzua3rYIKXI8xbLXT/Jq', 'سیاوش هاشمی', 'all', 'Active', '2026-10-07 13:11:36', '2026-11-17 12:41:00', 17, 28),
 	(56, 'a.olfati@irankish.com', '09125014950', '$2y$10$B/indeIDTP9h5U7ZJU9k4eS7B1ODlX9JO.NbWUfEjx5ifiP77rjf.', 'ارشیا الفتی', 'all', 'Active', '2026-10-07 13:12:33', '2026-10-12 09:52:55', 18, 29),
 	(57, 'z.lorestani@kiccc.com', '09368944626', '$2y$10$.OKLcP/oICbT9yznETSgBeaYTwYUMupv8HZ.tZeJLOeJHPqpSsemG', 'زهره لرستانی', 'all', 'Active', '2026-10-07 13:13:35', '2026-10-07 13:13:35', 19, 30),
@@ -44233,7 +44420,7 @@ INSERT INTO `users` (`id`, `email`, `mobile`, `password`, `name`, `role`, `statu
 	(60, 'admin.refah@intek.ir', NULL, '$2y$10$EXz/3h9uIr9WKUiLjtlVAe38oSMsqM/sXZnWRmc9OitHPjIAI326y', 'ادمین پرتال رفاه پردیس', 'member', 'Active', '2026-10-18 03:29:21', '2026-11-24 16:35:24', 8, 32),
 	(61, 'admin.tourism@intek.ir', NULL, '$2y$10$EXz/3h9uIr9WKUiLjtlVAe38oSMsqM/sXZnWRmc9OitHPjIAI326y', 'ادمین پرتال گردشگری', 'member', 'Active', '2026-10-18 03:29:21', '2026-11-24 16:35:27', 21, 33),
 	(62, 'admin.sabin@intek.ir', NULL, '$2y$10$EXz/3h9uIr9WKUiLjtlVAe38oSMsqM/sXZnWRmc9OitHPjIAI326y', 'ادمین پرتال سابین تجارت آریا', 'member', 'Active', '2026-10-18 03:29:21', '2026-11-24 16:35:29', 26, 34),
-	(63, 'admin.sep@intek.ir', NULL, '$2y$10$EXz/3h9uIr9WKUiLjtlVAe38oSMsqM/sXZnWRmc9OitHPjIAI326y', 'ادمین پرتال پرداخت الکترونیک سامان', 'member', 'Active', '2026-10-18 03:29:21', '2026-11-24 16:35:31', 11, 35),
+	(63, 'admin.sep@intek.ir', '091241111111', '$2y$10$oDkuu87YTiB/BG/DEjv5n.xOfsnNftwWP6vpjqSIjeUn83JgiORoe', 'ادمین پرتال پرداخت الکترونیک سامان', 'member', 'Active', '2026-10-18 03:29:21', '2026-11-28 08:14:07', 11, 35),
 	(64, 'admin.pec@intek.ir', NULL, '$2y$10$EXz/3h9uIr9WKUiLjtlVAe38oSMsqM/sXZnWRmc9OitHPjIAI326y', 'ادمین پرتال تجارت الکترونیک پارسیان', 'member', 'Active', '2026-10-18 03:29:21', '2026-11-24 16:35:33', 15, 36),
 	(65, 'admin.ikc@intek.ir', '09354400522', '$2y$10$EXz/3h9uIr9WKUiLjtlVAe38oSMsqM/sXZnWRmc9OitHPjIAI326y', 'ادمین پرتال ایران کیش', 'member', 'Active', '2026-10-18 03:29:21', '2026-11-24 16:35:36', 24, 37);
 
@@ -44318,9 +44505,9 @@ CREATE TABLE IF NOT EXISTS `user_log` (
   `system_info` tinytext DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2684 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2743 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.user_log: ~2,518 rows (approximately)
+-- Dumping data for table idesk.user_log: ~2,814 rows (approximately)
 DELETE FROM `user_log`;
 INSERT INTO `user_log` (`id`, `user_id`, `action`, `local_ip`, `internet_ip`, `system_info`, `timestamp`) VALUES
 	(1, 10, 'logout', '0.0.0.0', '0.0.0.0', NULL, '2024-04-29 15:16:19'),
@@ -46982,7 +47169,66 @@ INSERT INTO `user_log` (`id`, `user_id`, `action`, `local_ip`, `internet_ip`, `s
 	(2680, 58, 'login', '192.168.50.12', '5.160.236.102', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 08:33:30'),
 	(2681, 10, 'login', '192.168.50.12', '5.160.72.211', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 10:24:47'),
 	(2682, 64, 'login', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 16:36:31'),
-	(2683, 64, 'logout', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 16:36:36');
+	(2683, 64, 'logout', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 16:36:36'),
+	(2684, 58, 'login', '192.168.50.12', '5.160.236.102', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 04:33:59'),
+	(2685, 10, 'login', '192.168.50.12', '5.160.72.211', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 08:32:49'),
+	(2686, 53, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 09:34:15'),
+	(2687, 10, 'logout', '192.168.50.12', '5.160.72.211', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 10:14:28'),
+	(2688, 10, 'login', '192.168.50.12', '5.160.72.211', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 10:14:41'),
+	(2689, 59, 'login', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 10:28:10'),
+	(2690, 59, 'logout', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 10:28:52'),
+	(2691, 59, 'login', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 10:37:09'),
+	(2692, 59, 'logout', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 10:41:54'),
+	(2693, 65, 'login', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 10:47:27'),
+	(2694, 65, 'logout', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 10:50:04'),
+	(2695, 53, 'logout', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 11:02:09'),
+	(2696, 52, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 11:04:39'),
+	(2697, 52, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 11:05:09'),
+	(2698, 52, 'logout', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 11:05:22'),
+	(2699, 53, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 11:05:26'),
+	(2700, 53, 'logout', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 11:07:31'),
+	(2701, 53, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 11:07:35'),
+	(2702, 53, 'logout', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 11:07:42'),
+	(2703, 52, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 11:07:46'),
+	(2704, 64, 'login', '192.168.50.12', '192.168.253.23', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 11:44:58'),
+	(2705, 53, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 11:49:06'),
+	(2706, 60, 'login', '192.168.50.12', '46.209.45.245', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 11:59:50'),
+	(2707, 52, 'logout', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 12:09:13'),
+	(2708, 64, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 12:09:59'),
+	(2709, 53, 'logout', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 12:14:44'),
+	(2710, 64, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 12:14:50'),
+	(2711, 64, 'logout', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 15:22:03'),
+	(2712, 53, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 15:22:08'),
+	(2713, 53, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 15:47:03'),
+	(2714, 53, 'logout', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 15:50:02'),
+	(2715, 64, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 15:51:06'),
+	(2716, 64, 'logout', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 15:51:18'),
+	(2717, 45, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 15:51:26'),
+	(2718, 53, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 05:36:08'),
+	(2719, 53, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 05:39:56'),
+	(2720, 31, 'login', '192.168.50.12', '95.38.47.36', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 05:49:04'),
+	(2721, 37, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 06:02:42'),
+	(2722, 37, 'login', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 06:27:34'),
+	(2723, 64, 'logout', '192.168.50.12', '192.168.253.23', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 06:28:26'),
+	(2724, 52, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 06:55:47'),
+	(2725, 31, 'login', '192.168.50.12', '95.38.47.36', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 07:43:41'),
+	(2726, 53, 'logout', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 07:47:14'),
+	(2727, 45, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 07:47:43'),
+	(2728, 53, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 07:49:47'),
+	(2729, 31, 'login', '192.168.50.12', '192.168.253.23', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 08:11:37'),
+	(2730, 31, 'logout', '192.168.50.12', '192.168.253.23', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 08:12:05'),
+	(2731, 31, 'login', '192.168.50.12', '192.168.253.23', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 08:12:09'),
+	(2732, 31, 'logout', '192.168.50.12', '192.168.253.23', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 08:13:22'),
+	(2733, 63, 'login', '192.168.50.12', '192.168.253.23', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 08:15:37'),
+	(2734, 63, 'logout', '192.168.50.12', '192.168.253.23', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 08:16:05'),
+	(2735, 31, 'login', '192.168.50.12', '192.168.253.23', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 08:16:08'),
+	(2736, 31, 'logout', '192.168.50.12', '95.38.47.36', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 08:16:57'),
+	(2737, 31, 'login', '192.168.50.12', '95.38.47.36', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 08:17:00'),
+	(2738, 31, 'logout', '192.168.50.12', '192.168.253.23', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 08:22:27'),
+	(2739, 37, 'login', '192.168.50.12', '192.168.253.23', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 08:23:47'),
+	(2740, 37, 'logout', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 08:26:12'),
+	(2741, NULL, 'logout', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 08:26:12'),
+	(2742, 37, 'login', '192.168.50.12', '95.38.245.186', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 08:26:27');
 
 -- Dumping structure for table idesk.user_remember_tokens
 CREATE TABLE IF NOT EXISTS `user_remember_tokens` (
@@ -47014,9 +47260,9 @@ CREATE TABLE IF NOT EXISTS `views` (
   `creation_date` timestamp NOT NULL DEFAULT current_timestamp(),
   `last_updated_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6800 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6808 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table idesk.views: ~6,639 rows (approximately)
+-- Dumping data for table idesk.views: ~6,647 rows (approximately)
 DELETE FROM `views`;
 INSERT INTO `views` (`id`, `person_id`, `person_rbac_id`, `person_type`, `element_id`, `part_name`, `local_ip`, `internet_ip`, `system_info`, `creation_date`, `last_updated_date`) VALUES
 	(1, 1, NULL, 1, 1, 'tickets', '0.0.0.0', '0.0.0.0', NULL, '2024-06-23 14:13:53', '2024-06-23 14:13:53'),
@@ -53817,191 +54063,15 @@ INSERT INTO `views` (`id`, `person_id`, `person_rbac_id`, `person_type`, `elemen
 	(6796, 38, NULL, 1, 2267, 'tickets', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 09:07:25', '2026-11-24 09:07:25'),
 	(6797, 38, NULL, 1, 2268, 'tickets', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 09:07:28', '2026-11-24 09:07:28'),
 	(6798, 24, NULL, 1, 2267, 'tickets', '192.168.50.12', '192.168.253.43', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 10:14:19', '2026-11-24 10:14:19'),
-	(6799, 9, NULL, 1, 2242, 'tickets', '192.168.50.12', '192.168.253.54', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 12:30:08', '2026-11-24 12:30:08');
-
--- Dumping structure for table idesk._iw_mig_permissions
-CREATE TEMPORARY TABLE IF NOT EXISTS `_iw_mig_permissions` (
-  `company_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `permission_name` varchar(100) NOT NULL,
-  `is_allowed` tinyint(4) NOT NULL,
-  PRIMARY KEY (`user_id`,`permission_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Dumping data for table idesk._iw_mig_permissions: ~52 rows (approximately)
-DELETE FROM `_iw_mig_permissions`;
-INSERT INTO `_iw_mig_permissions` (`company_id`, `user_id`, `permission_name`, `is_allowed`) VALUES
-	(4, 10, 'manager_create_expert', 1),
-	(4, 25, 'manager_create_expert', 1),
-	(5, 26, 'manager_create_expert', 1),
-	(6, 30, 'manager_create_expert', 1),
-	(8, 31, 'manager_create_expert', 1),
-	(9, 35, 'manager_create_expert', 0),
-	(9, 37, 'manager_create_expert', 1),
-	(9, 37, 'manager_finance_access', 1),
-	(9, 38, 'manager_create_expert', 1),
-	(9, 42, 'manager_create_expert', 1),
-	(9, 45, 'manager_create_expert', 1),
-	(7, 46, 'manager_create_expert', 1),
-	(7, 48, 'manager_create_expert', 1),
-	(7, 49, 'manager_create_expert', 1),
-	(7, 50, 'manager_create_expert', 1),
-	(9, 52, 'manager_create_expert', 0),
-	(4, 54, 'manager_create_expert', 1),
-	(10, 55, 'customer_admin_assign_manager_to_section', 1),
-	(10, 55, 'customer_admin_create_expert', 1),
-	(10, 55, 'customer_admin_create_manager', 1),
-	(10, 55, 'customer_admin_reassign_expert', 1),
-	(10, 56, 'manager_create_expert', 1),
-	(10, 57, 'manager_create_expert', 1),
-	(5, 58, 'manager_create_expert', 1),
-	(4, 59, 'customer_admin_assign_manager_to_section', 1),
-	(4, 59, 'customer_admin_create_expert', 1),
-	(4, 59, 'customer_admin_create_manager', 1),
-	(4, 59, 'customer_admin_reassign_expert', 1),
-	(5, 60, 'customer_admin_assign_manager_to_section', 1),
-	(5, 60, 'customer_admin_create_expert', 1),
-	(5, 60, 'customer_admin_create_manager', 1),
-	(5, 60, 'customer_admin_reassign_expert', 1),
-	(6, 61, 'customer_admin_assign_manager_to_section', 1),
-	(6, 61, 'customer_admin_create_expert', 1),
-	(6, 61, 'customer_admin_create_manager', 1),
-	(6, 61, 'customer_admin_reassign_expert', 1),
-	(7, 62, 'customer_admin_assign_manager_to_section', 1),
-	(7, 62, 'customer_admin_create_expert', 1),
-	(7, 62, 'customer_admin_create_manager', 1),
-	(7, 62, 'customer_admin_reassign_expert', 1),
-	(8, 63, 'customer_admin_assign_manager_to_section', 1),
-	(8, 63, 'customer_admin_create_expert', 1),
-	(8, 63, 'customer_admin_create_manager', 1),
-	(8, 63, 'customer_admin_reassign_expert', 1),
-	(9, 64, 'customer_admin_assign_manager_to_section', 1),
-	(9, 64, 'customer_admin_create_expert', 1),
-	(9, 64, 'customer_admin_create_manager', 1),
-	(9, 64, 'customer_admin_reassign_expert', 1),
-	(10, 65, 'customer_admin_assign_manager_to_section', 1),
-	(10, 65, 'customer_admin_create_expert', 1),
-	(10, 65, 'customer_admin_create_manager', 1),
-	(10, 65, 'customer_admin_reassign_expert', 1);
-
--- Dumping structure for table idesk._iw_mig_profiles
-CREATE TEMPORARY TABLE IF NOT EXISTS `_iw_mig_profiles` (
-  `user_id` int(11) NOT NULL,
-  `company_id` int(11) NOT NULL,
-  `portal_role` varchar(10) NOT NULL,
-  `section_name` varchar(150) DEFAULT NULL,
-  `is_active` tinyint(4) NOT NULL,
-  `created_by` int(11) NOT NULL,
-  PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Dumping data for table idesk._iw_mig_profiles: ~34 rows (approximately)
-DELETE FROM `_iw_mig_profiles`;
-INSERT INTO `_iw_mig_profiles` (`user_id`, `company_id`, `portal_role`, `section_name`, `is_active`, `created_by`) VALUES
-	(10, 4, 'MANAGER', NULL, 1, 1),
-	(25, 4, 'MANAGER', NULL, 1, 1),
-	(26, 5, 'MANAGER', NULL, 1, 1),
-	(30, 6, 'MANAGER', NULL, 1, 1),
-	(31, 8, 'MANAGER', NULL, 1, 1),
-	(35, 9, 'EXPERT', 'فنی', 1, 1),
-	(37, 9, 'MANAGER', 'بخش ایشو', 1, 1),
-	(38, 9, 'MANAGER', NULL, 1, 1),
-	(39, 4, 'EXPERT', NULL, 1, 1),
-	(40, 4, 'EXPERT', NULL, 1, 1),
-	(41, 4, 'EXPERT', NULL, 1, 1),
-	(42, 9, 'MANAGER', 'فنی', 1, 1),
-	(43, 9, 'EXPERT', 'بخش ایشو', 1, 1),
-	(44, 9, 'EXPERT', NULL, 1, 1),
-	(45, 9, 'MANAGER', NULL, 1, 1),
-	(46, 7, 'MANAGER', NULL, 1, 1),
-	(48, 7, 'MANAGER', NULL, 1, 1),
-	(49, 7, 'MANAGER', NULL, 1, 1),
-	(50, 7, 'MANAGER', NULL, 1, 1),
-	(51, 9, 'EXPERT', NULL, 1, 1),
-	(52, 9, 'EXPERT', 'فنی', 1, 1),
-	(53, 9, 'EXPERT', NULL, 1, 1),
-	(54, 4, 'MANAGER', NULL, 1, 1),
-	(55, 10, 'ADMIN', NULL, 1, 38),
-	(56, 10, 'MANAGER', NULL, 1, 1),
-	(57, 10, 'MANAGER', NULL, 1, 1),
-	(58, 5, 'MANAGER', NULL, 1, 1),
-	(59, 4, 'ADMIN', NULL, 1, 1),
-	(60, 5, 'ADMIN', NULL, 1, 1),
-	(61, 6, 'ADMIN', NULL, 1, 1),
-	(62, 7, 'ADMIN', NULL, 1, 1),
-	(63, 8, 'ADMIN', NULL, 1, 1),
-	(64, 9, 'ADMIN', NULL, 1, 1),
-	(65, 10, 'ADMIN', NULL, 1, 38);
-
--- Dumping structure for table idesk._iw_mig_roles
-CREATE TEMPORARY TABLE IF NOT EXISTS `_iw_mig_roles` (
-  `source_id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
-  `source_manager_id` int(11) NOT NULL,
-  `all_rbac` tinyint(4) NOT NULL,
-  `activity_id` int(11) NOT NULL,
-  `company_id` int(11) NOT NULL,
-  `unit_id` int(11) NOT NULL,
-  `tag_id` int(11) DEFAULT NULL,
-  `kind` varchar(12) NOT NULL,
-  PRIMARY KEY (`source_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Dumping data for table idesk._iw_mig_roles: ~14 rows (approximately)
-DELETE FROM `_iw_mig_roles`;
-INSERT INTO `_iw_mig_roles` (`source_id`, `name`, `description`, `source_manager_id`, `all_rbac`, `activity_id`, `company_id`, `unit_id`, `tag_id`, `kind`) VALUES
-	(39, 'مدیر پرتال - پرداخت نوین آرین', 'Customer Portal manager; scoped to company', 31, 0, 3, 4, 20, NULL, 'MANAGER'),
-	(40, 'مدیر پرتال - توسعه فناوری رفاه پردیس', 'Customer Portal manager; scoped to company', 32, 0, 1, 5, 25, NULL, 'MANAGER'),
-	(41, 'مدیر پرتال - توسعه فناوری و اطلاعات گردشگری ایران', 'Customer Portal manager; scoped to company', 33, 0, 1, 6, 21, NULL, 'MANAGER'),
-	(42, 'مدیر پرتال - سابین تجارت آریا', 'Customer Portal manager; scoped to company', 34, 0, 1, 7, 26, NULL, 'MANAGER'),
-	(43, 'مدیر پرتال - پرداخت الکترونیک سامان کیش', 'Customer Portal manager; scoped to company', 35, 0, 1, 8, 22, NULL, 'MANAGER'),
-	(44, 'مدیر پرتال - تجارت الکترونیک پارسیان', 'Customer Portal manager; scoped to company', 36, 0, 1, 9, 23, NULL, 'MANAGER'),
-	(45, 'مدیر پرتال - ایران کیش', 'Customer Portal manager; scoped to company', 37, 0, 3, 10, 24, NULL, 'MANAGER'),
-	(46, 'کارشناس پرتال - پرداخت نوین آرین', 'Customer Portal expert; scoped to company', 39, 0, 3, 4, 20, NULL, 'EXPERT'),
-	(47, 'کارشناس پرتال - توسعه فناوری رفاه پردیس', 'Customer Portal expert; scoped to company', 40, 0, 1, 5, 25, NULL, 'EXPERT'),
-	(48, 'کارشناس پرتال - توسعه فناوری و اطلاعات گردشگری ایران', 'Customer Portal expert; scoped to company', 41, 0, 1, 6, 21, NULL, 'EXPERT'),
-	(49, 'کارشناس پرتال - سابین تجارت آریا', 'Customer Portal expert; scoped to company', 42, 0, 1, 7, 26, NULL, 'EXPERT'),
-	(50, 'کارشناس پرتال - پرداخت الکترونیک سامان کیش', 'Customer Portal expert; scoped to company', 43, 0, 1, 8, 22, NULL, 'EXPERT'),
-	(51, 'کارشناس پرتال - تجارت الکترونیک پارسیان', 'Customer Portal expert; scoped to company', 44, 0, 1, 9, 23, NULL, 'EXPERT'),
-	(52, 'کارشناس پرتال - ایران کیش', 'Customer Portal expert; scoped to company', 45, 0, 3, 10, 24, NULL, 'EXPERT');
-
--- Dumping structure for table idesk._iw_mig_sections
-CREATE TEMPORARY TABLE IF NOT EXISTS `_iw_mig_sections` (
-  `company_id` int(11) NOT NULL,
-  `name` varchar(150) NOT NULL,
-  `is_active` tinyint(4) NOT NULL,
-  `created_by` int(11) NOT NULL,
-  PRIMARY KEY (`company_id`,`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Dumping data for table idesk._iw_mig_sections: ~2 rows (approximately)
-DELETE FROM `_iw_mig_sections`;
-INSERT INTO `_iw_mig_sections` (`company_id`, `name`, `is_active`, `created_by`) VALUES
-	(9, 'بخش ایشو', 1, 64),
-	(9, 'فنی', 1, 64);
-
--- Dumping structure for table idesk._iw_mig_settings
-CREATE TEMPORARY TABLE IF NOT EXISTS `_iw_mig_settings` (
-  `company_id` int(11) NOT NULL,
-  `portal_unit_id` int(11) NOT NULL,
-  `admin_rbac_id` int(11) NOT NULL,
-  `manager_rbac_name` varchar(255) NOT NULL,
-  `expert_rbac_name` varchar(255) NOT NULL,
-  `draft_aging_days` int(11) NOT NULL,
-  PRIMARY KEY (`company_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Dumping data for table idesk._iw_mig_settings: ~7 rows (approximately)
-DELETE FROM `_iw_mig_settings`;
-INSERT INTO `_iw_mig_settings` (`company_id`, `portal_unit_id`, `admin_rbac_id`, `manager_rbac_name`, `expert_rbac_name`, `draft_aging_days`) VALUES
-	(4, 20, 31, 'مدیر پرتال - پرداخت نوین آرین', 'کارشناس پرتال - پرداخت نوین آرین', 14),
-	(5, 25, 32, 'مدیر پرتال - توسعه فناوری رفاه پردیس', 'کارشناس پرتال - توسعه فناوری رفاه پردیس', 14),
-	(6, 21, 33, 'مدیر پرتال - توسعه فناوری و اطلاعات گردشگری ایران', 'کارشناس پرتال - توسعه فناوری و اطلاعات گردشگری ایران', 14),
-	(7, 26, 34, 'مدیر پرتال - سابین تجارت آریا', 'کارشناس پرتال - سابین تجارت آریا', 14),
-	(8, 22, 35, 'مدیر پرتال - پرداخت الکترونیک سامان کیش', 'کارشناس پرتال - پرداخت الکترونیک سامان کیش', 14),
-	(9, 23, 36, 'مدیر پرتال - تجارت الکترونیک پارسیان', 'کارشناس پرتال - تجارت الکترونیک پارسیان', 14),
-	(10, 24, 37, 'مدیر پرتال - ایران کیش', 'کارشناس پرتال - ایران کیش', 14);
+	(6799, 9, NULL, 1, 2242, 'tickets', '192.168.50.12', '192.168.253.54', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-24 12:30:08', '2026-11-24 12:30:08'),
+	(6800, 16, NULL, 1, 2269, 'tickets', '192.168.50.12', '192.168.253.66', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 05:33:05', '2026-11-25 05:33:05'),
+	(6801, 27, NULL, 1, 2264, 'tickets', '192.168.50.12', '192.168.253.22', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 06:32:56', '2026-11-25 06:32:56'),
+	(6802, 39, NULL, 1, 2268, 'tickets', '192.168.50.12', '192.168.253.19', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 06:41:28', '2026-11-25 06:41:28'),
+	(6803, 39, NULL, 1, 2266, 'tickets', '192.168.50.12', '192.168.253.19', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 06:51:52', '2026-11-25 06:51:52'),
+	(6804, 38, NULL, 1, 1241, 'tickets', '192.168.50.12', '192.168.50.12', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-25 07:48:08', '2026-11-25 07:48:08'),
+	(6805, 16, NULL, 1, 2270, 'tickets', '192.168.50.12', '192.168.253.21', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 05:54:39', '2026-11-28 05:54:39'),
+	(6806, 9, NULL, 1, 2270, 'tickets', '192.168.50.12', '192.168.253.70', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 07:44:14', '2026-11-28 07:44:14'),
+	(6807, 16, NULL, 1, 2271, 'tickets', '192.168.50.12', '192.168.253.66', 'Windows NT INTEK-WEBSITE 10.0 build 17763 (Windows Server 2019) AMD64', '2026-11-28 08:07:35', '2026-11-28 08:07:35');
 
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `admins_details_view`;
